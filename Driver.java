@@ -1,6 +1,8 @@
 import util.Version;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
+
 import javax.swing.*;
 import java.awt.image.*;
 import java.util.ArrayList;
@@ -61,6 +63,12 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    public static Clip bossLoop;
    //public GlobalModManager modManager;
 
+   // Fullscreen
+   private static JFrame frame;
+   private boolean fullscreen = false;
+   public static Dimension currentResolution = new Dimension(800, 770);
+   public static Point transformPoint = new Point(0, 0);
+
    public static void main(String[] args) throws Exception {
       System.out.println("Zelda 1 master quest " + version);
 
@@ -71,7 +79,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                          + " not sponsored by, nor affiliated with, Nintendo Co. Ltd.\033[0m");
 
       // instantiates frame
-      JFrame frame = new JFrame();
+      frame = new JFrame();
 
       // RSC Games: refactored the name prompt. Original code will be kept for historical
       // reasons.
@@ -111,12 +119,19 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       Driver driver = new Driver(frame);
       driver.setFocusable(true);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setResizable(false);
+      frame.setResizable(true);
       frame.add(driver);
       frame.pack();
       frame.setSize(800, 770);
+      frame.setMinimumSize(new Dimension(800, 770));
       frame.setLocationRelativeTo(null);
       frame.setVisible(true);
+
+      frame.addComponentListener(new ComponentAdapter() {
+         public void componentResized(ComponentEvent event) {
+            currentResolution = new Dimension(frame.getWidth(), frame.getHeight()); 
+         }
+      });
 
       overworldthemeIntro = new File("./Sound files/overworld_leadin.wav");
       overworldthemeLoop = new File("./Sound files/overworld_loop.wav");
@@ -252,6 +267,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       room.fillRoomArray(player);
       Timer timer = new Timer(10, this);
       timer.start();
+
+      toggleFullScreen();
    }
 
    // timer function to be called every frame
@@ -325,10 +342,12 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       }
    }
 
-   public void keyTyped(KeyEvent e) {
-   }
+   public void keyTyped(KeyEvent e) {}
 
    public void keyReleased(KeyEvent e) {
+      if (e.getKeyCode() == KeyEvent.VK_F11)
+         toggleFullScreen();
+
       // sets the position to null when a key is released, stopping the player
       if (player.dir != 't' && player.stun == 0) {
          if (player.dir != 'n' && player.dir != 'e')
@@ -337,6 +356,56 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             player.dir = 'n';
       }
       Cane.deactivate(player);
+   }
+
+   // NOTE: Part of the RSC Games fullscreen patches.
+   public void toggleFullScreen() {
+      fullscreen = !fullscreen;
+
+      if (fullscreen) {
+         frame.setVisible(false);
+         frame.dispose();
+         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+         frame.setUndecorated(true);
+         frame.setVisible(true);
+      }
+      else {
+         //frame.dispose();
+         frame.setVisible(false);
+         frame.dispose();
+         frame.setExtendedState(JFrame.NORMAL);
+         frame.setSize(new Dimension(800, 770));
+         frame.setUndecorated(false);
+         frame.setVisible(true);
+      }
+   }
+
+   // NOTE: Part of the RSC Games fullscreen patches.
+   public void updateOffset(Graphics2D g) {
+      //g.setTransform(AffineTransform.getTranslateInstance(0, 0));
+      Point nres = new Point((int)currentResolution.getWidth(), (int)currentResolution.getHeight());
+      Point gres = new Point(800, 770);
+      Point p = new Point((nres.x / 2 - gres.x / 2), (nres.y / 2 - gres.y / 2));
+      transformPoint = p;
+
+      g.translate(p.getX(), p.getY());
+   }
+
+   // NOTE: Part of the RSC Games fullscreen patch.
+   private void drawBorders(Graphics2D g) {
+      g.setTransform(AffineTransform.getTranslateInstance(0, 0));
+
+      Point topLeft = transformPoint;
+      Point bottomRight = new Point((int)(topLeft.getX() + 800), (int)(topLeft.getY() + 770));
+      g.setColor(Color.black);
+      g.fillRect(0, 0, (int)topLeft.getX(), (int)currentResolution.getHeight());
+      g.fillRect(0, (int)bottomRight.getY(), (int)currentResolution.getWidth(), (int)currentResolution.getHeight());
+      g.fillRect((int)bottomRight.getX(), 0, (int)currentResolution.getWidth(), (int)currentResolution.getHeight());
+      g.fillRect(0, 0, (int)currentResolution.getWidth(), (int)topLeft.getY());
+
+      // Draw a small line around the viewport.
+      g.setColor(Color.white);
+      g.drawRect((int)topLeft.getX() - 1, (int)topLeft.getY() - 1, (int)(bottomRight.getX() - topLeft.getX()), (int)(bottomRight.getY() - topLeft.getY()));
    }
 
    public void keyPressed(KeyEvent e) {
@@ -469,7 +538,9 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
 
    public void paintComponent(Graphics g) {
       try {
+         updateOffset((Graphics2D)g);
          render(g);
+         drawBorders((Graphics2D)g);
       }
       catch (Exception ie) {
          System.out.println("FATAL! UNHANDLED EXCEPTION HIT BOTTOM OF CALL STACK!");
