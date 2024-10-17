@@ -40,10 +40,10 @@ public class DarkSword extends Entity {
         height = dir == 'a' || dir == 'd' ? 40:60;
         width = dir == 'a' || dir == 'd' ? 60:40;
         try {
-            darkSwordW = ImageIO.read(new File(".\\Image files\\darkSwordW.png"));
-            darkSwordS = ImageIO.read(new File(".\\Image files\\darkSwordS.png"));
-            darkSwordA = ImageIO.read(new File(".\\Image files\\darkSwordA.png"));
-            darkSwordD = ImageIO.read(new File(".\\Image files\\darkSwordD.png"));
+            darkSwordW = ImageIO.read(new File("./Image files/darkSwordW.png"));
+            darkSwordS = ImageIO.read(new File("./Image files/darkSwordS.png"));
+            darkSwordA = ImageIO.read(new File("./Image files/darkSwordA.png"));
+            darkSwordD = ImageIO.read(new File("./Image files/darkSwordD.png"));
         } catch (IOException ex) {
             System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT!");
             System.out.println("Error details: ");

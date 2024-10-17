@@ -62,21 +62,21 @@ public class Player extends Entity {
    // parameter-based constructor
    public Player() {
       try {
-         linkAnimations[0][0] = ImageIO.read(new File(".\\Image files\\LinkW.png"));
-         linkWattack = ImageIO.read(new File(".\\Image files\\LinkWattack.png"));
-         linkAnimations[0][1] = ImageIO.read(new File(".\\Image files\\LinkS.png"));
-         linkSattack = ImageIO.read(new File(".\\Image files\\LinkSattack.png"));
-         linkAnimations[1][0] = ImageIO.read(new File(".\\Image files\\LinkSMETAL.png"));
-         linkAnimations[2][0] = ImageIO.read(new File(".\\Image files\\LinkSBROKEN.png"));
-         linkAnimations[0][2] = ImageIO.read(new File(".\\Image files\\LinkA.png"));
-         linkAattack = ImageIO.read(new File(".\\Image files\\LinkAattack.png"));
-         linkAnimations[1][1] = ImageIO.read(new File(".\\Image files\\LinkAMETAL.png"));
-         linkAnimations[2][1] = ImageIO.read(new File(".\\Image files\\LinkABROKEN.png"));
-         linkAnimations[0][3] = ImageIO.read(new File(".\\Image files\\LinkD.png"));
-         linkDattack = ImageIO.read(new File(".\\Image files\\LinkDattack.png"));
-         linkAnimations[1][2] = ImageIO.read(new File(".\\Image files\\LinkDMETAL.png"));
-         linkAnimations[2][2] = ImageIO.read(new File(".\\Image files\\LinkDBROKEN.png"));
-         linkT = ImageIO.read(new File(".\\Image files\\LinkT.png"));
+         linkAnimations[0][0] = ImageIO.read(new File("./Image files/LinkW.png"));
+         linkWattack = ImageIO.read(new File("./Image files/LinkWattack.png"));
+         linkAnimations[0][1] = ImageIO.read(new File("./Image files/LinkS.png"));
+         linkSattack = ImageIO.read(new File("./Image files/LinkSattack.png"));
+         linkAnimations[1][0] = ImageIO.read(new File("./Image files/LinkSMETAL.png"));
+         linkAnimations[2][0] = ImageIO.read(new File("./Image files/LinkSBROKEN.png"));
+         linkAnimations[0][2] = ImageIO.read(new File("./Image files/LinkA.png"));
+         linkAattack = ImageIO.read(new File("./Image files/LinkAattack.png"));
+         linkAnimations[1][1] = ImageIO.read(new File("./Image files/LinkAMETAL.png"));
+         linkAnimations[2][1] = ImageIO.read(new File("./Image files/LinkABROKEN.png"));
+         linkAnimations[0][3] = ImageIO.read(new File("./Image files/LinkD.png"));
+         linkDattack = ImageIO.read(new File("./Image files/LinkDattack.png"));
+         linkAnimations[1][2] = ImageIO.read(new File("./Image files/LinkDMETAL.png"));
+         linkAnimations[2][2] = ImageIO.read(new File("./Image files/LinkDBROKEN.png"));
+         linkT = ImageIO.read(new File("./Image files/LinkT.png"));
       } catch (IOException ex) {
          System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT!");
          System.out.println("Error details: ");

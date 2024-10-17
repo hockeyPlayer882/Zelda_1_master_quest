@@ -16,7 +16,7 @@ public class SuperBomb extends Entity{
         this.cy = cy;
         this.width = 10;
         try {
-            superBomb = ImageIO.read(new File(".\\Image files\\superBomb.png"));
+            superBomb = ImageIO.read(new File("./Image files/superBomb.png"));
         } catch (IOException ex) {
             System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");
             System.out.println("Error details: ");
@@ -25,7 +25,7 @@ public class SuperBomb extends Entity{
     }
     public static void init(){
         try {
-            superBomb = ImageIO.read(new File(".\\Image files\\superBomb.png"));
+            superBomb = ImageIO.read(new File("./Image files/superBomb.png"));
         } catch (IOException ex) {
             System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");
             System.out.println("Error details: ");

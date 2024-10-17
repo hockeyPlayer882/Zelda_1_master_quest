@@ -23,7 +23,7 @@ numKeyEnemiesAlive += 1;
 this.MmovementTimer = 40;
 this.movementTimer = (int)(MmovementTimer+Math.random()*(80));
  try{
-             skeleton = ImageIO.read(new File(".\\Image files\\skeleton.png"));
+             skeleton = ImageIO.read(new File("./Image files/skeleton.png"));
              
    }catch (IOException ex) {
                

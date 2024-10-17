@@ -28,7 +28,7 @@ public class Head6 extends Entity{
    int Rand = rand.nextInt(3);
    this.dir = (Rand == 0 ? 'w': Rand == 1 ? 'a':'s');
    try{
-             head6 = ImageIO.read(new File(".\\Image files\\head6.png"));
+             head6 = ImageIO.read(new File("./Image files/head6.png"));
    }catch (IOException ex) {
                
               System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");
@@ -103,7 +103,7 @@ this.maxInv = 60;
 this.damage = 6;
 isBoss = true;
 try{
-          boss6 = ImageIO.read(new File(".\\Image files\\boss6.png"));
+          boss6 = ImageIO.read(new File("./Image files/boss6.png"));
 }catch (IOException ex) {
             
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");

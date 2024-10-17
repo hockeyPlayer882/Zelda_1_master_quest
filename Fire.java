@@ -13,7 +13,7 @@ this.cy = cy;
 this.dir = dir;
 this.speed = 3;
 try{     
-          fire = ImageIO.read(new File(".\\Image files\\fire.png"));
+          fire = ImageIO.read(new File("./Image files/fire.png"));
 }catch (IOException ex) {
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");
            System.out.println("Error details: ");

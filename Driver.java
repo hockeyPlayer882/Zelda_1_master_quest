@@ -1,5 +1,4 @@
 import util.Version;
-import modldr.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -60,13 +59,36 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    public static Clip bossIntro;
    public static long bossIntroLen;
    public static Clip bossLoop;
-   public GlobalModManager modManager;
+   //public GlobalModManager modManager;
 
    public static void main(String[] args) throws Exception {
-      Wand.init();
-      SuperBomb.init();
-      Cane.setImages();
-      System.out.println("Zelda 1 game version v" + version);
+      System.out.println("Zelda 1 master quest " + version);
+
+      // Added legal notice:
+      System.out.println("\033[34mNOTICE: This is a fan game! The author of this game is not the"
+                         + " original intellectual property owner! The works in this game"
+                         + " are solely used in cases permitted by fair use. This game is"
+                         + " not sponsored by, nor affiliated with, Nintendo Co. Ltd.\033[0m");
+
+      // instantiates frame
+      JFrame frame = new JFrame();
+
+      // RSC Games: refactored the name prompt. Original code will be kept for historical
+      // reasons.
+      name = null;
+
+      while (true) {
+         do {
+            name = JOptionPane.showInputDialog("Enter player name.");
+         }
+         while (name == null);
+
+         int response = JOptionPane.showConfirmDialog(null, "Your name is " + name + ", right?");
+         if (response == 0) break;
+      }
+
+      /*
+      // vvvvvv Original code below vvvvvv
       // instantiates frame
       JFrame frame = new JFrame();
       // gets the user name from a prompt in the JOptionPane
@@ -79,6 +101,12 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       if (response != 0) {
          name = JOptionPane.showInputDialog("Enter Name (you don't get another chance :X)");
       }
+       */
+
+      Wand.init();
+      SuperBomb.init();
+      Cane.setImages();
+
       DebugInterface.debugInit();
       Driver driver = new Driver(frame);
       driver.setFocusable(true);
@@ -102,17 +130,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       File bossThemeLoop = new File("./Sound files/boss_z1_loop.wav");
       File heartCollectedTheme = new File("./Sound files/got_heart_z1.wav");
 
-      AudioInputStream streamLoop;
       AudioInputStream streamIntro;
-      AudioInputStream streamDungeonIntro;
-      AudioInputStream streamDungeonLoop;
-      AudioInputStream streamDeathIntro;
-      AudioInputStream streamDeathLoop;
-      AudioInputStream streamBossIntro;
-      AudioInputStream streamBossLoop;
-      AudioInputStream streamItemCollected;
-      AudioInputStream streamOpenThing;
-      AudioInputStream streamHeartCollected;
+
       AudioFormat formatIntro;
       DataLine.Info infoIntro;
 
@@ -124,94 +143,28 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       clipIntro.start();
       clipIntroLen = 0;
 
-      AudioFormat formatLoop;
-      DataLine.Info infoLoop;
-      Boomerang.setImage();
-      streamLoop = AudioSystem.getAudioInputStream(overworldthemeLoop);
-      formatLoop = streamIntro.getFormat();
-      infoLoop = new DataLine.Info(Clip.class, formatLoop);
-      clipLoop = (Clip) AudioSystem.getLine(infoLoop);
-      clipLoop.open(streamLoop);
+      clipLoop = loadClip(overworldthemeLoop);
+      dungeonLoop = loadClip(dungeonthemeLoop);
+      dungeonIntro = loadClip(dungeonthemeIntro);
+      deathIntro = loadClip(deathThemeIntro);
+      deathLoop = loadClip(deathThemeLoop);
+      bossLoop = loadClip(bossThemeLoop);
+      bossIntro = loadClip(bossThemeIntro);
+      itemCollected = loadClip(itemCollectedTheme);
+      heartCollected = loadClip(heartCollectedTheme);
+      openThing = loadClip(openThingTheme);
+   }
 
-      AudioFormat formatDungeonLoop;
-      DataLine.Info infoDungeonLoop;
-      streamDungeonLoop = AudioSystem.getAudioInputStream(dungeonthemeLoop);
-      formatDungeonLoop = streamIntro.getFormat();
-      infoDungeonLoop = new DataLine.Info(Clip.class, formatDungeonLoop);
-      dungeonLoop = (Clip) AudioSystem.getLine(infoDungeonLoop);
-      dungeonLoop.open(streamDungeonLoop);
-
-      AudioFormat formatDungeonIntro;
-      DataLine.Info infoDungeonIntro;
-      streamDungeonIntro = AudioSystem.getAudioInputStream(dungeonthemeIntro);
-      formatDungeonIntro = streamIntro.getFormat();
-      infoDungeonIntro = new DataLine.Info(Clip.class, formatDungeonIntro);
-      dungeonIntro = (Clip) AudioSystem.getLine(infoDungeonIntro);
-      dungeonIntro.open(streamDungeonIntro);
-      dungeonClipIntroLen = 0;
-
-      AudioFormat formatDeathIntro;
-      DataLine.Info infoDeathIntro;
-      streamDeathIntro = AudioSystem.getAudioInputStream(deathThemeIntro);
-      formatDeathIntro = streamIntro.getFormat();
-      infoDeathIntro = new DataLine.Info(Clip.class, formatDeathIntro);
-      deathIntro = (Clip) AudioSystem.getLine(infoDeathIntro);
-      deathIntro.open(streamDeathIntro);
-      deathIntroLen = 0;
-
-      AudioFormat formatDeathLoop;
-      DataLine.Info infoDeathLoop;
-      streamDeathLoop = AudioSystem.getAudioInputStream(deathThemeLoop);
-      formatDeathLoop = streamIntro.getFormat();
-      infoDeathLoop = new DataLine.Info(Clip.class, formatDeathLoop);
-      deathLoop = (Clip) AudioSystem.getLine(infoDeathLoop);
-      deathLoop.open(streamDeathLoop);
-
-      AudioFormat formatBossLoop;
-      DataLine.Info infoBossLoop;
-      streamBossLoop = AudioSystem.getAudioInputStream(bossThemeLoop);
-      formatBossLoop = streamIntro.getFormat();
-      infoBossLoop = new DataLine.Info(Clip.class, formatBossLoop);
-      bossLoop = (Clip) AudioSystem.getLine(infoBossLoop);
-      bossLoop.open(streamBossLoop);
-
-      AudioFormat formatBossIntro;
-      DataLine.Info infoBossIntro;
-      streamBossIntro = AudioSystem.getAudioInputStream(bossThemeIntro);
-      formatBossIntro = streamIntro.getFormat();
-      infoBossIntro = new DataLine.Info(Clip.class, formatBossIntro);
-      bossIntro = (Clip) AudioSystem.getLine(infoBossIntro);
-      bossIntro.open(streamBossIntro);
-      bossIntroLen = 0;
-
-      AudioFormat formatItemCollected;
-      DataLine.Info infoItemCollected;
-      streamItemCollected = AudioSystem.getAudioInputStream(itemCollectedTheme);
-      formatItemCollected = streamIntro.getFormat();
-      infoItemCollected = new DataLine.Info(Clip.class, formatItemCollected);
-      itemCollected = (Clip) AudioSystem.getLine(infoItemCollected);
-      itemCollected.open(streamItemCollected);
-
-      AudioFormat formatHeartCollected;
-      DataLine.Info infoHeartCollected;
-      streamHeartCollected = AudioSystem.getAudioInputStream(heartCollectedTheme);
-      formatHeartCollected = streamIntro.getFormat();
-      infoHeartCollected = new DataLine.Info(Clip.class, formatHeartCollected);
-      heartCollected = (Clip) AudioSystem.getLine(infoHeartCollected);
-      heartCollected.open(streamHeartCollected);
-
-      AudioFormat formatOpenThing;
-      DataLine.Info infoOpenThing;
-      streamOpenThing = AudioSystem.getAudioInputStream(openThingTheme);
-      formatOpenThing = streamIntro.getFormat();
-      infoOpenThing = new DataLine.Info(Clip.class, formatOpenThing);
-      openThing = (Clip) AudioSystem.getLine(infoOpenThing);
-      openThing.open(streamOpenThing);
-   
+   static Clip loadClip(File path) throws Exception {
+      AudioInputStream stream = AudioSystem.getAudioInputStream(path);
+      AudioFormat format = stream.getFormat();
+      DataLine.Info info = new DataLine.Info(Clip.class, format);
+      Clip clip = (Clip) AudioSystem.getLine(info);
+      clip.open(stream);
+      return clip;
    }
 
    public Driver(JFrame frame) throws Exception {
-      
       /*// TELEPORTS PLAYER TO SPECIFIC LOCATIONS! NOT FOR RELEASE! TESTING ONLY!!
       Player.location[0] = 8;
       Player.location[1] = 5;
@@ -286,11 +239,11 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          System.err.println("Something's about to be... peacefully beheaded.");
       }
 
-      GameContext context = new GameContext(frame);
-      this.modManager = new GlobalModManager(context); // Runs mod loader (ZModLoader)
+      //GameContext context = new GameContext(frame);
+      //this.modManager = new GlobalModManager(context); // Runs mod loader (ZModLoader)
 
-      this.room = new Room("startArea",modManager);
-      this.modManager.initMods();
+      this.room = new Room("startArea"/*,modManager*/);
+      //this.modManager.initMods();
 
       // check for key inputs
       addKeyListener(this);
@@ -678,7 +631,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          // draws the magic wand(and moves it)
          Wand.draw(g, this, player);
          // Mod render
-         modManager.render();
+         //modManager.render();
          // only let the objects move if the game isn't paused
          // GAME UPDATE CODE HERE!!!!!!
          DebugInterface.startSeg("Update");
@@ -700,7 +653,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             DebugInterface.segInstant("collectItem(key)");
             heartContainer.collectItem(player);
             DebugInterface.segInstant("collectItem(heartContainer)");
-            modManager.tick();
+            //modManager.tick();
             DebugInterface.segInstant("modtick()");
          }
          // draw items

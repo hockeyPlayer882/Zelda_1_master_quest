@@ -15,7 +15,7 @@ public static char dir2;
 private static int NumWater;
 public static void spawn(int CX, int CY, int numWater){
 try{
-          waterMonster = ImageIO.read(new File(".\\Image files\\waterMonster.png"));
+          waterMonster = ImageIO.read(new File("./Image files/waterMonster.png"));
 }catch (IOException ex) {
             
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");

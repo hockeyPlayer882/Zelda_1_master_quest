@@ -19,11 +19,11 @@ public class Item extends Entity{
    this.value = value;
    this.type = type;
    try{
-             rubpee5 = ImageIO.read(new File(".\\Image files\\Rubpee5.png"));
-             rubpee = ImageIO.read(new File(".\\Image files\\Rubpee.png"));
-             heart = ImageIO.read(new File(".\\Image files\\fullHeart.png"));
-             key = ImageIO.read(new File(".\\Image files\\key.png"));
-             heartContainer = ImageIO.read(new File(".\\Image files\\heartContainer.png"));
+             rubpee5 = ImageIO.read(new File("./Image files/Rubpee5.png"));
+             rubpee = ImageIO.read(new File("./Image files/Rubpee.png"));
+             heart = ImageIO.read(new File("./Image files/fullHeart.png"));
+             key = ImageIO.read(new File("./Image files/key.png"));
+             heartContainer = ImageIO.read(new File("./Image files/heartContainer.png"));
              
    }catch (IOException ex) {
                

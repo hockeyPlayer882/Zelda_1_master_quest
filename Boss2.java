@@ -19,7 +19,7 @@ this.hp = 1;
 this.damage = 1;
 isBoss = true;
 try{
-          boss2 = ImageIO.read(new File(".\\Image files\\boss2.png"));
+          boss2 = ImageIO.read(new File("./Image files/boss2.png"));
 }catch (IOException ex) {
             
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");

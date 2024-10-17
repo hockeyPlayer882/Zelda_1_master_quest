@@ -16,7 +16,7 @@ public class Boss5 extends Entity {
         isBoss = true;
         inv = 999;
         try {
-            boss5 = ImageIO.read(new File(".\\Image files\\boss5.png"));
+            boss5 = ImageIO.read(new File("./Image files/boss5.png"));
         } catch (IOException ex) {
 
             System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");

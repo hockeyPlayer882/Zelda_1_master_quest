@@ -16,7 +16,7 @@ this.fireResistance = 1;
 this.hp = 1;
 numKeyEnemiesAlive += 1;
 try{
-if(shieldEater == null) shieldEater = ImageIO.read(new File(".\\Image files\\shieldEater.png"));
+if(shieldEater == null) shieldEater = ImageIO.read(new File("./Image files/shieldEater.png"));
 }
 catch (IOException ex) {
             

@@ -1,4 +1,3 @@
-import modldr.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.awt.image.*;
@@ -45,25 +44,25 @@ public class Room {
    private BufferedImage wall;
    public static BufferedImage raft;
    private int numWater;
-   private GlobalModManager modManager;
+   //private GlobalModManager modManager;
 
-   public Room(String area, GlobalModManager modManager) {
-      this.modManager = modManager;
+   public Room(String area/*, GlobalModManager modManager*/) {
+      //this.modManager = modManager;
       try {
          if (rock == null)
-            rock = ImageIO.read(new File(".\\Image files\\rock.png"));
+            rock = ImageIO.read(new File("./Image files/rock.png"));
          if (rockSuperBombable == null)
-            rockSuperBombable = ImageIO.read(new File(".\\Image files\\rockSuperBombable.png"));
+            rockSuperBombable = ImageIO.read(new File("./Image files/rockSuperBombable.png"));
          if (water == null)
-            water = ImageIO.read(new File(".\\Image files\\water.png"));
+            water = ImageIO.read(new File("./Image files/water.png"));
          if (tile == null)
-            tile = ImageIO.read(new File(".\\Image files\\tile.png"));
+            tile = ImageIO.read(new File("./Image files/tile.png"));
          if (wall == null)
-            wall = ImageIO.read(new File(".\\Image files\\wall.png"));
+            wall = ImageIO.read(new File("./Image files/wall.png"));
          if (tree == null)
-            tree = ImageIO.read(new File(".\\Image files\\tree.png"));
+            tree = ImageIO.read(new File("./Image files/tree.png"));
          if (raft == null)
-            raft = ImageIO.read(new File(".\\Image files\\raft.png"));
+            raft = ImageIO.read(new File("./Image files/raft.png"));
       } catch (IOException ex) {
 
          System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");
@@ -88,7 +87,7 @@ public class Room {
       Driver.bombs.clear();
       Driver.fires.clear();
       Driver.obstacles.clear();
-      modManager.unloadRoom();
+      //modManager.unloadRoom();
       Fire.numFire = 0;
       Bomb.numBombs = 0;
       numWater = 0;
@@ -96,7 +95,7 @@ public class Room {
       Entity.numKeyEnemiesAlive = 0;
 
       // Room load starts here.
-      boolean skipBuiltinRoomLoad = modManager.loadRoom(Player.location);
+      boolean skipBuiltinRoomLoad = false;//modManager.loadRoom(Player.location);
       if (skipBuiltinRoomLoad)
          return; // Our job here is done... especially if this room doesn't exist in the source.
       for (Item item : Driver.items) {

@@ -27,14 +27,14 @@ this.cost1 = cost1;
 this.cost2 = cost2;
 this.cost3 = cost3;
 try{
-          if(bomb == null) bomb = ImageIO.read(new File(".\\Image files\\bomb.png"));
-          if(bow == null)bow = ImageIO.read(new File(".\\Image files\\bow.png"));
-          if(candle == null)candle = ImageIO.read(new File(".\\Image files\\candle.png"));
-          if(heart == null)heart = ImageIO.read(new File(".\\Image files\\fullHeart.png"));
-          if(metalShield == null)metalShield = ImageIO.read(new File(".\\Image files\\shieldMETAL.png"));
-          if(woodenShield == null) woodenShield = ImageIO.read(new File(".\\Image files\\woodenShield.png"));
-          if(blueMedicine == null)blueMedicine = ImageIO.read(new File(".\\Image files\\blueMedicine.png"));
-          if(redMedicine == null)redMedicine = ImageIO.read(new File(".\\Image files\\redMedicine.png"));
+          if(bomb == null) bomb = ImageIO.read(new File("./Image files/bomb.png"));
+          if(bow == null)bow = ImageIO.read(new File("./Image files/bow.png"));
+          if(candle == null)candle = ImageIO.read(new File("./Image files/candle.png"));
+          if(heart == null)heart = ImageIO.read(new File("./Image files/fullHeart.png"));
+          if(metalShield == null)metalShield = ImageIO.read(new File("./Image files/shieldMETAL.png"));
+          if(woodenShield == null) woodenShield = ImageIO.read(new File("./Image files/woodenShield.png"));
+          if(blueMedicine == null)blueMedicine = ImageIO.read(new File("./Image files/blueMedicine.png"));
+          if(redMedicine == null)redMedicine = ImageIO.read(new File("./Image files/redMedicine.png"));
 }catch (IOException ex) {
             
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");

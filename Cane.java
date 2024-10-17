@@ -23,8 +23,8 @@ public abstract class Cane {
     public static void setImages() {
         try {
             if (cane == null) {
-                cane = ImageIO.read(new File(".\\Image files\\invincibility.png"));
-                star = ImageIO.read(new File(".\\Image files\\star.png"));
+                cane = ImageIO.read(new File("./Image files/invincibility.png"));
+                star = ImageIO.read(new File("./Image files/star.png"));
             }
         } catch (IOException ex) {
 

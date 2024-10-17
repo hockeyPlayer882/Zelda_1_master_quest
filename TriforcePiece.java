@@ -13,7 +13,7 @@ this.cx = cx;
 this.cy = cy;
 
 try{
-          triforcePiece = ImageIO.read(new File(".\\Image files\\triforcePiece.png"));
+          triforcePiece = ImageIO.read(new File("./Image files/triforcePiece.png"));
 }catch (IOException ex) {
             
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");

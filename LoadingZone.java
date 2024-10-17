@@ -91,22 +91,22 @@ public class LoadingZone extends Entity {
    public LoadingZone(int cx, int cy, int areaToBeEntered) {
       try {
          if (wallImages[0][0] == null) {
-            wallImages[0][1] = ImageIO.read(new File(".\\Image files\\topWallBLOCKED.png"));
-            wallImages[0][0] = ImageIO.read(new File(".\\Image files\\topWallOPEN.png"));
-            wallImages[0][2] = ImageIO.read(new File(".\\Image files\\topWallKEY.png"));
-            wallImages[0][3] = ImageIO.read(new File(".\\Image files\\topWallCLOSED.png"));
-            wallImages[1][1] = ImageIO.read(new File(".\\Image files\\bottomWallBLOCKED.png"));
-            wallImages[1][0] = ImageIO.read(new File(".\\Image files\\bottomWallOPEN.png"));
-            wallImages[1][2] = ImageIO.read(new File(".\\Image files\\bottomWallKEY.png"));
-            wallImages[0][3] = ImageIO.read(new File(".\\Image files\\bottomWallCLOSED.png"));
-            wallImages[2][1] = ImageIO.read(new File(".\\Image files\\leftWallBLOCKED.png"));
-            wallImages[2][0] = ImageIO.read(new File(".\\Image files\\leftWallOPEN.png"));
-            wallImages[2][2] = ImageIO.read(new File(".\\Image files\\leftWallKEY.png"));
-            wallImages[0][3] = ImageIO.read(new File(".\\Image files\\leftWallCLOSED.png"));
-            wallImages[3][1] = ImageIO.read(new File(".\\Image files\\rightWallBLOCKED.png"));
-            wallImages[3][0] = ImageIO.read(new File(".\\Image files\\rightWallOPEN.png"));
-            wallImages[3][2] = ImageIO.read(new File(".\\Image files\\rightWallKEY.png"));
-            wallImages[3][3] = ImageIO.read(new File(".\\Image files\\rightWallCLOSED.png"));
+            wallImages[0][1] = ImageIO.read(new File("./Image files/topWallBLOCKED.png"));
+            wallImages[0][0] = ImageIO.read(new File("./Image files/topWallOPEN.png"));
+            wallImages[0][2] = ImageIO.read(new File("./Image files/topWallKEY.png"));
+            wallImages[0][3] = ImageIO.read(new File("./Image files/topWallCLOSED.png"));
+            wallImages[1][1] = ImageIO.read(new File("./Image files/bottomWallBLOCKED.png"));
+            wallImages[1][0] = ImageIO.read(new File("./Image files/bottomWallOPEN.png"));
+            wallImages[1][2] = ImageIO.read(new File("./Image files/bottomWallKEY.png"));
+            wallImages[0][3] = ImageIO.read(new File("./Image files/bottomWallCLOSED.png"));
+            wallImages[2][1] = ImageIO.read(new File("./Image files/leftWallBLOCKED.png"));
+            wallImages[2][0] = ImageIO.read(new File("./Image files/leftWallOPEN.png"));
+            wallImages[2][2] = ImageIO.read(new File("./Image files/leftWallKEY.png"));
+            wallImages[0][3] = ImageIO.read(new File("./Image files/leftWallCLOSED.png"));
+            wallImages[3][1] = ImageIO.read(new File("./Image files/rightWallBLOCKED.png"));
+            wallImages[3][0] = ImageIO.read(new File("./Image files/rightWallOPEN.png"));
+            wallImages[3][2] = ImageIO.read(new File("./Image files/rightWallKEY.png"));
+            wallImages[3][3] = ImageIO.read(new File("./Image files/rightWallCLOSED.png"));
          }
 
       } catch (IOException ex) {
@@ -483,7 +483,7 @@ public class LoadingZone extends Entity {
                         
                   } else if (Player.level == 8){
                       if(Player.location[0] == 0 && Player.location[1] == 0)
-                          keyDoor[7][0] = DOOR_UNLOCKED:
+                          keyDoor[7][0] = DOOR_UNLOCKED;
                       
                   }
                } else

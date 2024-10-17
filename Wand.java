@@ -96,14 +96,14 @@ public abstract class Wand{
    
    public static void init(){
       try{     
-                wandW = ImageIO.read(new File(".\\Image files\\wandW.png"));
-                wandS = ImageIO.read(new File(".\\Image files\\wandS.png"));
-                wandA = ImageIO.read(new File(".\\Image files\\wandA.png"));
-                wandD = ImageIO.read(new File(".\\Image files\\wandD.png"));
-                projectileW = ImageIO.read(new File(".\\Image files\\wandProjectileW.png"));
-                projectileS = ImageIO.read(new File(".\\Image files\\wandProjectileS.png"));
-                projectileA = ImageIO.read(new File(".\\Image files\\wandProjectileA.png"));
-                projectileD = ImageIO.read(new File(".\\Image files\\wandProjectileD.png"));
+                wandW = ImageIO.read(new File("./Image files/wandW.png"));
+                wandS = ImageIO.read(new File("./Image files/wandS.png"));
+                wandA = ImageIO.read(new File("./Image files/wandA.png"));
+                wandD = ImageIO.read(new File("./Image files/wandD.png"));
+                projectileW = ImageIO.read(new File("./Image files/wandProjectileW.png"));
+                projectileS = ImageIO.read(new File("./Image files/wandProjectileS.png"));
+                projectileA = ImageIO.read(new File("./Image files/wandProjectileA.png"));
+                projectileD = ImageIO.read(new File("./Image files/wandProjectileD.png"));
       }catch (IOException ex) {
                  System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT!");
                  System.out.println("Error details: ");

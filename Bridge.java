@@ -11,7 +11,7 @@ this.cx = cx;
 this.cy = cy;
 this.dir = dir;
 try{
-          if(bridge == null)bridge = ImageIO.read(new File(".\\Image files\\bridge.png"));
+          if(bridge == null)bridge = ImageIO.read(new File("./Image files/bridge.png"));
 }catch (IOException ex) {
             
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");
@@ -25,7 +25,7 @@ this.cx = cx;
 this.cy = cy;
 dir = ' ';
 try{
-          if(bridge == null)bridge = ImageIO.read(new File(".\\Image files\\bridge.png"));
+          if(bridge == null)bridge = ImageIO.read(new File("./Image files/bridge.png"));
 }catch (IOException ex) {
             
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");

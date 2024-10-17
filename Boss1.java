@@ -19,7 +19,7 @@ public class Boss1 extends Entity {
         this.damage = 2;
         isBoss = true;
         try {
-            boss1 = ImageIO.read(new File(".\\Image files\\boss1.png"));
+            boss1 = ImageIO.read(new File("./Image files/boss1.png"));
         } catch (IOException ex) {
 
             System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");

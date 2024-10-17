@@ -12,10 +12,10 @@ private BufferedImage octorokRA;
 private BufferedImage octorokRD;
 public OctorokR(int cx, int cy){
 try{     
-          if(octorokRW == null)octorokRW = ImageIO.read(new File(".\\Image files\\octorokRW.png"));
-          if(octorokRS == null)octorokRS = ImageIO.read(new File(".\\Image files\\octorokRS.png"));
-          if(octorokRA == null)octorokRA = ImageIO.read(new File(".\\Image files\\octorokRA.png"));
-          if(octorokRD == null)octorokRD = ImageIO.read(new File(".\\Image files\\octorokRD.png"));
+          if(octorokRW == null)octorokRW = ImageIO.read(new File("./Image files/octorokRW.png"));
+          if(octorokRS == null)octorokRS = ImageIO.read(new File("./Image files/octorokRS.png"));
+          if(octorokRA == null)octorokRA = ImageIO.read(new File("./Image files/octorokRA.png"));
+          if(octorokRD == null)octorokRD = ImageIO.read(new File("./Image files/octorokRD.png"));
 }catch (IOException ex) {
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT!");
            System.out.println("Error details: ");

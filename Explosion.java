@@ -13,7 +13,7 @@ public class Explosion extends Entity {
         this.damage = 1;
         this.cy = cy;
         try {
-            explosion = ImageIO.read(new File(".\\Image files\\explosion.png"));
+            explosion = ImageIO.read(new File("./Image files/explosion.png"));
         } catch (IOException ex) {
             System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");
             System.out.println("Error details: ");

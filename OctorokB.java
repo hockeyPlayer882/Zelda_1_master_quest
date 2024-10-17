@@ -14,10 +14,10 @@ public OctorokB(int cx, int cy){
 super(6,'w',cx,cy,2,2,0,1,(int)Math.random()*20+80,40,0);
 try{     
           if(octorokBW == null){
-            octorokBW = ImageIO.read(new File(".\\Image files\\octorokBW.png"));
-            octorokBS = ImageIO.read(new File(".\\Image files\\octorokBS.png"));
-            octorokBA = ImageIO.read(new File(".\\Image files\\octorokBA.png"));
-            octorokBD = ImageIO.read(new File(".\\Image files\\octorokBD.png"));
+            octorokBW = ImageIO.read(new File("./Image files/octorokBW.png"));
+            octorokBS = ImageIO.read(new File("./Image files/octorokBS.png"));
+            octorokBA = ImageIO.read(new File("./Image files/octorokBA.png"));
+            octorokBD = ImageIO.read(new File("./Image files/octorokBD.png"));
 }
 }catch (IOException ex) {
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT!");

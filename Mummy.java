@@ -22,7 +22,7 @@ numKeyEnemiesAlive += 1;
 this.MmovementTimer = 40;
 this.movementTimer = (int)(MmovementTimer+Math.random()*(80));
  try{
-             mummy = ImageIO.read(new File(".\\Image files\\mummy.png"));
+             mummy = ImageIO.read(new File("./Image files/mummy.png"));
              
    }catch (IOException ex) {
                

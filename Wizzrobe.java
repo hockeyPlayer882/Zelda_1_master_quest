@@ -35,8 +35,8 @@ public class Wizzrobe extends Entity{
     this.cx = cx;
     this.cy = cy;
     try{     
-        if(wizzrobeA == null)wizzrobeA = ImageIO.read(new File(".\\Image files\\wizzrobeA.png"));
-        if(wizzrobeD == null)wizzrobeD = ImageIO.read(new File(".\\Image files\\wizzrobeD.png"));
+        if(wizzrobeA == null)wizzrobeA = ImageIO.read(new File("./Image files/wizzrobeA.png"));
+        if(wizzrobeD == null)wizzrobeD = ImageIO.read(new File("./Image files/wizzrobeD.png"));
     }catch (IOException ex) {
         System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT!");
         System.out.println("Error details: ");

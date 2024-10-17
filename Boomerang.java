@@ -13,7 +13,7 @@ public static char[] dirs = {'n','n'};
 public static BufferedImage boomerang;
 public static void setImage(){
 try{
-          boomerang = ImageIO.read(new File(".\\Image files\\boomerang.png"));
+          boomerang = ImageIO.read(new File("./Image files/boomerang.png"));
 }catch (IOException ex) {
             
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");

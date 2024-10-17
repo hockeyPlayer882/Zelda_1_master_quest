@@ -41,14 +41,14 @@ public class Boss7 extends Entity {
     public Boss7(int cx, int cy) {
         this.speed = 6;
         try {
-            boss7Animations[0] = ImageIO.read(new File(".\\Image files\\boss7W.png"));
-            boss7Wattack = ImageIO.read(new File(".\\Image files\\boss7Wattack.png"));
-            boss7Animations[1] = ImageIO.read(new File(".\\Image files\\boss7S.png"));
-            boss7Sattack = ImageIO.read(new File(".\\Image files\\boss7Sattack.png"));
-            boss7Animations[2] = ImageIO.read(new File(".\\Image files\\boss7A.png"));
-            boss7Aattack = ImageIO.read(new File(".\\Image files\\boss7Aattack.png"));
-            boss7Animations[3] = ImageIO.read(new File(".\\Image files\\boss7D.png"));
-            boss7Dattack = ImageIO.read(new File(".\\Image files\\boss7Dattack.png"));
+            boss7Animations[0] = ImageIO.read(new File("./Image files/boss7W.png"));
+            boss7Wattack = ImageIO.read(new File("./Image files/boss7Wattack.png"));
+            boss7Animations[1] = ImageIO.read(new File("./Image files/boss7S.png"));
+            boss7Sattack = ImageIO.read(new File("./Image files/boss7Sattack.png"));
+            boss7Animations[2] = ImageIO.read(new File("./Image files/boss7A.png"));
+            boss7Aattack = ImageIO.read(new File("./Image files/boss7Aattack.png"));
+            boss7Animations[3] = ImageIO.read(new File("./Image files/boss7D.png"));
+            boss7Dattack = ImageIO.read(new File("./Image files/boss7Dattack.png"));
         } catch (IOException ex) {
             System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT!");
             System.out.println("Error details: ");

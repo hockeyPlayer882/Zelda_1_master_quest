@@ -27,7 +27,7 @@ public class Head extends Entity{
    this.cx = headNum == 1 ? cx-unitSize:headNum == 3 ? cx+unitSize:cx;
    this.cy = headNum == 2 ? cy-unitSize:headNum == 4 ? cy+unitSize:cy;
    try{
-             head = ImageIO.read(new File(".\\Image files\\headBoss4" + (headNum == 1 ? "A":headNum == 2 ? "W":headNum == 3 ? "D":"S") + ".png"));
+             head = ImageIO.read(new File("./Image files/headBoss4" + (headNum == 1 ? "A":headNum == 2 ? "W":headNum == 3 ? "D":"S") + ".png"));
    }catch (IOException ex) {
                
               System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");
@@ -61,7 +61,7 @@ this.MmovementTimer = 10;
 this.damage = 12;
 isBoss = true;
 try{
-          boss4 = ImageIO.read(new File(".\\Image files\\boss4.png"));
+          boss4 = ImageIO.read(new File("./Image files/boss4.png"));
 }catch (IOException ex) {
             
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");

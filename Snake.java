@@ -13,8 +13,8 @@ public class Snake extends Entity{
         super(10,'a',cx,cy,3,3,0,1,(int)(Math.random()*20+80),(int)Math.random()*20+80,0);
         numKeyEnemiesAlive++;        
             try{     
-                    snakeA = ImageIO.read(new File(".\\Image files\\snakeA.png"));
-                    snakeD = ImageIO.read(new File(".\\Image files\\snakeD.png"));
+                    snakeA = ImageIO.read(new File("./Image files/snakeA.png"));
+                    snakeD = ImageIO.read(new File("./Image files/snakeD.png"));
             }catch (IOException ex) {
                     System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");
                     System.out.println("Error details: ");

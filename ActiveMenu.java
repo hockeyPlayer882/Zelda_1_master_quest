@@ -28,21 +28,21 @@ public class ActiveMenu{
 
    public ActiveMenu() {
       try {     
-         fullHeart = ImageIO.read(new File(".\\Image files\\fullHeart.png"));
-         halfHeart = ImageIO.read(new File(".\\Image files\\halfHeart.png"));
-         poisonedFullHeart = ImageIO.read(new File(".\\Image files\\poisonedFullHeart.png"));
-         poisonedHalfHeart = ImageIO.read(new File(".\\Image files\\poisonedHalfHeart.png"));
-         emptyHeart = ImageIO.read(new File(".\\Image files\\emptyHeart.png"));
-         rubpee = ImageIO.read(new File(".\\Image files\\Rubpee.png"));
-         bomb = ImageIO.read(new File(".\\Image files\\bomb.png"));
-         candle = ImageIO.read(new File(".//Image files\\candle.png"));
-         key = ImageIO.read(new File(".\\Image files\\key.png"));
-         bow = ImageIO.read(new File(".\\Image files\\bow.png"));
+         fullHeart = ImageIO.read(new File("./Image files/fullHeart.png"));
+         halfHeart = ImageIO.read(new File("./Image files/halfHeart.png"));
+         poisonedFullHeart = ImageIO.read(new File("./Image files/poisonedFullHeart.png"));
+         poisonedHalfHeart = ImageIO.read(new File("./Image files/poisonedHalfHeart.png"));
+         emptyHeart = ImageIO.read(new File("./Image files/emptyHeart.png"));
+         rubpee = ImageIO.read(new File("./Image files/Rubpee.png"));
+         bomb = ImageIO.read(new File("./Image files/bomb.png"));
+         candle = ImageIO.read(new File(".//Image files/candle.png"));
+         key = ImageIO.read(new File("./Image files/key.png"));
+         bow = ImageIO.read(new File("./Image files/bow.png"));
 
          if (Shop.blueMedicine == null) 
-            Shop.blueMedicine = ImageIO.read(new File(".\\Image files\\blueMedicine.png"));
+            Shop.blueMedicine = ImageIO.read(new File("./Image files/blueMedicine.png"));
          if (Shop.redMedicine == null) 
-            Shop.redMedicine = ImageIO.read(new File(".\\Image files\\redMedicine.png"));
+            Shop.redMedicine = ImageIO.read(new File("./Image files/redMedicine.png"));
       }
       catch (IOException ex) {
          System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");

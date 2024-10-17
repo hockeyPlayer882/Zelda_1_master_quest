@@ -13,7 +13,7 @@ public Bomb(int cx, int cy){
 this.cx = cx;
 this.cy = cy;
 try{     
-          bomb = ImageIO.read(new File(".\\Image files\\bomb.png"));
+          bomb = ImageIO.read(new File("./Image files/bomb.png"));
 }catch (IOException ex) {
            System.out.println("FAILURE, YOU ARE STOOOOOOOOOOOOOOOOOOPID WITH IMAGES! GET BETTER AT JAVA YOU IDIOT");
            System.out.println("Error details: ");
