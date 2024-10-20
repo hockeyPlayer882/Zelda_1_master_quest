@@ -27,8 +27,8 @@ public class LoadingZone extends Entity {
       { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY},
       { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY} ,
       { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY},
-      { 
-          
+      {  HAS_NO_KEY, HAS_NO_KEY
+        
       }
    };
    // same idea as the keyArray, but checks if the door that each key is intended

@@ -268,7 +268,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       Timer timer = new Timer(10, this);
       timer.start();
 
-      toggleFullScreen();
+      //toggleFullScreen();
    }
 
    // timer function to be called every frame
