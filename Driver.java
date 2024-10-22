@@ -133,10 +133,27 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          }
       });
 
+      // overworldthemeIntro = new File("./Sound files/overworld_leadin.wav");
+      // overworldthemeLoop = new File("./Sound files/overworld_loop.wav");
+      // dungeonthemeIntro = new File("./Sound files/z1_dungeon_intro.wav");
+      // File dungeonthemeLoop = new File("./Sound files/z1_dungeon_test_loop_1.wav");
+      // File deathThemeIntro = new File("./Sound files/you_died_start.wav");
+      // File deathThemeLoop = new File("./Sound files/you_died_loop.wav");
+      // File itemCollectedTheme = new File("./Sound files/got_item_z1.wav");
+      // File openThingTheme = new File("./Sound files/secret_z1.wav");
+      // bossThemeIntro = new File("./Sound files/boss_z1_intro.wav");
+      // File bossThemeLoop = new File("./Sound files/boss_z1_loop.wav");
+      // File heartCollectedTheme = new File("./Sound files/got_heart_z1.wav");
+
+      // TODO: Michael remove the intro for overworld.
       overworldthemeIntro = new File("./Sound files/overworld_leadin.wav");
-      overworldthemeLoop = new File("./Sound files/overworld_loop.wav");
-      dungeonthemeIntro = new File("./Sound files/z1_dungeon_intro.wav");
-      File dungeonthemeLoop = new File("./Sound files/z1_dungeon_test_loop_1.wav");
+      overworldthemeLoop = new File("./new_ost/07-Hyrule Field.wav"); // Classic
+
+      // TODO: Adjust intro (Michael).
+      dungeonthemeIntro = new File("./new_ost/12-Lost Ancient Ruins-Intro.wav");
+      File dungeonthemeLoop = new File("./new_ost/12-Lost Ancient Ruins.wav");
+
+      // TODO: Replace all the ./Sound files for release.
       File deathThemeIntro = new File("./Sound files/you_died_start.wav");
       File deathThemeLoop = new File("./Sound files/you_died_loop.wav");
       File itemCollectedTheme = new File("./Sound files/got_item_z1.wav");
