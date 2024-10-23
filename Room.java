@@ -10,9 +10,6 @@ public class Room {
    private int numSpawnedOctorokRs = 0;
    private int numOctorokBs = 0;
    private int numSpawnedOctorokBs = 0;
-   // NOTE TO SELF:: GENIUS IDEA!!!!!!!!!!!!! FORCE THE PLAYER TO FIND A KEY HIDDEN
-   // IN THE OVERWORLD FOR ONE OF THE DUNGEON MAPS WHERE YOU HAVE TO FIGHT DARK
-   // LINK.
    // arrayList to store objects in a specific room
    public static ArrayList<ArrayList<Entity>> currentRoom = new ArrayList<ArrayList<Entity>>();
    public static ArrayList<String> text = new ArrayList<String>();
@@ -139,7 +136,7 @@ public class Room {
                   newArea = 4;
                else if (Player.location[0] == 8 && Player.location[1] == 5 || Player.level == 7)
                   newArea = 7;
-               else if (Player.location[0] == 10 && Player.location[1] == 10)
+               else if (Player.location[0] == 10 && Player.location[1] == 10 && ActiveMenu.numTriforcePieces == 7)
                   newArea = 8;
                row.add(new LoadingZone(x * 41 + 23, y * 41 + 140, newArea));
                continue;
@@ -1011,9 +1008,9 @@ public class Room {
                // room below the previous room(holds a cave with advice, "secrets are hidden in
                // trees, set them on fire to reveal them."
                else if (Player.location[0] == 16 && Player.location[1] == 8) {
-                  if (y == 14 && (x == 10 || x == 11))
+                  if (y >= 14 && (x == 10 || x == 11))
                      roomToBeGenerated[x][y] = 6;
-                  else if (x == 0 || x == 18 || y == 14)
+                  else if (x == 0 || x == 18 || y >= 14)
                      roomToBeGenerated[x][y] = 1;
                   else if (y == 10 || y == 11 && (x != 0 && x != 18))
                      roomToBeGenerated[x][y] = makeRow("", "!!RO", "", x);
@@ -1023,7 +1020,7 @@ public class Room {
                }
                // room above and to the right of the previous room(another branch room)
                else if (Player.location[0] == 15 && Player.location[1] == 9) {
-                  if (y <= 4 || (x == 18 && y >= 10) || (x == 0 && y == 14))
+                  if (y <= 4 || (x == 18 && y >= 10) || (x == 0 && y >= 14))
                      roomToBeGenerated[x][y] = 1;
                   else if (y >= 5 && y <= 7)
                      roomToBeGenerated[x][y] = makeRow("", "DANGER! " + (y == 6 ? "red" : "blue") + " octoroks", "", x);
@@ -1033,9 +1030,9 @@ public class Room {
                // room below the previous room(literally nothing here, but we're going to make
                // the player think otherwise ;] )
                else if (Player.location[0] == 15 && Player.location[1] == 8) {
-                  if (y == 14 && (x == 10 || x == 11))
+                  if (y >= 14 && (x == 10 || x == 11))
                      roomToBeGenerated[x][y] = 14;
-                  else if (x == 0 || x == 18 || y == 14)
+                  else if (x == 0 || x == 18 || y >= 14)
                      roomToBeGenerated[x][y] = 1;
                   else if (y == 10 || y == 11 && (x != 0 && x != 18))
                      roomToBeGenerated[x][y] = makeRow("", "!!BO", "", x);
@@ -1045,7 +1042,7 @@ public class Room {
                }
                // 1 room to the left of the branch room at (15,9) (entrance to dungeon 4)
                else if (Player.location[0] == 14 && Player.location[1] == 9) {
-                  if (y == 14 || y <= 4 || x == 0)
+                  if (y >= 14 || y <= 4 || x == 0)
                      roomToBeGenerated[x][y] = 1;
                   else
                      roomToBeGenerated[x][y] = 0;
@@ -1130,7 +1127,7 @@ public class Room {
                }
                // the room 1 up and 1 left from the start(The first shop room in the game)
                else if (Player.location[0] == 9 && Player.location[1] == 11) {
-                  if (y == 14)
+                  if (y >= 14)
                      roomToBeGenerated[x][y] = makeRow("openingMiddle", "", "", x);
                   else if (y >= 0 && y <= 3)
                      roomToBeGenerated[x][y] = makeRow("openingMiddle", "null", "", x);
@@ -1246,7 +1243,7 @@ public class Room {
                }
                // room directly left from the shop
                else if (Player.location[0] == 8 && Player.location[1] == 11) {
-                  if (y == 14)
+                  if (y >= 14)
                      roomToBeGenerated[x][y] = makeRow("openingMiddle", "", "", x);
                   else if (y >= 0 && y <= 4 || y == 18)
                      roomToBeGenerated[x][y] = makeRow("rocks on right", "null", "small river", x);
@@ -1385,16 +1382,16 @@ public class Room {
                }
                //room below the previous room (branches room, left leads to dungeon 6, right has a heartPiece, and down leads to dungeon 7)
                else if (Player.location[0] == 8 && Player.location[1] == 6){
-                  if(y == 14 && (x < 2  || x > 16)) roomToBeGenerated[x][y] = 1;
-                  else if(y==14) roomToBeGenerated[x][y] = Obstacle.superBombBlownRock ? 0:24;
+                  if(y >= 14 && (x < 2  || x > 16)) roomToBeGenerated[x][y] = 1;
+                  else if(y >= 14) roomToBeGenerated[x][y] = Obstacle.superBombBlownRock ? 0:24;
                   else if( y == 0 && x != 10 && x != 11) roomToBeGenerated[x][y] = 1;
                   else if ((x == 7 || x == 13) && y <= 14) roomToBeGenerated[x][y] = x == 7 ? 7:8;
-                  else roomToBeGenerated[x][y] = 0;
+                  else roomToBeGenerated[x][y] = 0; 
                }
                //room to the right of the previous room
                else if (Player.location[0] == 9 && Player.location[1] == 6){
                   if(y == 10 && x == 18) roomToBeGenerated[x][y] = 12;
-                  else if(y == 0 || y == 14 || x == 18) roomToBeGenerated[x][y] = 1;
+                  else if(y == 0 || y >= 14 || x == 18) roomToBeGenerated[x][y] = 1;
                   else if(x > 1 && y < 5 && x <= 6) roomToBeGenerated[x][y] = 8;
                   else if(x > 3 && y%2 == 0) roomToBeGenerated[x][y] = 7;
                   else roomToBeGenerated[x][y] = 0;
@@ -1402,13 +1399,13 @@ public class Room {
                //2 rooms to the left of the previous room 
                else if (Player.location[0] == 7 && Player.location[1] == 6){
                   if(y == 10 && x == 10 && LoadingZone.numDefeatedBosses == 5) roomToBeGenerated[x][y] = 15;
-                  else if(y == 0 || y == 14 || x == 0) roomToBeGenerated[x][y] = 1;
+                  else if(y == 0 || y >= 14 || x == 0) roomToBeGenerated[x][y] = 1;
                   else if(x <= 15 && y < 14)roomToBeGenerated[x][y] = y%2 == 0 ? 7:8;
                   else roomToBeGenerated[x][y] = 0;
                }
                //1 room to the right and below the previous room (dungeon 7)
                else if (Player.location[0] == 8 && Player.location[1] == 5){
-                  if(x == 0 || y == 14 || x == 18) roomToBeGenerated[x][y] = 1;
+                  if(x == 0 || y >= 14 || x == 18) roomToBeGenerated[x][y] = 1;
                   else if(y == 0) roomToBeGenerated[x][y] = makeRow("openingMiddle","","",x);
                   else if (x == 10 && y == 10 && LoadingZone.numDefeatedBosses == 6) roomToBeGenerated[x][y] = 6;
                   else roomToBeGenerated[x][y] = 0;
@@ -1885,7 +1882,7 @@ public class Room {
                   LoadingZone.currentRoomBlock[3] = 0;
                   if (y == 13)
                      roomToBeGenerated[x][y] = 9;
-                  else if (y == 14)
+                  else if (y >= 14)
                      roomToBeGenerated[x][y] = 13;
                   else
                      roomToBeGenerated[x][y] = 0;
@@ -2694,7 +2691,7 @@ public class Room {
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(y == 14) roomToBeGenerated[x][y] = 9;
+                  if(y >= 14) roomToBeGenerated[x][y] = 9;
                   else if(y > 15) roomToBeGenerated[x][y] = 13;
                   else roomToBeGenerated[x][y] = 0;
                }
@@ -2773,7 +2770,7 @@ public class Room {
                LoadingZone.currentRoomBlock[2] = 0;
                LoadingZone.currentRoomBlock[3] = 1;
                if(y == 15) roomToBeGenerated[x][y] = 22;
-               else if (y == 14) roomToBeGenerated[x][y] = 13;
+               else if (y >= 14) roomToBeGenerated[x][y] = 13;
                else roomToBeGenerated[x][y] = 0;
                }  
                //room to the left of the previous room (nothing here, up is a dead end, and left leads to death and the cane of invincibility)

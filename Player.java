@@ -33,7 +33,7 @@ public class Player extends Entity {
    private static BufferedImage linkT;
    // 2D array for storing link non-attacking animations, first array is for
    // standard, and the second is for the metal shield
-   private static BufferedImage[][] linkAnimations = { { linkW, linkS, linkA, linkD },
+   public static BufferedImage[][] linkAnimations = { { linkW, linkS, linkA, linkD },
          { linkSMETAL, linkAMETAL, linkDMETAL }, { linkSBROKEN, linkABROKEN, linkDBROKEN } };
    // item variables
    public int rubpees;

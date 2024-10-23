@@ -290,8 +290,10 @@ public class Entity {
          // room
          if (Player.level == 1) {
             if (Player.location[0] == 3 && Player.location[1] == 4 && !Player.hasBoomerang) {
-               if (numKeyEnemiesAlive == 0 && Room.images.size() == 0)
+               if (numKeyEnemiesAlive == 0 && Room.images.size() == 0){
+                  Boomerang.setImage();
                   Room.images.add(Boomerang.boomerang);
+               }
             }
          }
          if (Player.level == 3) {

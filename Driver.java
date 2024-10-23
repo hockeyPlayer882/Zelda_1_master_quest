@@ -29,6 +29,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    Player player = new Player();
    public static String name;
    Sword sword = new Sword();
+   static Menu menu;
    // Varius item refrences to be spawned when an enemy is defeated
    Item rubpee = new Item(999, 999, 1, "rubpee");
    Item rubpee5 = new Item(999, 999, 5, "rubpee5");
@@ -41,34 +42,21 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    Room room;
    // class used to store HUD for the player shown while the game is active
    ActiveMenu activeMenu = new ActiveMenu();
-   public static Clip clipIntro;
-   static long clipIntroLen;
-   public static Clip clipLoop;
+   public static Clip overworldLoop;
    public static Clip dungeonIntro;
-   public static File overworldthemeLoop;
-   public static File overworldthemeIntro;
-   public static File dungeonthemeIntro;
-   public static File bossThemeIntro;
-   static long dungeonClipIntroLen;
    public static Clip dungeonLoop;
-   public static Clip deathIntro;
-
-   public static long deathIntroLen;
    public static Clip deathLoop;
    public static Clip itemCollected;
    public static Clip heartCollected;
    public static Clip openThing;
-   public static Clip bossIntro;
-   public static long bossIntroLen;
    public static Clip bossLoop;
    //public GlobalModManager modManager;
 
    // Fullscreen
    private static JFrame frame;
    private boolean fullscreen = false;
-   public static Dimension currentResolution = new Dimension(800, 770);
+   public static Dimension currentResolution = new Dimension(790, 770);
    public static Point transformPoint = new Point(0, 0);
-
    public static void main(String[] args) throws Exception {
       System.out.println("Zelda 1 master quest " + version);
 
@@ -80,7 +68,6 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
 
       // instantiates frame
       frame = new JFrame();
-
       // RSC Games: refactored the name prompt. Original code will be kept for historical
       // reasons.
       name = null;
@@ -95,6 +82,9 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          if (response == 0) break;
       }
 
+      //creates the game menu ***REPLACE PARAMETER WITH data taken from the save file whe support is added
+      String[] pNames = {name,"empty","empty"};
+      menu = new Menu(pNames);
       /*
       // vvvvvv Original code below vvvvvv
       // instantiates frame
@@ -110,7 +100,6 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          name = JOptionPane.showInputDialog("Enter Name (you don't get another chance :X)");
       }
        */
-
       Wand.init();
       SuperBomb.init();
       Cane.setImages();
@@ -122,8 +111,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       frame.setResizable(true);
       frame.add(driver);
       frame.pack();
-      frame.setSize(800, 770);
-      frame.setMinimumSize(new Dimension(800, 770));
+      frame.setSize(790, 770);
+      frame.setMinimumSize(new Dimension(790, 770));
       frame.setLocationRelativeTo(null);
       frame.setVisible(true);
 
@@ -132,56 +121,19 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             currentResolution = new Dimension(frame.getWidth(), frame.getHeight()); 
          }
       });
-
-      // overworldthemeIntro = new File("./Sound files/overworld_leadin.wav");
-      // overworldthemeLoop = new File("./Sound files/overworld_loop.wav");
-      // dungeonthemeIntro = new File("./Sound files/z1_dungeon_intro.wav");
-      // File dungeonthemeLoop = new File("./Sound files/z1_dungeon_test_loop_1.wav");
-      // File deathThemeIntro = new File("./Sound files/you_died_start.wav");
-      // File deathThemeLoop = new File("./Sound files/you_died_loop.wav");
-      // File itemCollectedTheme = new File("./Sound files/got_item_z1.wav");
-      // File openThingTheme = new File("./Sound files/secret_z1.wav");
-      // bossThemeIntro = new File("./Sound files/boss_z1_intro.wav");
-      // File bossThemeLoop = new File("./Sound files/boss_z1_loop.wav");
-      // File heartCollectedTheme = new File("./Sound files/got_heart_z1.wav");
-
-      // TODO: Michael remove the intro for overworld.
-      overworldthemeIntro = new File("./Sound files/overworld_leadin.wav");
-      overworldthemeLoop = new File("./new_ost/07-Hyrule Field.wav"); // Classic
-
-      // TODO: Adjust intro (Michael).
-      dungeonthemeIntro = new File("./new_ost/12-Lost Ancient Ruins-Intro.wav");
-      File dungeonthemeLoop = new File("./new_ost/12-Lost Ancient Ruins.wav");
-
-      // TODO: Replace all the ./Sound files for release.
-      File deathThemeIntro = new File("./Sound files/you_died_start.wav");
+      File overworldthemeLoop = new File("new_ost/07-Hyrule Field.wav");
+      File dungeonthemeLoop = new File("new_ost/12-Lost Ancient Ruins.wav");
+      File dungeonthemeIntro = new File("new_ost/12-Lost Ancient Ruins-Intro.wav");
       File deathThemeLoop = new File("./Sound files/you_died_loop.wav");
       File itemCollectedTheme = new File("./Sound files/got_item_z1.wav");
       File openThingTheme = new File("./Sound files/secret_z1.wav");
-      bossThemeIntro = new File("./Sound files/boss_z1_intro.wav");
-      File bossThemeLoop = new File("./Sound files/boss_z1_loop.wav");
+      File bossThemeLoop = new File("Sound files/boss_z1_loop.wav");
       File heartCollectedTheme = new File("./Sound files/got_heart_z1.wav");
-
-      AudioInputStream streamIntro;
-
-      AudioFormat formatIntro;
-      DataLine.Info infoIntro;
-
-      streamIntro = AudioSystem.getAudioInputStream(overworldthemeIntro);
-      formatIntro = streamIntro.getFormat();
-      infoIntro = new DataLine.Info(Clip.class, formatIntro);
-      clipIntro = (Clip) AudioSystem.getLine(infoIntro);
-      clipIntro.open(streamIntro);
-      clipIntro.start();
-      clipIntroLen = 0;
-
-      clipLoop = loadClip(overworldthemeLoop);
-      dungeonLoop = loadClip(dungeonthemeLoop);
       dungeonIntro = loadClip(dungeonthemeIntro);
-      deathIntro = loadClip(deathThemeIntro);
+      overworldLoop = loadClip(overworldthemeLoop);
+      dungeonLoop = loadClip(dungeonthemeLoop);
       deathLoop = loadClip(deathThemeLoop);
       bossLoop = loadClip(bossThemeLoop);
-      bossIntro = loadClip(bossThemeIntro);
       itemCollected = loadClip(itemCollectedTheme);
       heartCollected = loadClip(heartCollectedTheme);
       openThing = loadClip(openThingTheme);
@@ -227,8 +179,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          player.Mhp = 100;
          player.hp = 100;
          Player.medicine = "red";
-         LoadingZone.numDefeatedBosses = 6;
-         ActiveMenu.numTriforcePieces = 6;
+         LoadingZone.numDefeatedBosses = 7;
+         ActiveMenu.numTriforcePieces = 7;
          Player.hasCandle = true;
          Player.hasBoomerang = true;
          Player.hasRaft = true;
@@ -274,17 +226,16 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       //GameContext context = new GameContext(frame);
       //this.modManager = new GlobalModManager(context); // Runs mod loader (ZModLoader)
 
-      this.room = new Room("startArea"/*,modManager*/);
       //this.modManager.initMods();
-
       // check for key inputs
       addKeyListener(this);
-      // create the starting room
-      room.spawnRoom(player);
-      room.fillRoomArray(player);
       Timer timer = new Timer(10, this);
       timer.start();
-
+      
+      // creates the room(should be world, but im dumb) that the player is in
+      this.room = new Room("starting area");
+      room.spawnRoom(player);
+      room.fillRoomArray(player);
       //toggleFullScreen();
    }
 
@@ -293,70 +244,55 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       // repaints the canvas
 
       repaint();
-      // handles the music
-      if (player.hp > 0) {
-         if (Player.level != 0) {
-            clipIntroLen = 0;
-            clipIntro.stop();
-            clipLoop.stop();
 
-            clipIntro.setFramePosition(0);
-            clipLoop.setFramePosition(0);
+      // handles the music
+         if (Player.level != 0) {
             if (Player.level > 0) {
                if (player.dir != 't') {
-                  if (dungeonClipIntroLen < dungeonIntro.getMicrosecondLength()) {
-                     dungeonClipIntroLen = dungeonIntro.getMicrosecondPosition();
-                     dungeonIntro.start();
-                  } else {
                      if ((Player.level == 1 && Player.location[0] == -4 && Player.location[1] == 3
                            || Player.level == 2 && Player.location[0] == -3 && Player.location[1] == 0
                            || Player.location[0] == -3 && Player.location[1] == -1 && Player.level == 3
                            || Player.level == 4 && Player.location[0] == -3 && Player.location[1] == 0
                            || Player.level == 5 && Player.location[0] == -3 && Player.location[1] == -1)) {
-                        if (bossIntroLen < bossIntro.getMicrosecondLength()) {
-                           dungeonIntro.stop();
-                           dungeonLoop.stop();
-                           bossIntro.start();
-                           bossIntroLen = bossIntro.getMicrosecondPosition();
-
-                        } else
                            bossLoop.loop(Clip.LOOP_CONTINUOUSLY);
+                           dungeonLoop.stop();
+                           dungeonIntro.setFramePosition(0);
+                           dungeonLoop.setFramePosition(0);
+                           dungeonIntro.setFramePosition(0);
+                           dungeonIntro.stop();
                      } else {
                         bossLoop.stop();
                         bossLoop.setFramePosition(0);
-                        bossIntroLen = 0;
-                        dungeonLoop.loop(Clip.LOOP_CONTINUOUSLY);
+                        overworldLoop.stop();
+                        overworldLoop.setFramePosition(0);
+                        if(dungeonIntro.getFramePosition() == dungeonIntro.getFrameLength()){
+                           dungeonLoop.loop(Clip.LOOP_CONTINUOUSLY);
+                           dungeonIntro.stop();
+                        }
+                        else dungeonIntro.start(); 
+                  
                      }
                   }
-               } else {
+               } else if(bossLoop != null){
                   bossLoop.stop();
-                  dungeonIntro.stop();
+                  bossLoop.setFramePosition(0);
                   dungeonLoop.stop();
+                  dungeonLoop.setFramePosition(0);
+                  overworldLoop.stop();
+                  overworldLoop.setFramePosition(0);
+                  dungeonIntro.setFramePosition(0);
+                  dungeonIntro.stop();
                }
             }
-         } else if (clipLoop != null && clipIntro != null && dungeonLoop != null && dungeonIntro != null) {
+          else if ( dungeonLoop != null) {
             dungeonLoop.stop();
-            dungeonIntro.stop();
-            dungeonIntro.setFramePosition(0);
             dungeonLoop.setFramePosition(0);
-            dungeonClipIntroLen = 0;
-            // I need to play with this number a bit to get it to work
-            if (clipIntroLen < clipIntro.getMicrosecondLength()) {
+            overworldLoop.loop(Clip.LOOP_CONTINUOUSLY);
 
-               clipIntroLen = clipIntro.getMicrosecondPosition();
-               clipIntro.start();
-            } else
-               clipLoop.loop(Clip.LOOP_CONTINUOUSLY);
-
-         }
+      } 
          // debugger
          DebugInterface.debugMain();
-      } else {
-         dungeonLoop.stop();
-         dungeonIntro.stop();
-         clipIntro.stop();
-         clipLoop.stop();
-      }
+      
    }
 
    public void keyTyped(KeyEvent e) {}
@@ -391,7 +327,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          frame.setVisible(false);
          frame.dispose();
          frame.setExtendedState(JFrame.NORMAL);
-         frame.setSize(new Dimension(800, 770));
+         frame.setSize(new Dimension(790, 770));
          frame.setUndecorated(false);
          frame.setVisible(true);
       }
@@ -401,7 +337,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    public void updateOffset(Graphics2D g) {
       //g.setTransform(AffineTransform.getTranslateInstance(0, 0));
       Point nres = new Point((int)currentResolution.getWidth(), (int)currentResolution.getHeight());
-      Point gres = new Point(800, 770);
+      Point gres = new Point(790, 770);
       Point p = new Point((nres.x / 2 - gres.x / 2), (nres.y / 2 - gres.y / 2));
       transformPoint = p;
 
@@ -413,7 +349,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       g.setTransform(AffineTransform.getTranslateInstance(0, 0));
 
       Point topLeft = transformPoint;
-      Point bottomRight = new Point((int)(topLeft.getX() + 800), (int)(topLeft.getY() + 770));
+      Point bottomRight = new Point((int)(topLeft.getX() + 790), (int)(topLeft.getY() + 770));
       g.setColor(Color.black);
       g.fillRect(0, 0, (int)topLeft.getX(), (int)currentResolution.getHeight());
       g.fillRect(0, (int)bottomRight.getY(), (int)currentResolution.getWidth(), (int)currentResolution.getHeight());
@@ -432,7 +368,21 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          //w->up, s-> down, a->left, d->right
          // key codes--- W->87, S->83,A->65,D->68, E->69,Q->81 H->72 K->75 R->82 F->70 ENTER->10
          P->80*/
-         if (Player.attackDelay <= 0 && !Player.isPaused && player.stun == 0 && Wand.delay <= 0) {
+         if(!menu.gameHasStarted){
+            switch (e.getKeyCode()){
+               case KeyEvent.VK_W:
+                  menu.moveArrow(true);
+                  break;
+               case KeyEvent.VK_S:
+                  menu.moveArrow(false);
+                  break;
+               case KeyEvent.VK_ENTER:
+                  menu.selectArrow(activeMenu,player,room);
+                  break;
+
+            }
+         }
+         else if (Player.attackDelay <= 0 && !Player.isPaused && player.stun == 0 && Wand.delay <= 0) {
             switch (e.getKeyCode()) {
                case KeyEvent.VK_W:
                   player.dir = 'w';
@@ -724,9 +674,6 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          // GAME UPDATE CODE HERE!!!!!!
          DebugInterface.startSeg("Update");
          if (Player.isPaused == false) {
-            // overriden function for player-:Player player, OctorokRs,size of OctorokRs,
-            // octorokBs, size of octorokBs, items, size of items, obstacles.size, room,
-            // projs, bombs, explosions, fires
             player.callBaseFunctions(player,room);
             DebugInterface.segInstant("callBaseFunctions");
             player.decreaseAtkDel(sword);
@@ -743,6 +690,9 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             DebugInterface.segInstant("collectItem(heartContainer)");
             //modManager.tick();
             DebugInterface.segInstant("modtick()");
+         }
+         else{
+            menu.draw(g,player,this);
          }
          // draw items
          rubpee.drawItem(g, this);
@@ -782,13 +732,9 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
           * }
           */
          } else {
-         deathIntro.start();
-         if (deathIntroLen < deathIntro.getMicrosecondLength()) {
-            deathIntroLen = deathIntro.getMicrosecondPosition();
-         } else
-            deathLoop.loop(Clip.LOOP_CONTINUOUSLY);
+         deathLoop.loop(Clip.LOOP_CONTINUOUSLY);
          g.setColor(Color.BLACK);
-         g.fillRect(0, 0, 800, 800);
+         g.fillRect(0, 0, 790, 790);
          g.setColor(Color.RED);
          Font font = new Font("Verdana", Font.PLAIN, 80);
          g.setFont(font);
