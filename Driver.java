@@ -128,7 +128,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       // TODO: -- Add The Goddess Appears to any secret caves.
       // TODO: -- Add Menu to the game start menu.
       // TODO: -- Spinning in the menu is a bit janky and may require a rewrite
-      File overworldthemeLoop = new File("new_ost/01-Menu.wav"/* "new_ost/07-Hyrule Field.wav"*/);
+      File overworldthemeLoop = new File("new_ost/07-Hyrule Field.wav");
       File dungeonthemeLoop = new File("new_ost/12-Lost Ancient Ruins.wav");
       File dungeonthemeIntro = new File("new_ost/12-Lost Ancient Ruins-Intro.wav");
       File deathThemeLoop = new File("./Sound files/you_died_loop.wav");
