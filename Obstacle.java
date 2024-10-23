@@ -1,3 +1,5 @@
+import neozelda.AudioEngine;
+
 public class Obstacle extends Entity {
    public String type;
    // checks if an obstacle can be moved or not, 0 is not, 1 is moveable from the
@@ -33,8 +35,7 @@ public class Obstacle extends Entity {
                         : Player.location[0] == 7 && Player.location[1] == 6 ? 6 : -1));
             Room.currentRoom.get(x).remove(this);
 
-            Driver.openThing.setFramePosition(0);
-            Driver.openThing.loop(0);
+            AudioEngine.playClip("./Sound files/secret_z1.wav");
             break;
          }
       }
@@ -53,8 +54,8 @@ public class Obstacle extends Entity {
       Room.currentRoom.get(x).remove(this);
       Driver.obstacles.remove(this);
       }
-      Driver.openThing.setFramePosition(0);
-      Driver.openThing.loop(0);
+      
+      AudioEngine.playClip("./Sound files/secret_z1.wav");
    }
 
    public void openExplosion(Room room, int x, int y) {

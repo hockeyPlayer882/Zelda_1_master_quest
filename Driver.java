@@ -4,10 +4,12 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.*;
+
+import neozelda.AudioEngine;
+
 import java.awt.image.*;
 import java.util.ArrayList;
 import java.io.*;
-import javax.sound.sampled.*;
 import javax.imageio.ImageIO;
 
 public class Driver extends JPanel implements KeyListener, ActionListener {
@@ -19,7 +21,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    public static BufferedImage metalSwordS;
    public static BufferedImage metalSwordA;
    public static BufferedImage metalSwordD;
-   static Version version = new Version(1, 1,11, 0);
+   static Version version = new Version(1, 1, 11, 0);
    // arrayList of rocks
    public static ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
    public static ArrayList<Projectile> projs = new ArrayList<Projectile>();
@@ -42,63 +44,63 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    Room room;
    // class used to store HUD for the player shown while the game is active
    ActiveMenu activeMenu = new ActiveMenu();
-   public static Clip overworldLoop;
-   public static Clip dungeonIntro;
-   public static Clip dungeonLoop;
-   public static Clip deathLoop;
-   public static Clip itemCollected;
-   public static Clip heartCollected;
-   public static Clip openThing;
-   public static Clip bossLoop;
-   //public GlobalModManager modManager;
+   // public GlobalModManager modManager;
+
+   private static String currentTrack = "";
 
    // Fullscreen
    private static JFrame frame;
    private boolean fullscreen = false;
    public static Dimension currentResolution = new Dimension(790, 770);
    public static Point transformPoint = new Point(0, 0);
+
    public static void main(String[] args) throws Exception {
       System.out.println("Zelda 1 master quest " + version);
 
       // Added legal notice:
       System.out.println("\033[34mNOTICE: This is a fan game! The author of this game is not the"
-                         + " original intellectual property owner! The works in this game"
-                         + " are solely used in cases permitted by fair use. This game is"
-                         + " not sponsored by, nor affiliated with, Nintendo Co. Ltd.\033[0m");
+            + " original intellectual property owner! The works in this game"
+            + " are solely used in cases permitted by fair use. This game is"
+            + " not sponsored by, nor affiliated with, Nintendo Co. Ltd.\033[0m");
 
       // instantiates frame
       frame = new JFrame();
-      // RSC Games: refactored the name prompt. Original code will be kept for historical
+      // RSC Games: refactored the name prompt. Original code will be kept for
+      // historical
       // reasons.
       name = null;
 
       while (true) {
          do {
             name = JOptionPane.showInputDialog("Enter player name.");
-         }
-         while (name == null);
+         } while (name == null);
 
          int response = JOptionPane.showConfirmDialog(null, "Your name is " + name + ", right?");
-         if (response == 0) break;
+         if (response == 0)
+            break;
       }
 
-      //creates the game menu ***REPLACE PARAMETER WITH data taken from the save file whe support is added
-      String[] pNames = {name,"empty","empty"};
+      // creates the game menu ***REPLACE PARAMETER WITH data taken from the save file
+      // whe support is added
+      String[] pNames = { name, "empty", "empty" };
       menu = new Menu(pNames);
       /*
-      // vvvvvv Original code below vvvvvv
-      // instantiates frame
-      JFrame frame = new JFrame();
-      // gets the user name from a prompt in the JOptionPane
-      name = JOptionPane.showInputDialog("Enter Name");
-      // if the player doesn't enter a name, avoid a crash by setting the name to an
-      // empty string
-      if (name == null)
-         name = "";
-      int response = JOptionPane.showConfirmDialog(null, "Your name is " + name + ", right?");
-      if (response != 0) {
-         name = JOptionPane.showInputDialog("Enter Name (you don't get another chance :X)");
-      }
+       * // vvvvvv Original code below vvvvvv
+       * // instantiates frame
+       * JFrame frame = new JFrame();
+       * // gets the user name from a prompt in the JOptionPane
+       * name = JOptionPane.showInputDialog("Enter Name");
+       * // if the player doesn't enter a name, avoid a crash by setting the name to
+       * an
+       * // empty string
+       * if (name == null)
+       * name = "";
+       * int response = JOptionPane.showConfirmDialog(null, "Your name is " + name +
+       * ", right?");
+       * if (response != 0) {
+       * name =
+       * JOptionPane.showInputDialog("Enter Name (you don't get another chance :X)");
+       * }
        */
       Wand.init();
       SuperBomb.init();
@@ -116,50 +118,23 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       frame.setLocationRelativeTo(null);
       frame.setVisible(true);
 
+      // Set the icon to the down facing link.
+      frame.setIconImage(Player.linkAnimations[0][1]);
+      frame.setTitle("Zelda 1 Master Quest (Original Edition)");
+
       frame.addComponentListener(new ComponentAdapter() {
          public void componentResized(ComponentEvent event) {
-            currentResolution = new Dimension(frame.getWidth(), frame.getHeight()); 
+            currentResolution = new Dimension(frame.getWidth(), frame.getHeight());
          }
       });
-
-      // TODO: Michael -- You need to fix these things:
-      // TODO: -- DungeonthemeIntro (still not working?)
-      // TODO: -- Add Black Mist to the lost woods
-      // TODO: -- Add The Goddess Appears to any secret caves.
-      // TODO: -- Add Menu to the game start menu.
-      // TODO: -- Spinning in the menu is a bit janky and may require a rewrite
-      File overworldthemeLoop = new File("new_ost/07-Hyrule Field.wav");
-      File dungeonthemeLoop = new File("new_ost/12-Lost Ancient Ruins.wav");
-      File dungeonthemeIntro = new File("new_ost/12-Lost Ancient Ruins-Intro.wav");
-      File deathThemeLoop = new File("./Sound files/you_died_loop.wav");
-      File itemCollectedTheme = new File("./Sound files/got_item_z1.wav");
-      File openThingTheme = new File("./Sound files/secret_z1.wav");
-      File bossThemeLoop = new File("./new_ost/Anger of the Guardians.wav");
-      File heartCollectedTheme = new File("./Sound files/got_heart_z1.wav");
-      dungeonIntro = loadClip(dungeonthemeIntro);
-      overworldLoop = loadClip(overworldthemeLoop);
-      dungeonLoop = loadClip(dungeonthemeLoop);
-      deathLoop = loadClip(deathThemeLoop);
-      bossLoop = loadClip(bossThemeLoop);
-      itemCollected = loadClip(itemCollectedTheme);
-      heartCollected = loadClip(heartCollectedTheme);
-      openThing = loadClip(openThingTheme);
-   }
-
-   static Clip loadClip(File path) throws Exception {
-      AudioInputStream stream = AudioSystem.getAudioInputStream(path);
-      AudioFormat format = stream.getFormat();
-      DataLine.Info info = new DataLine.Info(Clip.class, format);
-      Clip clip = (Clip) AudioSystem.getLine(info);
-      clip.open(stream);
-      return clip;
    }
 
    public Driver(JFrame frame) throws Exception {
-      /*// TELEPORTS PLAYER TO SPECIFIC LOCATIONS! NOT FOR RELEASE! TESTING ONLY!!
-      Player.location[0] = 8;
-      Player.location[1] = 5;
-      */
+      /*
+       * // TELEPORTS PLAYER TO SPECIFIC LOCATIONS! NOT FOR RELEASE! TESTING ONLY!!
+       * Player.location[0] = 8;
+       * Player.location[1] = 5;
+       */
       Player.name = name;
       // cheat codes for names... becuase why not?
       if (Player.name.equals("I am rich!"))
@@ -171,9 +146,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       else if (Player.name.equals("GIVE ME THE BOW,NOW!")) {
          Player.hasBow = true;
          Player.hasArrows = true;
-      }
-      else if (Player.name.equals("INVINCIBLE!"))
-         Player.hasCane = true; 
+      } else if (Player.name.equals("INVINCIBLE!"))
+         Player.hasCane = true;
       else if (Player.name.equals("SUPER OVERPOWERED!")) {
          Player.hasBow = true;
          Player.hasCane = true;
@@ -194,8 +168,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          Player.hasWand = true;
          player.bombs = 999;
          player.keys = 999;
-      } 
-      else if (Player.name.equals("BOOMERANG! YAY!"))
+      } else if (Player.name.equals("BOOMERANG! YAY!"))
          Player.hasBoomerang = true;
       else if (Player.name.equals("I am sick!"))
          Player.medicine = "red";
@@ -203,8 +176,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          player.shieldStrength = 2;
          Sword.type = "metal";
          Sword.damage = 2;
-      } 
-      else if (Player.name.equals("KEEEYS!"))
+      } else if (Player.name.equals("KEEEYS!"))
          player.keys += 999;
       else if (Player.name.equals("SUPERSTAR!")) {
          player.hp = 100;
@@ -220,8 +192,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          metalSwordS = ImageIO.read(new File("./Image files/metalSwordS.png"));
          metalSwordA = ImageIO.read(new File("./Image files/metalSwordA.png"));
          metalSwordD = ImageIO.read(new File("./Image files/metalSwordD.png"));
-      } 
-      catch (IOException ex) {
+      } catch (IOException ex) {
          // handle exception... or not. I mean, it's not like anyone is ever going to get
          // this exception, let alone actually know what it was talking about or read any
          // of the amazing comments braught to you buy a random teenager who gets easily
@@ -230,79 +201,118 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          System.err.println("Something's about to be... peacefully beheaded.");
       }
 
-      //GameContext context = new GameContext(frame);
-      //this.modManager = new GlobalModManager(context); // Runs mod loader (ZModLoader)
+      // GameContext context = new GameContext(frame);
+      // this.modManager = new GlobalModManager(context); // Runs mod loader
+      // (ZModLoader)
 
-      //this.modManager.initMods();
+      // this.modManager.initMods();
       // check for key inputs
       addKeyListener(this);
       Timer timer = new Timer(10, this);
       timer.start();
-      
+
       // creates the room(should be world, but im dumb) that the player is in
       this.room = new Room("starting area");
       room.spawnRoom(player);
       room.fillRoomArray(player);
-      //toggleFullScreen();
+      // toggleFullScreen();
    }
 
    // timer function to be called every frame
    public void actionPerformed(ActionEvent e) {
       // repaints the canvas
-
       repaint();
 
+      // debugger
+      DebugInterface.debugMain();
+
+      if (player.hp <= 0) {
+         if (!currentTrack.equals("dead")) {
+            AudioEngine.playBGM("./Sound files/you_died_loop.wav");
+            currentTrack = "dead";
+         }
+
+         return;
+      }
+
       // handles the music
-         if (Player.level != 0) {
-            if (Player.level > 0) {
-               if (player.dir != 't') {
-                     if ((Player.level == 1 && Player.location[0] == -4 && Player.location[1] == 3
-                           || Player.level == 2 && Player.location[0] == -3 && Player.location[1] == 0
-                           || Player.location[0] == -3 && Player.location[1] == -1 && Player.level == 3
-                           || Player.level == 4 && Player.location[0] == -3 && Player.location[1] == 0
-                           || Player.level == 5 && Player.location[0] == -3 && Player.location[1] == -1)) {
-                           bossLoop.loop(Clip.LOOP_CONTINUOUSLY);
-                           dungeonLoop.stop();
-                           dungeonIntro.setFramePosition(0);
-                           dungeonLoop.setFramePosition(0);
-                           dungeonIntro.setFramePosition(0);
-                           dungeonIntro.stop();
-                     } else {
-                        bossLoop.stop();
-                        bossLoop.setFramePosition(0);
-                        overworldLoop.stop();
-                        overworldLoop.setFramePosition(0);
-                        if(dungeonIntro.getFramePosition() == dungeonIntro.getFrameLength()){
-                           dungeonLoop.loop(Clip.LOOP_CONTINUOUSLY);
-                           dungeonIntro.stop();
-                        }
-                        else dungeonIntro.start(); 
-                  
-                     }
-                  }
-               } else if(bossLoop != null){
-                  bossLoop.stop();
-                  bossLoop.setFramePosition(0);
+      // Play intro theme.
+      if (!menu.gameHasStarted) {
+         if (!currentTrack.equals("load-screen")) {
+            AudioEngine.playBGM("./new_ost/01-Menu.wav");
+            currentTrack = "load-screen";
+         }
+      }
+      else if (Player.level != 0) {
+         if (Player.level > 0) {
+            if (player.dir != 't') {
+               // Boss track playing.
+               if ((Player.level == 1 && Player.location[0] == -4 && Player.location[1] == 3
+                     || Player.level == 2 && Player.location[0] == -3 && Player.location[1] == 0
+                     || Player.location[0] == -3 && Player.location[1] == -1 && Player.level == 3
+                     || Player.level == 4 && Player.location[0] == -3 && Player.location[1] == 0
+                     || Player.level == 5 && Player.location[0] == -3 && Player.location[1] == -1)) {
+                  /*
+                  bossLoop.loop(Clip.LOOP_CONTINUOUSLY);
                   dungeonLoop.stop();
+                  dungeonIntro.setFramePosition(0);
                   dungeonLoop.setFramePosition(0);
-                  overworldLoop.stop();
-                  overworldLoop.setFramePosition(0);
                   dungeonIntro.setFramePosition(0);
                   dungeonIntro.stop();
+                  */
+                  if (!currentTrack.equals("boss-theme")) {
+                     AudioEngine.playBGM("./new_ost/Anger of the Guardians.wav");
+                     currentTrack = "boss-theme";
+                  }
+               } 
+               // Standard dungeon track.
+               else {
+                  /*
+                  bossLoop.stop();
+                  bossLoop.setFramePosition(0);
+                  overworldLoop.stop();
+                  overworldLoop.setFramePosition(0);
+                  if (dungeonIntro.getFramePosition() == dungeonIntro.getFrameLength()) {
+                     dungeonLoop.loop(Clip.LOOP_CONTINUOUSLY);
+                     dungeonIntro.stop();
+                  } else
+                     dungeonIntro.start();*/
+                  if (!currentTrack.equals("dungeon")) {
+                     AudioEngine.playBGM("./new_ost/12-Lost Ancient Ruins-Intro.wav", "./new_ost/12-Lost Ancient Ruins.wav");
+                     currentTrack = "dungeon";
+                  }
                }
             }
-          else if ( dungeonLoop != null) {
+         }
+         // Play fairy theme; cave.
+         else if (!currentTrack.equals("cave")) {
+            /*
+            bossLoop.stop();
+            bossLoop.setFramePosition(0);
             dungeonLoop.stop();
             dungeonLoop.setFramePosition(0);
-            overworldLoop.loop(Clip.LOOP_CONTINUOUSLY);
-
-      } 
-         // debugger
-         DebugInterface.debugMain();
-      
+            overworldLoop.stop();
+            overworldLoop.setFramePosition(0);
+            dungeonIntro.setFramePosition(0);
+            dungeonIntro.stop();*/
+            AudioEngine.playBGM("./new_ost/24-The Goddess Appears-Intro.wav", "./new_ost/24-The Goddess Appears.wav");
+            currentTrack = "cave";
+         }
+      }
+      // Play overworld loop. 
+      else if (!currentTrack.equals("overworld")) {
+         /*
+         dungeonLoop.stop();
+         dungeonLoop.setFramePosition(0);
+         overworldLoop.loop(Clip.LOOP_CONTINUOUSLY);*/
+         
+         AudioEngine.playBGM("./new_ost/07-Hyrule Field.wav");
+         currentTrack = "overworld";
+      }
    }
 
-   public void keyTyped(KeyEvent e) {}
+   public void keyTyped(KeyEvent e) {
+   }
 
    public void keyReleased(KeyEvent e) {
       if (e.getKeyCode() == KeyEvent.VK_F11)
@@ -328,9 +338,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
          frame.setUndecorated(true);
          frame.setVisible(true);
-      }
-      else {
-         //frame.dispose();
+      } else {
+         // frame.dispose();
          frame.setVisible(false);
          frame.dispose();
          frame.setExtendedState(JFrame.NORMAL);
@@ -342,8 +351,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
 
    // NOTE: Part of the RSC Games fullscreen patches.
    public void updateOffset(Graphics2D g) {
-      //g.setTransform(AffineTransform.getTranslateInstance(0, 0));
-      Point nres = new Point((int)currentResolution.getWidth(), (int)currentResolution.getHeight());
+      // g.setTransform(AffineTransform.getTranslateInstance(0, 0));
+      Point nres = new Point((int) currentResolution.getWidth(), (int) currentResolution.getHeight());
       Point gres = new Point(790, 770);
       Point p = new Point((nres.x / 2 - gres.x / 2), (nres.y / 2 - gres.y / 2));
       transformPoint = p;
@@ -356,27 +365,31 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       g.setTransform(AffineTransform.getTranslateInstance(0, 0));
 
       Point topLeft = transformPoint;
-      Point bottomRight = new Point((int)(topLeft.getX() + 790), (int)(topLeft.getY() + 770));
+      Point bottomRight = new Point((int) (topLeft.getX() + 790), (int) (topLeft.getY() + 770));
       g.setColor(Color.black);
-      g.fillRect(0, 0, (int)topLeft.getX(), (int)currentResolution.getHeight());
-      g.fillRect(0, (int)bottomRight.getY(), (int)currentResolution.getWidth(), (int)currentResolution.getHeight());
-      g.fillRect((int)bottomRight.getX(), 0, (int)currentResolution.getWidth(), (int)currentResolution.getHeight());
-      g.fillRect(0, 0, (int)currentResolution.getWidth(), (int)topLeft.getY());
+      g.fillRect(0, 0, (int) topLeft.getX(), (int) currentResolution.getHeight());
+      g.fillRect(0, (int) bottomRight.getY(), (int) currentResolution.getWidth(), (int) currentResolution.getHeight());
+      g.fillRect((int) bottomRight.getX(), 0, (int) currentResolution.getWidth(), (int) currentResolution.getHeight());
+      g.fillRect(0, 0, (int) currentResolution.getWidth(), (int) topLeft.getY());
 
       // Draw a small line around the viewport.
       g.setColor(Color.white);
-      g.drawRect((int)topLeft.getX() - 1, (int)topLeft.getY() - 1, (int)(bottomRight.getX() - topLeft.getX()), (int)(bottomRight.getY() - topLeft.getY()));
+      g.drawRect((int) topLeft.getX() - 1, (int) topLeft.getY() - 1, (int) (bottomRight.getX() - topLeft.getX()),
+            (int) (bottomRight.getY() - topLeft.getY()));
    }
 
    public void keyPressed(KeyEvent e) {
       if (player.dir != 't') {
-         /* sets the player direction to the player input, e is attack, q is an item, and
-         // f is pause
-         //w->up, s-> down, a->left, d->right
-         // key codes--- W->87, S->83,A->65,D->68, E->69,Q->81 H->72 K->75 R->82 F->70 ENTER->10
-         P->80*/
-         if(!menu.gameHasStarted){
-            switch (e.getKeyCode()){
+         /*
+          * sets the player direction to the player input, e is attack, q is an item, and
+          * // f is pause
+          * //w->up, s-> down, a->left, d->right
+          * // key codes--- W->87, S->83,A->65,D->68, E->69,Q->81 H->72 K->75 R->82 F->70
+          * ENTER->10
+          * P->80
+          */
+         if (!menu.gameHasStarted) {
+            switch (e.getKeyCode()) {
                case KeyEvent.VK_W:
                   menu.moveArrow(true);
                   break;
@@ -384,12 +397,11 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                   menu.moveArrow(false);
                   break;
                case KeyEvent.VK_ENTER:
-                  menu.selectArrow(activeMenu,player,room);
+                  menu.selectArrow(activeMenu, player, room);
                   break;
 
             }
-         }
-         else if (Player.attackDelay <= 0 && !Player.isPaused && player.stun == 0 && Wand.delay <= 0) {
+         } else if (Player.attackDelay <= 0 && !Player.isPaused && player.stun == 0 && Wand.delay <= 0) {
             switch (e.getKeyCode()) {
                case KeyEvent.VK_W:
                   player.dir = 'w';
@@ -462,19 +474,24 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                         && player.rubpees > 0) {
 
                      Arrow.spawn(player);
-                  } else if (player.activeItem.equals("cane") && Player.hasCane && Cane.coolDownTimer <= 0 && Cane.activeTimer <= 0)
+                  } else if (player.activeItem.equals("cane") && Player.hasCane && Cane.coolDownTimer <= 0
+                        && Cane.activeTimer <= 0)
                      Cane.activate(player);
-                     else if (player.activeItem.equals("superBomb") && Player.hasSuperBomb){
-                        //add new bomb to currentRoom
-                        if (player.stDir == 'w')
-                        Room.currentRoom.get(Room.currentRoom.size()-1).add(new SuperBomb(player.cx, player.cy - Player.unitSize));
+                  else if (player.activeItem.equals("superBomb") && Player.hasSuperBomb) {
+                     // add new bomb to currentRoom
+                     if (player.stDir == 'w')
+                        Room.currentRoom.get(Room.currentRoom.size() - 1)
+                              .add(new SuperBomb(player.cx, player.cy - Player.unitSize));
                      else if (player.stDir == 's')
-                        Room.currentRoom.get(Room.currentRoom.size()-1).add(new SuperBomb(player.cx, player.cy + Player.unitSize));
+                        Room.currentRoom.get(Room.currentRoom.size() - 1)
+                              .add(new SuperBomb(player.cx, player.cy + Player.unitSize));
                      else if (player.stDir == 'a')
-                        Room.currentRoom.get(Room.currentRoom.size()-1).add(new SuperBomb(player.cx - Player.unitSize, player.cy));
+                        Room.currentRoom.get(Room.currentRoom.size() - 1)
+                              .add(new SuperBomb(player.cx - Player.unitSize, player.cy));
                      else if (player.stDir == 'd')
-                        Room.currentRoom.get(Room.currentRoom.size()-1).add(new SuperBomb(player.cx + Player.unitSize, player.cy));
-                     }
+                        Room.currentRoom.get(Room.currentRoom.size() - 1)
+                              .add(new SuperBomb(player.cx + Player.unitSize, player.cy));
+                  }
                   break;
                case KeyEvent.VK_F:
                   Player.isPaused = true;
@@ -483,7 +500,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          } else if (!activeMenu.isResuming && Player.isPaused) {
             switch (e.getKeyCode()) {
                case 68:
-                  if (activeMenu.selectedItem[0] == activeMenu.itemExists[0].length-1) {
+                  if (activeMenu.selectedItem[0] == activeMenu.itemExists[0].length - 1) {
                      if (activeMenu.selectedItem[1] == 0)
                         activeMenu.selectedItem[1] = 1;
                      else
@@ -498,7 +515,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                         activeMenu.selectedItem[1] = 0;
                      else
                         activeMenu.selectedItem[1] = 1;
-                     activeMenu.selectedItem[0] = activeMenu.itemExists[0].length-1;
+                     activeMenu.selectedItem[0] = activeMenu.itemExists[0].length - 1;
                   } else
                      activeMenu.selectedItem[0] -= 1;
                   break;
@@ -512,11 +529,10 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
 
    public void paintComponent(Graphics g) {
       try {
-         updateOffset((Graphics2D)g);
+         updateOffset((Graphics2D) g);
          render(g);
-         drawBorders((Graphics2D)g);
-      }
-      catch (Exception ie) {
+         drawBorders((Graphics2D) g);
+      } catch (Exception ie) {
          System.out.println("FATAL! UNHANDLED EXCEPTION HIT BOTTOM OF CALL STACK!");
          System.out.print("Exception in thread " + Thread.currentThread().getName() + " ");
          ie.printStackTrace();
@@ -582,7 +598,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
 
          // draws enemies and objects
          DebugInterface.startSeg("Room draw");
-         room.drawRooms(g, this, player,sword);
+         room.drawRooms(g, this, player, sword);
          DebugInterface.endSeg();
 
          // draws in game text shown in certain rooms in levels
@@ -599,7 +615,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          for (int i = 0; i < bombs.size(); i++) {
             Bomb bomb = bombs.get(i);
             bomb.drawBomb(this, g);
-            if(!Player.isPaused)
+            if (!Player.isPaused)
                bomb.explode();
             DebugInterface.segInstant("Bomb entity");
          }
@@ -645,7 +661,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          }
          DebugInterface.endSeg();
 
-         //does all of the cool stuff for the player
+         // does all of the cool stuff for the player
          Cane.doThings(player);
          // draws the player
          DebugInterface.startSeg("Player sim");
@@ -676,12 +692,12 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          // draws the magic wand(and moves it)
          Wand.draw(g, this, player);
          // Mod render
-         //modManager.render();
+         // modManager.render();
          // only let the objects move if the game isn't paused
          // GAME UPDATE CODE HERE!!!!!!
          DebugInterface.startSeg("Update");
          if (Player.isPaused == false) {
-            player.callBaseFunctions(player,room);
+            player.callBaseFunctions(player, room);
             DebugInterface.segInstant("callBaseFunctions");
             player.decreaseAtkDel(sword);
             DebugInterface.segInstant("decreaseAtkDel");
@@ -695,11 +711,10 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             DebugInterface.segInstant("collectItem(key)");
             heartContainer.collectItem(player);
             DebugInterface.segInstant("collectItem(heartContainer)");
-            //modManager.tick();
+            // modManager.tick();
             DebugInterface.segInstant("modtick()");
-         }
-         else{
-            menu.draw(g,player,this);
+         } else {
+            menu.draw(g, player, this);
          }
          // draw items
          rubpee.drawItem(g, this);
@@ -712,9 +727,9 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          DebugInterface.segInstant("key.draw");
          heartContainer.drawItem(g, this);
          DebugInterface.endSeg();
-         if(player.activeItem.equals("cane"))
-            Cane.drawCoolDownBox(g,this);
-         if(Player.name.equals("SUPERSTAR!") || Player.name.equals("SUPER OVERPOWERED!"))
+         if (player.activeItem.equals("cane"))
+            Cane.drawCoolDownBox(g, this);
+         if (Player.name.equals("SUPERSTAR!") || Player.name.equals("SUPER OVERPOWERED!"))
             player.heal(1);
          /*
           * //Random Stuff not important to the legend of Zelda, just fun coding thingies
@@ -738,8 +753,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
           * g.drawRect(400-(x/2),400-(y/2),x,y);
           * }
           */
-         } else {
-         deathLoop.loop(Clip.LOOP_CONTINUOUSLY);
+      } else {
          g.setColor(Color.BLACK);
          g.fillRect(0, 0, 790, 790);
          g.setColor(Color.RED);

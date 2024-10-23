@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import neozelda.AudioEngine;
+
 public class Room {
    private int numOctorokRs = 0;
    private int numSpawnedOctorokRs = 0;
@@ -694,8 +696,7 @@ public class Room {
                && imagecy + Entity.unitSize / 2 > player.cy - Entity.unitSize / 2) {
             BufferedImage image = (BufferedImage) images.get(i);
             if (!Driver.metalSwordW.equals(image) || player.Mhp >= 14) {
-               Driver.itemCollected.setFramePosition(0);
-               Driver.itemCollected.loop(0);
+               AudioEngine.playHighlight("./Sound files/got_item_z1.wav");
             }
             if (Driver.woodenSwordW.equals(image))
                Sword.type = "wooden";
