@@ -121,13 +121,20 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             currentResolution = new Dimension(frame.getWidth(), frame.getHeight()); 
          }
       });
-      File overworldthemeLoop = new File("new_ost/07-Hyrule Field.wav");
+
+      // TODO: Michael -- You need to fix these things:
+      // TODO: -- DungeonthemeIntro (still not working?)
+      // TODO: -- Add Black Mist to the lost woods
+      // TODO: -- Add The Goddess Appears to any secret caves.
+      // TODO: -- Add Menu to the game start menu.
+      // TODO: -- Spinning in the menu is a bit janky and may require a rewrite
+      File overworldthemeLoop = new File("new_ost/01-Menu.wav"/* "new_ost/07-Hyrule Field.wav"*/);
       File dungeonthemeLoop = new File("new_ost/12-Lost Ancient Ruins.wav");
       File dungeonthemeIntro = new File("new_ost/12-Lost Ancient Ruins-Intro.wav");
       File deathThemeLoop = new File("./Sound files/you_died_loop.wav");
       File itemCollectedTheme = new File("./Sound files/got_item_z1.wav");
       File openThingTheme = new File("./Sound files/secret_z1.wav");
-      File bossThemeLoop = new File("Sound files/boss_z1_loop.wav");
+      File bossThemeLoop = new File("./new_ost/Anger of the Guardians.wav");
       File heartCollectedTheme = new File("./Sound files/got_heart_z1.wav");
       dungeonIntro = loadClip(dungeonthemeIntro);
       overworldLoop = loadClip(overworldthemeLoop);
