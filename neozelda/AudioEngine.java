@@ -7,6 +7,7 @@ import javax.sound.sampled.*;
 public class AudioEngine {
     static SoundSource bgm = null;
     static ArrayList<ClipSoundSource> sounds = new ArrayList<>();
+    static HighlightSoundSource lastHighlight = null;
 
     /**
      * Play a standard looping BGM with no intro track.
@@ -67,7 +68,11 @@ public class AudioEngine {
             if (bgm != null)
                 bgm.pause();
 
+            if (lastHighlight != null)
+                lastHighlight.pause();
+
             highlight.start();
+            lastHighlight = highlight;
         }
         catch (Exception ie) {
             System.out.println("Failed to load requested clip. Stack trace:");

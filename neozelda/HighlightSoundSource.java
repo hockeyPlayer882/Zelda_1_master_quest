@@ -21,28 +21,37 @@ class HighlightSoundSource extends SoundSource implements Runnable {
 
     @Override
     public void play() {
+        System.out.println("Playing highlight");
         threadActive = true;
+        clip.start();
     }
 
     @Override
     public void start() {
+        System.out.println("starting highlight");
         clip.setFramePosition(0);
         play();
     }
 
     @Override
     public void pause() {
+        System.out.println("pausing highlight?");
         threadActive = false;
         clip.stop();
     }
     
     protected void finalize() {
+        System.out.println("finalizing highlight");
         clip.stop();
         clip.close();
     }
 
+    // TODO: Highlight Sound Source is broken. Rewrite the entire audio engine
+    // mixer in a single thread? That's probably far more efficient.
     @Override
     public void run() {
+        System.out.println("Thread started.");
+
         while (runPlayerThread) {
             try {
                 Thread.sleep(25);
@@ -53,16 +62,17 @@ class HighlightSoundSource extends SoundSource implements Runnable {
                 continue;
 
             // Play the BGM again after this clip is done.
-            if (!clip.isRunning() && clip.getFramePosition() != 0) {
+            if (!clip.isRunning() && clip.getMicrosecondPosition() == clip.getMicrosecondLength()) {
                 runPlayerThread = false;
+                clip.stop();
 
                 if (AudioEngine.getCurrentBGM() == bgm)
                     bgm.play();
+
+                System.out.println("Thread ended.");
             }
-            // Start the intro clip.
-            else {
-                clip.start();
-            }
+
+            System.out.println(clip.getMicrosecondPosition());
         }
     }
 }

@@ -52,7 +52,7 @@ public class Item extends Entity {
                         && this.cy + unitSize / 2 > Boomerang.cy - unitSize / 2)) {
          if (type.equals("heart")) {
             player.heal(this.value);
-            AudioEngine.playClip("./Sound files/got_heart_z1.wav");
+            AudioEngine.playClip("./sfx/LTTP_RefillHealth.wav");
          }
          if (type.equals("rubpee") || type.equals("rubpee5")) {
             player.rubpees += this.value;
@@ -61,8 +61,8 @@ public class Item extends Entity {
             player.bombs += this.value;
          }
          if (type.equals("key")) {
-            AudioEngine.playClip("./Sound files/got_heart_z1.wav");
-            
+            AudioEngine.playClip("./sfx/LTTP_Get_Key_StereoL.wav");
+
             player.keys += this.value;
             if (Player.level == 1) {
                if (Player.location[0] == 1 && Player.location[1] == 0)
@@ -185,7 +185,7 @@ public class Item extends Entity {
                LoadingZone.keyArray[4][6] = true;
          }
          if (type.equals("heartContainer")) {
-            AudioEngine.playHighlight("./Sound files/got_item_z1.wav");
+            AudioEngine.playHighlight("./Sound files/secret_z1.wav");
 
             player.Mhp += this.value;
             player.heal(this.value);
