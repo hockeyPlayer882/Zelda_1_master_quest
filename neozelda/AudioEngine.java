@@ -95,7 +95,7 @@ public class AudioEngine {
         // Purge all clips that are no longer running.
         ArrayList<ClipSoundSource> dupClips = new ArrayList<>();
         dupClips.addAll(sounds);
-        for (ClipSoundSource sndClip : sounds) {
+        for (ClipSoundSource sndClip : dupClips) {
             if (sndClip.isFinished()) {
                 sndClip.delete();
                 sounds.remove(sndClip);
