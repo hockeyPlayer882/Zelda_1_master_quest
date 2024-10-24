@@ -106,7 +106,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       SuperBomb.init();
       Cane.setImages();
 
-      DebugInterface.debugInit();
+      DebugInterface.debugInit(false);
       Driver driver = new Driver(frame);
       driver.setFocusable(true);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -252,14 +252,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                      || Player.location[0] == -3 && Player.location[1] == -1 && Player.level == 3
                      || Player.level == 4 && Player.location[0] == -3 && Player.location[1] == 0
                      || Player.level == 5 && Player.location[0] == -3 && Player.location[1] == -1)) {
-                  /*
-                  bossLoop.loop(Clip.LOOP_CONTINUOUSLY);
-                  dungeonLoop.stop();
-                  dungeonIntro.setFramePosition(0);
-                  dungeonLoop.setFramePosition(0);
-                  dungeonIntro.setFramePosition(0);
-                  dungeonIntro.stop();
-                  */
+
                   if (!currentTrack.equals("boss-theme")) {
                      AudioEngine.playBGM("./new_ost/Anger of the Guardians.wav");
                      currentTrack = "boss-theme";
@@ -267,16 +260,6 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                } 
                // Standard dungeon track.
                else {
-                  /*
-                  bossLoop.stop();
-                  bossLoop.setFramePosition(0);
-                  overworldLoop.stop();
-                  overworldLoop.setFramePosition(0);
-                  if (dungeonIntro.getFramePosition() == dungeonIntro.getFrameLength()) {
-                     dungeonLoop.loop(Clip.LOOP_CONTINUOUSLY);
-                     dungeonIntro.stop();
-                  } else
-                     dungeonIntro.start();*/
                   if (!currentTrack.equals("dungeon")) {
                      AudioEngine.playBGM("./new_ost/12-Lost Ancient Ruins-Intro.wav", "./new_ost/12-Lost Ancient Ruins.wav");
                      currentTrack = "dungeon";
@@ -286,26 +269,20 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          }
          // Play fairy theme; cave.
          else if (!currentTrack.equals("cave")) {
-            /*
-            bossLoop.stop();
-            bossLoop.setFramePosition(0);
-            dungeonLoop.stop();
-            dungeonLoop.setFramePosition(0);
-            overworldLoop.stop();
-            overworldLoop.setFramePosition(0);
-            dungeonIntro.setFramePosition(0);
-            dungeonIntro.stop();*/
             AudioEngine.playBGM("./new_ost/24-The Goddess Appears-Intro.wav", "./new_ost/24-The Goddess Appears.wav");
             currentTrack = "cave";
          }
       }
+      // Ripped from room.java: Lost woods music
+      else if (Player.location[0] >= -4 && Player.location[0] <= 5 && Player.location[1] >= 6
+      && Player.location[1] <= 15) {
+         if (!currentTrack.equals("lost-woods")) {
+            AudioEngine.playBGM("./new_ost/19-Black Mist.wav");
+            currentTrack = "lost-woods";
+         }
+      }
       // Play overworld loop. 
-      else if (!currentTrack.equals("overworld")) {
-         /*
-         dungeonLoop.stop();
-         dungeonLoop.setFramePosition(0);
-         overworldLoop.loop(Clip.LOOP_CONTINUOUSLY);*/
-         
+      else if (!currentTrack.equals("overworld")) {         
          AudioEngine.playBGM("./new_ost/07-Hyrule Field.wav");
          currentTrack = "overworld";
       }
@@ -560,6 +537,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          if (Player.isPaused && activeMenu.isResuming)
             activeMenu.resumeGame(player, room);
 
+         // TODO: Add a fog effect to the lost woods (do this in effects function?)
+
          // adds refrence items to arrayList
          DebugInterface.startSeg("Image collection");
          if (items.size() < 6) {
@@ -570,6 +549,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             items.add(heart);
             items.add(heartContainer);
          }
+
          Room.collectImages(player);
          DebugInterface.endSeg();
 

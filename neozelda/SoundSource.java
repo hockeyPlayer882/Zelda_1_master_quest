@@ -16,4 +16,18 @@ abstract class SoundSource {
      * Pause the track.
      */
     public abstract void pause();
+
+    /**
+     * Report whether this source is playing or not.
+     * 
+     * @return Whether it's still playing.
+     */
+    public abstract boolean isFinished();
+
+    /**
+     * Report whether this audio clip is playing.
+     * 
+     * @return Whether it's actively playing.
+     */
+    public abstract boolean playing();
 }

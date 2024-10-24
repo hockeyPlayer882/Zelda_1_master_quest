@@ -24,8 +24,19 @@ class BGMSoundSource extends SoundSource {
     public void pause() {
         internal.stop();
     }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
+
+    @Override
+    public boolean playing() {
+        return internal.isRunning();
+    }
     
     protected void finalize() {
+        System.out.println("Freeing clip " + this.internal);
         internal.stop();
         internal.close();
     }

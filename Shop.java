@@ -102,7 +102,8 @@ public class Shop {
                 && 420 + Player.unitSize > player.cy - Player.unitSize / 2 && player.rubpees >= this.cost1
                 && cost1 != 0) {
             player.rubpees -= this.cost1;
-            AudioEngine.playHighlight("./Sound files/got_item_z1.wav");
+            AudioEngine.playHighlight("./sfx/LTTP_ItemFanfare.wav");
+
             cost1 = 0;
             item1 = "";
             if (Player.location[0] == 9 && Player.location[1] == 11) {
@@ -121,7 +122,7 @@ public class Shop {
                 && 420 + Player.unitSize > player.cy - Player.unitSize / 2 && player.rubpees >= this.cost2
                 && cost2 != 0) {
             player.rubpees -= this.cost2;
-            AudioEngine.playHighlight("./Sound files/got_item_z1.wav");
+            AudioEngine.playHighlight("./sfx/LTTP_ItemFanfare.wav");
             cost2 = 0;
             item2 = "";
             if (Player.location[0] == 9 && Player.location[1] == 11) {
@@ -143,7 +144,8 @@ public class Shop {
                 && 420 + Player.unitSize > player.cy - Player.unitSize / 2 && player.rubpees >= this.cost3
                 && cost3 != 0) {
             player.rubpees -= this.cost3;
-            AudioEngine.playHighlight("./Sound files/got_item_z1.wav");
+            AudioEngine.playHighlight("./sfx/LTTP_ItemFanfare.wav");
+
             cost3 = 0;
             item3 = "";
             if (Player.location[0] == 9 && Player.location[1] == 11) {

@@ -695,9 +695,11 @@ public class Room {
                && imagecy - Entity.unitSize / 2 < player.cy + Entity.unitSize / 2
                && imagecy + Entity.unitSize / 2 > player.cy - Entity.unitSize / 2) {
             BufferedImage image = (BufferedImage) images.get(i);
+            
             if (!Driver.metalSwordW.equals(image) || player.Mhp >= 14) {
-               AudioEngine.playHighlight("./Sound files/got_item_z1.wav");
+               AudioEngine.playHighlight("./sfx/LTTP_ItemFanfare.wav");
             }
+
             if (Driver.woodenSwordW.equals(image))
                Sword.type = "wooden";
             else if (images.get(i).equals(Boomerang.boomerang))

@@ -2,26 +2,21 @@ package neozelda;
 
 import javax.sound.sampled.Clip;
 
-class BGMSoundSourceIntro extends SoundSource implements Runnable {
+class BGMSoundSourceIntro extends SoundSource {
     Clip intro;
     Clip loop;
-
-    boolean runPlayerThread = true;
-    boolean threadActive = false;
-    Thread playerThread;
 
     public BGMSoundSourceIntro(Clip intro, Clip loop) {
         this.intro = intro;
         this.loop = loop;
-
-        playerThread = new Thread(this);
-        playerThread.setDaemon(true);
-        playerThread.start();
     }
 
     @Override
     public void play() {
-        threadActive = true;
+        if (!isFinished())
+            intro.start();
+        else
+            loop.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     @Override
@@ -33,39 +28,30 @@ class BGMSoundSourceIntro extends SoundSource implements Runnable {
 
     @Override
     public void pause() {
-        threadActive = false;
-        loop.stop();
+        if (!isFinished())
+            intro.stop();
+        else
+            loop.stop();
+    }
+
+    /**
+     * Specifically for starting the loop section of the bgm.
+     */
+    @Override
+    public boolean isFinished() {
+        return !intro.isRunning() && intro.getFramePosition() == intro.getFrameLength();
+    }
+
+    @Override
+    public boolean playing() {
+        return intro.isRunning() || loop.isRunning();
     }
     
     protected void finalize() {
+        System.out.println("Freeing clip " + this.intro + " " + this.loop);
         intro.stop();
         intro.close();
         loop.stop();
         loop.close();
-    }
-
-    @Override
-    public void run() {
-        while (runPlayerThread) {
-            try {
-                Thread.sleep(25);
-            } catch (InterruptedException ie) {}
-
-            // Don't manage the clip if it's not playing.
-            if (!threadActive) {
-                intro.stop();
-                continue;
-            }
-
-            // Play the loop clip now.
-            if (!intro.isRunning() && intro.getFramePosition() != 0) {
-                threadActive = false;
-                loop.loop(Clip.LOOP_CONTINUOUSLY);
-            }
-            // Start the intro clip.
-            else {
-                intro.start();
-            }
-        }
     }
 }

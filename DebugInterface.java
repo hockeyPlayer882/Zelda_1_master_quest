@@ -1,9 +1,9 @@
 public class DebugInterface {
    private static boolean linked = false;
    
-   public static void debugInit() {
+   public static void debugInit(boolean enabled) {
       try {
-         Patcher.debug_init();
+         Patcher.debug_init(enabled);
          linked = true;
       }
       catch (NoClassDefFoundError ie) {

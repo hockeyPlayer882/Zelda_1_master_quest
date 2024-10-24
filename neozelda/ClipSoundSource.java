@@ -24,6 +24,11 @@ public class ClipSoundSource extends SoundSource {
         return !internal.isRunning() && internal.getFramePosition() == internal.getFrameLength();
     }
 
+    @Override
+    public boolean playing() {
+        return internal.isRunning();
+    }
+
     public void delete() {
         internal.stop();
         internal.close();
@@ -35,6 +40,7 @@ public class ClipSoundSource extends SoundSource {
     }
     
     protected void finalize() {
+        System.out.println("Freeing clip " + this.internal);
         internal.stop();
         internal.close();
     }
