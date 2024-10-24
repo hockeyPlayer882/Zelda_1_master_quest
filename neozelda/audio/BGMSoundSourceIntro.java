@@ -1,4 +1,4 @@
-package neozelda;
+package neozelda.audio;
 
 import javax.sound.sampled.Clip;
 
@@ -28,10 +28,8 @@ class BGMSoundSourceIntro extends SoundSource {
 
     @Override
     public void pause() {
-        if (!isFinished())
-            intro.stop();
-        else
-            loop.stop();
+        intro.stop();
+        loop.stop();
     }
 
     /**
@@ -48,7 +46,15 @@ class BGMSoundSourceIntro extends SoundSource {
     }
     
     protected void finalize() {
-        System.out.println("Freeing clip " + this.intro + " " + this.loop);
+        //System.out.println("Freeing bgm loop " + this.intro + " " + this.loop);
+        intro.stop();
+        intro.close();
+        loop.stop();
+        loop.close();
+    }
+
+    @Override
+    public void delete() {
         intro.stop();
         intro.close();
         loop.stop();

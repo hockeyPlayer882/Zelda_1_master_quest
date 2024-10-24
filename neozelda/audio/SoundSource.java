@@ -1,4 +1,4 @@
-package neozelda;
+package neozelda.audio;
 
 abstract class SoundSource {
 
@@ -30,4 +30,9 @@ abstract class SoundSource {
      * @return Whether it's actively playing.
      */
     public abstract boolean playing();
+
+    /**
+     * Force this audio track to stop playing and deallocate all resources.
+     */
+    public abstract void delete();
 }

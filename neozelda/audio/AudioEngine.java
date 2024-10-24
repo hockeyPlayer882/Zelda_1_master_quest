@@ -1,4 +1,4 @@
-package neozelda;
+package neozelda.audio;
 
 import java.util.ArrayList;
 import java.io.File;
@@ -27,10 +27,16 @@ public class AudioEngine implements Runnable {
             Clip clip = loadClip(new File(soundPath));
             BGMSoundSource bgmSource = new BGMSoundSource(clip);
 
+            if (currentHighlight != null) {
+                currentHighlight.delete();
+                currentHighlight = null;
+            }
+
             if (bgm != null)
-                bgm.pause();
+                bgm.delete();
 
             bgm = bgmSource;
+            bgmSource.start();
         }
         catch (Exception ie) {
             System.out.println("Failed to load requested clip. Stack trace:");
@@ -59,10 +65,16 @@ public class AudioEngine implements Runnable {
             Clip loopClip = loadClip(new File(soundPath));
             BGMSoundSourceIntro bgmSource = new BGMSoundSourceIntro(introClip, loopClip);
 
+            if (currentHighlight != null) {
+                currentHighlight.delete();
+                currentHighlight = null;
+            }
+
             if (bgm != null)
-                bgm.pause();
+                bgm.delete();
 
             bgm = bgmSource;
+            bgmSource.start();
         }
         catch (Exception ie) {
             System.out.println("Failed to load requested clip. Stack trace:");
@@ -88,15 +100,16 @@ public class AudioEngine implements Runnable {
     public void tryPlayHighlight(String soundPath) {
         try {
             Clip highlightClip = loadClip(new File(soundPath));
-            HighlightSoundSource highlight = new HighlightSoundSource(highlightClip, bgm);
+            HighlightSoundSource highlight = new HighlightSoundSource(highlightClip);
 
-            if (bgm != null)
-                bgm.pause();
+            //if (bgm != null)
+            //    bgm.pause();
 
             if (currentHighlight != null)
-                currentHighlight.pause();
+                currentHighlight.delete();
 
             currentHighlight = highlight;
+            currentHighlight.start();
         }
         catch (Exception ie) {
             System.out.println("Failed to load requested clip. Stack trace:");
@@ -121,7 +134,6 @@ public class AudioEngine implements Runnable {
             Clip clip = loadClip(new File(clipPath));
             ClipSoundSource clipSrc = new ClipSoundSource(clip);
 
-            // TODO: Possible memory leak?
             clipSrc.start();
             sounds.add(clipSrc);
         }
@@ -140,10 +152,9 @@ public class AudioEngine implements Runnable {
 
     static Clip loadClip(File path) throws Exception {
         AudioInputStream stream = AudioSystem.getAudioInputStream(path);
-        AudioFormat format = stream.getFormat();
-        DataLine.Info info = new DataLine.Info(Clip.class, format);
-        Clip clip = (Clip) AudioSystem.getLine(info);
+        Clip clip = AudioSystem.getClip();
         clip.open(stream);
+        stream.close();
         return clip;
     }
 
@@ -166,10 +177,6 @@ public class AudioEngine implements Runnable {
             } 
             catch (InterruptedException ie) {}
 
-            // Manage the current BGM and looping.
-            if (bgm != null && bgm.isFinished())
-                bgm.play();
-
             // Play an overlay highlight.
             if (currentHighlight != null) {
                 if (bgm.playing())
@@ -181,6 +188,9 @@ public class AudioEngine implements Runnable {
                     bgm.play();
                 }
             }
+            // Manage the current BGM and looping.
+            else if (bgm != null && bgm.isFinished())
+                bgm.play();
         }
     }
 }

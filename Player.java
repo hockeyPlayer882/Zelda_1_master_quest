@@ -4,8 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import neozelda.audio.AudioEngine;
+import util.Counter;
+
 //child class of Entity, has specific methods and attributes special for the main player
 public class Player extends Entity {
+   private static final int DELTA_BETWEEN_BEEPS_MS = 666;
+
    // tracks the player location in both the overworld and a dungeon
    public static int[] location = { 10, 10 };
    // tracks where the player is: level 0 is the overworld, level -1 is a cave or
@@ -58,6 +63,8 @@ public class Player extends Entity {
    // the name of the player to be taken from the player input
    public static String name;
 
+   private Counter beepCounter;
+
    // only one player object will be created,therefore there is no need for a
    // parameter-based constructor
    public Player() {
@@ -98,6 +105,8 @@ public class Player extends Entity {
       this.keys = 0;
       this.shieldIsActive = true;
       this.shieldStrength = 1;
+
+      beepCounter = new Counter();
    }
 
    public void attack(Sword sword) {
@@ -148,7 +157,25 @@ public class Player extends Entity {
       }
    }
 
+   // TODO: Store the clips for audio in RAM so we don't have to reload them
+   // every time.
+   private void processHealth() {
+      if (this.hp <= 2) {
+         int delta = beepCounter.elapsedms();
+
+         if (delta > DELTA_BETWEEN_BEEPS_MS) {
+            beepCounter.reset();
+            AudioEngine.playClip("./sfx/LTTP_LowHealth.wav");
+         }
+      }
+      else
+         beepCounter.reset();
+   }
+
    public void draw(Graphics g, Driver driver) {
+      // Hooking draw function for low-health beeping since no tick function exists.
+      processHealth();
+
       // draws the raft(if being used)
       if (this.stun > 0)
          g.drawImage(Room.raft, this.cx - unitSize / 2, this.cy - unitSize / 2, unitSize, unitSize, driver);

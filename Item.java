@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-import neozelda.AudioEngine;
+import neozelda.audio.AudioEngine;
 
 public class Item extends Entity {
    // keeps track of the increment value & the correct item
@@ -73,7 +73,7 @@ public class Item extends Entity {
          }
 
          if (type.equals("heartContainer")) {
-            AudioEngine.playHighlight("./Sound files/secret_z1.wav");
+            AudioEngine.playHighlight("./sfx/lttp_get_heart_container.wav");
 
             player.Mhp += this.value;
             player.heal(this.value);

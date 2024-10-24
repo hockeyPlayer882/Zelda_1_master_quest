@@ -5,7 +5,7 @@ import java.awt.geom.AffineTransform;
 
 import javax.swing.*;
 
-import neozelda.AudioEngine;
+import neozelda.audio.AudioEngine;
 
 import java.awt.image.*;
 import java.util.ArrayList;
@@ -106,7 +106,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       SuperBomb.init();
       Cane.setImages();
 
-      DebugInterface.debugInit(false);
+      DebugInterface.debugInit(true);
       Driver driver = new Driver(frame);
       driver.setFocusable(true);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

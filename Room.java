@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-import neozelda.AudioEngine;
+import neozelda.audio.AudioEngine;
 
 public class Room {
    private int numOctorokRs = 0;

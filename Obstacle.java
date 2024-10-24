@@ -1,4 +1,4 @@
-import neozelda.AudioEngine;
+import neozelda.audio.AudioEngine;
 
 public class Obstacle extends Entity {
    public String type;
