@@ -92,6 +92,8 @@ public class Shop {
             g.drawImage(heart, 590, 420 + ActiveMenu.iterationNum, 38, 48, driver);
         else if (item3.equals("bomb"))
             g.drawImage(bomb, 590, 420 + ActiveMenu.iterationNum, 38, 48, driver);
+        else if(item3.equals("superbomb")) 
+            g.drawImage(SuperBomb.superBomb, 590, 420 + ActiveMenu.iterationNum, 38, 48, driver);
     }
 
     public void buyItems(Player player) {
@@ -154,7 +156,11 @@ public class Shop {
                 else
                     player.heal(2);
             } else if (Player.location[0] == 6 && Player.location[1] == 12) {
-                player.heal(2);
+                if(ActiveMenu.numTriforcePieces >= 6)
+                    Player.hasSuperBomb = true;
+                else
+                    player.heal(2);
+                
             } else if (Player.location[0] == 16 && Player.location[1] == 11) {
                 player.bombs += 4;
             }

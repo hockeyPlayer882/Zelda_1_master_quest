@@ -8,9 +8,9 @@ this.cx = 999;
 this.cy = 999;
 }
 //keeps track of what type of sword is being used, wooden is the sword obtained at the start of the game, followed by the metal sword and lastly the magic sword
-public static String type = "No sword";
+public static String type = "No_Sword";
 public void spawnSword(Player player){
-if(!type.equals("No sword")){
+if(!type.equals("No_Sword")){
 switch(player.stDir){
 case 'w':
 this.dir = 'w';

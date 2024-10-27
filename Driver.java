@@ -13,6 +13,7 @@ import java.io.*;
 import javax.imageio.ImageIO;
 
 public class Driver extends JPanel implements KeyListener, ActionListener {
+
    public static BufferedImage woodenSwordW;
    public static BufferedImage woodenSwordS;
    public static BufferedImage woodenSwordA;
@@ -28,7 +29,10 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    public static ArrayList<Bomb> bombs = new ArrayList<Bomb>();
    public static ArrayList<Explosion> explosions = new ArrayList<Explosion>();
    public static ArrayList<Fire> fires = new ArrayList<Fire>();
-   Player player = new Player();
+   public static Player player = new Player();
+   public static saveFile f1 = new saveFile("./save files/save_file_1.txt", player);
+   public static saveFile f2 = new saveFile("./save files/save_file_2.txt", player);
+   public static saveFile f3 = new saveFile("./save files/save_file_3.txt", player);
    public static String name;
    Sword sword = new Sword();
    static Menu menu;
@@ -68,22 +72,25 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       // RSC Games: refactored the name prompt. Original code will be kept for
       // historical
       // reasons.
-      name = null;
 
-      while (true) {
-         do {
-            name = JOptionPane.showInputDialog("Enter player name.");
-         } while (name == null);
-
-         int response = JOptionPane.showConfirmDialog(null, "Your name is " + name + ", right?");
-         if (response == 0)
-            break;
-      }
+      /*
+       * while (true) {
+       * do {
+       * name = JOptionPane.showInputDialog("Enter player name.");
+       * } while (name == null);
+       * 
+       * int response = JOptionPane.showConfirmDialog(null, "Your name is " + name +
+       * ", right?");
+       * if (response == 0)
+       * break;
+       * }
+       */
 
       // creates the game menu ***REPLACE PARAMETER WITH data taken from the save file
       // whe support is added
-      String[] pNames = { name, "empty", "empty" };
+      String[] pNames = { f1.searchFile("name"), f2.searchFile("name"), f3.searchFile("name") };
       menu = new Menu(pNames);
+      name = pNames[0];
       /*
        * // vvvvvv Original code below vvvvvv
        * // instantiates frame
@@ -106,7 +113,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       SuperBomb.init();
       Cane.setImages();
 
-      DebugInterface.debugInit(true);
+      DebugInterface.debugInit(false);
       Driver driver = new Driver(frame);
       driver.setFocusable(true);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -130,12 +137,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    }
 
    public Driver(JFrame frame) throws Exception {
-      /*
-       * // TELEPORTS PLAYER TO SPECIFIC LOCATIONS! NOT FOR RELEASE! TESTING ONLY!!
-       * Player.location[0] = 8;
-       * Player.location[1] = 5;
-       */
-      Player.name = name;
+      
       // cheat codes for names... becuase why not?
       if (Player.name.equals("I am rich!"))
          player.rubpees += 999;
@@ -208,7 +210,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       // this.modManager.initMods();
       // check for key inputs
       addKeyListener(this);
-      Timer timer = new Timer(10, this);
+      Timer timer = new Timer(16, this);
       timer.start();
 
       // creates the room(should be world, but im dumb) that the player is in
@@ -242,8 +244,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             AudioEngine.playBGM("./new_ost/01-Menu.wav");
             currentTrack = "load-screen";
          }
-      }
-      else if (Player.level != 0) {
+      } else if (Player.level != 0) {
          if (Player.level > 0) {
             if (player.dir != 't') {
                // Boss track playing.
@@ -257,11 +258,12 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                      AudioEngine.playBGM("./new_ost/Anger of the Guardians.wav");
                      currentTrack = "boss-theme";
                   }
-               } 
+               }
                // Standard dungeon track.
                else {
                   if (!currentTrack.equals("dungeon")) {
-                     AudioEngine.playBGM("./new_ost/12-Lost Ancient Ruins-Intro.wav", "./new_ost/12-Lost Ancient Ruins.wav");
+                     AudioEngine.playBGM("./new_ost/12-Lost Ancient Ruins-Intro.wav",
+                           "./new_ost/12-Lost Ancient Ruins.wav");
                      currentTrack = "dungeon";
                   }
                }
@@ -275,14 +277,14 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       }
       // Ripped from room.java: Lost woods music
       else if (Player.location[0] >= -4 && Player.location[0] <= 5 && Player.location[1] >= 6
-      && Player.location[1] <= 15) {
+            && Player.location[1] <= 15) {
          if (!currentTrack.equals("lost-woods")) {
             AudioEngine.playBGM("./new_ost/19-Black Mist.wav");
             currentTrack = "lost-woods";
          }
       }
-      // Play overworld loop. 
-      else if (!currentTrack.equals("overworld")) {         
+      // Play overworld loop.
+      else if (!currentTrack.equals("overworld")) {
          AudioEngine.playBGM("./new_ost/07-Hyrule Field.wav");
          currentTrack = "overworld";
       }
@@ -368,15 +370,42 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          if (!menu.gameHasStarted) {
             switch (e.getKeyCode()) {
                case KeyEvent.VK_W:
-                  menu.moveArrow(true);
+                  if (!menu.registrating)
+                     menu.moveArrow(true);
+                  else
+                     menu.changeKeyBoardSelection('W');
                   break;
                case KeyEvent.VK_S:
-                  menu.moveArrow(false);
+                  if (!menu.registrating)
+                     menu.moveArrow(false);
+                  else
+                     menu.changeKeyBoardSelection('S');
+                  break;
+               case KeyEvent.VK_A:
+                  if(menu.registrating)
+                     menu.changeKeyBoardSelection('A');
+                  break;
+               case KeyEvent.VK_D:
+                  if(menu.registrating)
+                     menu.changeKeyBoardSelection('D');
                   break;
                case KeyEvent.VK_ENTER:
-                  menu.selectArrow(activeMenu, player, room);
+                  if(!menu.registrating)
+                     menu.selectArrow(activeMenu, player, room);
+                  else
+                     menu.addKey(player);
                   break;
-
+               case KeyEvent.VK_DELETE:
+               if(!menu.registrating){
+                  if (menu.saveFileSelected == 0)
+                     f1.deleteSave(player);
+                  if (menu.saveFileSelected == 1)
+                     f2.deleteSave(player);
+                  if (menu.saveFileSelected == 2)
+                     f3.deleteSave(player);
+               }
+               else menu.removeKey();
+                  break;
             }
          } else if (Player.attackDelay <= 0 && !Player.isPaused && player.stun == 0 && Wand.delay <= 0) {
             switch (e.getKeyCode()) {
@@ -438,7 +467,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                         && (Boomerang.cx > 800 || Boomerang.cx < 0 || Boomerang.cy > 800 || Boomerang.cy < 0))
                      Boomerang.spawn(player);
                   else if (player.activeItem.equals("blue medicine") && Player.medicine.equals("blue")) {
-                     Player.medicine = "";
+                     Player.medicine = "NONE";
                      player.heal(player.Mhp);
                   } else if (player.activeItem.equals("wand") && Player.hasWand && Wand.delay <= 0) {
                      Wand.spawn(player);
@@ -477,7 +506,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          } else if (!activeMenu.isResuming && Player.isPaused) {
             switch (e.getKeyCode()) {
                case 68:
-                  if (activeMenu.selectedItem[0] == activeMenu.itemExists[0].length - 1) {
+                  if (activeMenu.selectedItem[0] == 3) {
                      if (activeMenu.selectedItem[1] == 0)
                         activeMenu.selectedItem[1] = 1;
                      else
@@ -492,7 +521,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                         activeMenu.selectedItem[1] = 0;
                      else
                         activeMenu.selectedItem[1] = 1;
-                     activeMenu.selectedItem[0] = activeMenu.itemExists[0].length - 1;
+                     activeMenu.selectedItem[0] = 3;
                   } else
                      activeMenu.selectedItem[0] -= 1;
                   break;
@@ -734,13 +763,23 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
           * }
           */
       } else {
+
          g.setColor(Color.BLACK);
          g.fillRect(0, 0, 790, 790);
          g.setColor(Color.RED);
          Font font = new Font("Verdana", Font.PLAIN, 80);
          g.setFont(font);
          g.drawString("YOU DIED!", 120, 400);
-         Player.level = -9999;
+         if (menu.saveFileSelected == 0)
+            f1.saveGame(player);
+         if (menu.saveFileSelected == 1)
+            f2.saveGame(player);
+         if (menu.saveFileSelected == 2)
+            f3.saveGame(player);
+         Font f = new Font("Verdana", Font.PLAIN, 40);
+         g.setFont(f);
+         g.drawString("Your game has \n been saved", 120, 480);
+         
       }
    }
 }

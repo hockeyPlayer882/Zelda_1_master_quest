@@ -45,7 +45,7 @@ public abstract class Wand{
    }
    public static void spawn(Player player){
       if(Player.hasWand && cx == 999){
-         delay = 30;
+         delay = 15;
         dir = player.stDir;      
         cx = dir == 'a' ? player.cx-Entity.unitSize*2:dir == 'd' ? player.cx+Entity.unitSize*2:player.cx-Entity.unitSize/2;
         cy = dir == 'w' ? player.cy-Entity.unitSize*2:dir == 's' ? player.cy+Entity.unitSize*2:player.cy-Entity.unitSize/2;

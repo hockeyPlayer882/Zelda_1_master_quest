@@ -258,8 +258,8 @@ public class LoadingZone extends Entity {
          cost1 = 100;
          item2 = "blue medicine";
          cost2 = 60;
-         item3 = "heart";
-         cost3 = 2;
+         item3 = ActiveMenu.numTriforcePieces >= 6 ? "superbomb":"heart";
+         cost3 = ActiveMenu.numTriforcePieces >= 6 ? 500:2;
       }
 
       else if (Player.location[0] == 16 && Player.location[1] == 11) {
