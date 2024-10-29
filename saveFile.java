@@ -15,15 +15,13 @@ public class saveFile {
         try {
             saveReader = new TextFile(path, "r");
             if (saveReader.readLine().equals("")) {
-                name = "Empty. press Enter to write in a name";
+                name = "Empty. Press Enter to create a new save.";
                 Player.name = name;
             }
-            
+
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -31,12 +29,10 @@ public class saveFile {
     public void deleteSave(Player p) {
         try {
             saveWriter = new TextFile(path, "w");
-            name = "Empty. press Enter to write in a name";
+            name = "Empty. Press Enter to create a new save.";
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
         }
     }
 
@@ -74,7 +70,7 @@ public class saveFile {
 
     public void saveGame(Player player) {
         try {
-            
+
             final String n = "\n";
             saveWriter = new TextFile(path, "w");
             saveWriter.write("name:" + Player.name + n);
@@ -105,47 +101,112 @@ public class saveFile {
             saveWriter.write("superBombBlownRock:" + Obstacle.superBombBlownRock + n);
             saveWriter.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
-    public String arrToString(boolean[] arr){
+
+    public String arrToString(boolean[] arr) {
         String returnS = "[ ";
-        for(int x = 0; x < arr.length;x++){
-                returnS += arr[x] + " ";
+        for (int x = 0; x < arr.length; x++) {
+            returnS += arr[x] + " ";
         }
         return returnS + "]";
     }
-    public void loadGame(Player p) {
+
+    // Fine Michael... I'll make this a tangled mess too. The current engine makes it
+    // hard not to... Wait who said the cheat codes *had* to be in driver.
+    private void processCheatCodes(Player player) {
+        // cheat codes for names... becuase why not?
+        if (Player.name.equals("I am rich!"))
+            player.rubpees += 999;
+        else if (Player.name.equals("I like explosions!"))
+            player.bombs += 4;
+        else if (Player.name.equals("I am a pyromaniac!"))
+            Player.hasCandle = true;
+        else if (Player.name.equals("GIVE ME THE BOW,NOW!")) {
+            Player.hasBow = true;
+            Player.hasArrows = true;
+        } 
+        else if (Player.name.equals("INVINCIBLE!"))
+            Player.hasCane = true;
+        else if (Player.name.equals("SUPER OVERPOWERED!")) {
+            Player.hasBow = true;
+            Player.hasCane = true;
+            Player.hasArrows = true;
+            Player.hasSuperBomb = true;
+            player.rubpees = 999;
+            Sword.type = "metal";
+            Sword.damage = 2;
+            player.shieldStrength = 2;
+            player.Mhp = 100;
+            player.hp = 100;
+            Player.medicine = "red";
+            LoadingZone.numDefeatedBosses = 7;
+            ActiveMenu.numTriforcePieces = 7;
+            Player.hasCandle = true;
+            Player.hasBoomerang = true;
+            Player.hasRaft = true;
+            Player.hasWand = true;
+            player.bombs = 999;
+            player.keys = 999;
+        } 
+        else if (Player.name.equals("BOOMERANG! YAY!"))
+            Player.hasBoomerang = true;
+        else if (Player.name.equals("I am sick!"))
+            Player.medicine = "red";
+        else if (Player.name.equals("METAL!!")) {
+            player.shieldStrength = 2;
+            Sword.type = "metal";
+            Sword.damage = 2;
+        } 
+        else if (Player.name.equals("KEEEYS!"))
+            player.keys += 999;
+        else if (Player.name.equals("SUPERSTAR!")) {
+            player.hp = 100;
+            player.Mhp = 100;
+        }
+    }
+
+    public void loadGame(Player p) {        
         Player.name = name;
         Obstacle.superBombBlownRock = searchFile("superBombBlownRock").equals("true");
-        LoadingZone.heartContainers = parseArray(searchFile("heartContainers"),8);
-        Player.hasCandle  = searchFile("candle").equals("true");
+        LoadingZone.heartContainers = parseArray(searchFile("heartContainers"), 8);
+        Player.hasCandle = searchFile("candle").equals("true");
         Player.medicine = searchFile("medicine");
-        Player.hasBow  = searchFile("bow").equals("true");
-        Player.hasCane  = searchFile("cane").equals("true");
-        Player.hasBoomerang  = searchFile("boomerang").equals("true");
-        if(Player.hasBoomerang) {
+        Player.hasBow = searchFile("bow").equals("true");
+        Player.hasCane = searchFile("cane").equals("true");
+        Player.hasBoomerang = searchFile("boomerang").equals("true");
+
+        if (Player.hasBoomerang) {
             p.activeItem = "boomerang";
             Boomerang.setImage();
         }
-        Player.hasArrows  = searchFile("arrows").equals("true");
-        Player.hasRaft  = searchFile("raft").equals("true");
-        Player.hasWand  = searchFile("wand").equals("true");
-        Player.hasSuperBomb  = searchFile("superBomb").equals("true");
+
+        Player.hasArrows = searchFile("arrows").equals("true");
+        Player.hasRaft = searchFile("raft").equals("true");
+        Player.hasWand = searchFile("wand").equals("true");
+        Player.hasSuperBomb = searchFile("superBomb").equals("true");
+
         p.Mhp = Integer.parseInt(searchFile("maxHP"));
         p.rubpees = Integer.parseInt(searchFile("rubpees").trim());
         p.keys = Integer.parseInt(searchFile("keys").trim());
         p.bombs = Integer.parseInt(searchFile("bombs"));
-        LoadingZone.keyArray = parse2DArray(searchFile("keyArray"),8);
-        LoadingZone.keyDoor = parse2DArray(searchFile("keyDoor"),8);
+
+        LoadingZone.keyArray = parse2DArray(searchFile("keyArray"), 8);
+        LoadingZone.keyDoor = parse2DArray(searchFile("keyDoor"), 8);
         ActiveMenu.numTriforcePieces = Integer.parseInt(searchFile("triforces"));
         LoadingZone.numDefeatedBosses = Integer.parseInt(searchFile("numDefeatedBosses"));
+
         Sword.type = searchFile("swordType");
         Sword.damage = Integer.parseInt(searchFile("damage"));
+
         p.shieldStrength = Integer.parseInt(searchFile("shield"));
-        ActiveMenu.itemExists = parse2DArray(searchFile("exists"),4);
+        ActiveMenu.itemExists = parse2DArray(searchFile("exists"), 4);
+
         Player.level = Integer.parseInt(searchFile("level"));
+
+        // Keep the legacy cheat code system!
+        processCheatCodes(p);
     }
 
     public boolean[][] parse2DArray(String arr, int length) {
@@ -176,17 +237,18 @@ public class saveFile {
         }
         return returnArr;
     }
-    public boolean[] parseArray(String arr, int length){
-        if(arr == null)
+
+    public boolean[] parseArray(String arr, int length) {
+        if (arr == null)
             return new boolean[length];
         Scanner scanner = new Scanner(arr);
         ArrayList<String> parts = new ArrayList<String>();
         String tok = scanner.next();
-            while (!tok.equals("]")) {
-                tok = scanner.next();
-                // Convert it to a single string.
-                parts.add(tok);
-            }
+        while (!tok.equals("]")) {
+            tok = scanner.next();
+            // Convert it to a single string.
+            parts.add(tok);
+        }
         scanner.close();
         return parseArray(parts.toArray(new String[length]));
     }

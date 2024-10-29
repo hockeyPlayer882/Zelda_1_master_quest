@@ -39,12 +39,16 @@ public class Patcher {
       int ms = totalFrameCounter.elapsedms();
       totalFrameCounter.reset();
 
-      if (curCounter != 15 && ms < 16)
+      if (curCounter != 15 && ms < 24)
          return;
+
+      Runtime runtime = Runtime.getRuntime();
+      long usedMemory = runtime.totalMemory() - runtime.freeMemory();
 
       // Only print profiling information if the game is lagging or if the timer went off.
       System.out.println("******************** PROFILE DATA ********************");
       System.out.println("Total time for the frame: " + ms + " ms\n");
+      System.out.println("Heap Usage: " + (usedMemory / 1048576) + " / " + (runtime.totalMemory() / 1048576) + " MiB");
 
       for (String seg : profilerCounters.keySet()) {
          HashMap<String, Long> counters = profilerCounters.get(seg);

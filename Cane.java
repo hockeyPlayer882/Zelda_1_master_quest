@@ -77,6 +77,7 @@ public abstract class Cane {
                     // MATH THINGIES FOR CIRCLE
                     // formula for X points, cx = middle point's cx + (radius * math.cos(degree))
                     // formula for Y points, cy = middle point's cy + (radius * math.sin(degree))
+                    // ^^ Bro's proud of his trig. ^^
                     starDeg[i] += 0.5;
                     starCX[i] = player.cx - Entity.unitSize / 4
                             + (int) ((Entity.unitSize / 1.5) * Math.cos(starDeg[i] * 36));

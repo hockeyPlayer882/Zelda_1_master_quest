@@ -6,6 +6,7 @@ public class Obstacle extends Entity {
    // left to the right, 2 is moveable from the right to the left, 3 is moveable
    // from the top to bottom, 4 is moveable from the bottom to top, and 5 is
    // moveable from any direction
+   // TODO: Bro just use an enum ;)
    private int moveable;
    public boolean isBurnable;
    public boolean isExplodable;
@@ -35,7 +36,7 @@ public class Obstacle extends Entity {
                         : Player.location[0] == 7 && Player.location[1] == 6 ? 6 : -1));
             Room.currentRoom.get(x).remove(this);
 
-            AudioEngine.playClip("./Sound files/secret_z1.wav");
+            AudioEngine.playClip("./sfx/LTTP_Secret.wav");
             break;
          }
       }
@@ -55,7 +56,7 @@ public class Obstacle extends Entity {
       Driver.obstacles.remove(this);
       }
       
-      AudioEngine.playClip("./Sound files/secret_z1.wav");
+      AudioEngine.playClip("./sfx/LTTP_Secret.wav");
    }
 
    public void openExplosion(Room room, int x, int y) {

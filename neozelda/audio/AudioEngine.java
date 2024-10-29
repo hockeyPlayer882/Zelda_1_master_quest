@@ -129,6 +129,8 @@ public class AudioEngine implements Runnable {
     /**
      * Play a sound clip.
      */
+    // TODO: Prevent stacking of clips if the same filename's been played
+    // in the last 500 ms.
     public void tryPlayClip(String clipPath) {
         try {
             Clip clip = loadClip(new File(clipPath));

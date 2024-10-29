@@ -21,6 +21,7 @@ public class Player extends Entity {
    public static int attackDelay;
    public int MaxAttackDelay;
    public char stDir = 's';
+
    private static BufferedImage linkW;
    private static BufferedImage linkWattack;
    private static BufferedImage linkS;
@@ -44,9 +45,11 @@ public class Player extends Entity {
    public int rubpees;
    public int bombs;
    public int keys;
+
    // blue means the player has blue medicine, red means the player has red
    // medicine, otherwise the player has no medicine
    public static String medicine = "no medicine";
+
    // checks if the player has the candle(I removed the blue candle from the
    // original... its a poor mechanic lets be honest)
    public static boolean hasCandle;
@@ -58,6 +61,7 @@ public class Player extends Entity {
    public static boolean hasWand;
    public static boolean hasSuperBomb;
    public static boolean isPaused;
+
    // checks what the players secondary item is (bomb, bows, etc.)
    public String activeItem = "NONE";
    // the name of the player to be taken from the player input
@@ -131,6 +135,11 @@ public class Player extends Entity {
          sword.despawn();
       }
 
+   }
+
+   @Override
+   protected void entityHitCallback() {
+      AudioEngine.playClip("./sfx/LTTP_Link_Hurt.wav");
    }
 
    public void advanceRoom(Room room) {

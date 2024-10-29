@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 
 public class Driver extends JPanel implements KeyListener, ActionListener {
 
+   private static BufferedImage lostWoodsTint;
    public static BufferedImage woodenSwordW;
    public static BufferedImage woodenSwordS;
    public static BufferedImage woodenSwordA;
@@ -22,7 +23,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    public static BufferedImage metalSwordS;
    public static BufferedImage metalSwordA;
    public static BufferedImage metalSwordD;
-   static Version version = new Version(1, 1, 11, 0);
+
+   static Version version = new Version(1, 1, 12, 1);
    // arrayList of rocks
    public static ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
    public static ArrayList<Projectile> projs = new ArrayList<Projectile>();
@@ -36,6 +38,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    public static String name;
    Sword sword = new Sword();
    static Menu menu;
+
    // Varius item refrences to be spawned when an enemy is defeated
    Item rubpee = new Item(999, 999, 1, "rubpee");
    Item rubpee5 = new Item(999, 999, 5, "rubpee5");
@@ -69,10 +72,10 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
 
       // instantiates frame
       frame = new JFrame();
+
       // RSC Games: refactored the name prompt. Original code will be kept for
       // historical
       // reasons.
-
       /*
        * while (true) {
        * do {
@@ -113,8 +116,9 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       SuperBomb.init();
       Cane.setImages();
 
-      DebugInterface.debugInit(false);
+      DebugInterface.debugInit(true);
       Driver driver = new Driver(frame);
+      frame.setAutoRequestFocus(true);
       driver.setFocusable(true);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setResizable(true);
@@ -137,54 +141,9 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    }
 
    public Driver(JFrame frame) throws Exception {
-      
-      // cheat codes for names... becuase why not?
-      if (Player.name.equals("I am rich!"))
-         player.rubpees += 999;
-      else if (Player.name.equals("I like explosions!"))
-         player.bombs += 4;
-      else if (Player.name.equals("I am a pyromaniac!"))
-         Player.hasCandle = true;
-      else if (Player.name.equals("GIVE ME THE BOW,NOW!")) {
-         Player.hasBow = true;
-         Player.hasArrows = true;
-      } else if (Player.name.equals("INVINCIBLE!"))
-         Player.hasCane = true;
-      else if (Player.name.equals("SUPER OVERPOWERED!")) {
-         Player.hasBow = true;
-         Player.hasCane = true;
-         Player.hasArrows = true;
-         Player.hasSuperBomb = true;
-         player.rubpees = 999;
-         Sword.type = "metal";
-         Sword.damage = 2;
-         player.shieldStrength = 2;
-         player.Mhp = 100;
-         player.hp = 100;
-         Player.medicine = "red";
-         LoadingZone.numDefeatedBosses = 7;
-         ActiveMenu.numTriforcePieces = 7;
-         Player.hasCandle = true;
-         Player.hasBoomerang = true;
-         Player.hasRaft = true;
-         Player.hasWand = true;
-         player.bombs = 999;
-         player.keys = 999;
-      } else if (Player.name.equals("BOOMERANG! YAY!"))
-         Player.hasBoomerang = true;
-      else if (Player.name.equals("I am sick!"))
-         Player.medicine = "red";
-      else if (Player.name.equals("METAL!!")) {
-         player.shieldStrength = 2;
-         Sword.type = "metal";
-         Sword.damage = 2;
-      } else if (Player.name.equals("KEEEYS!"))
-         player.keys += 999;
-      else if (Player.name.equals("SUPERSTAR!")) {
-         player.hp = 100;
-         player.Mhp = 100;
-      }
       try {
+         lostWoodsTint = ImageIO.read(new File("./Image files/fx/lost_woods_shader.png"));
+
          woodenSwordW = ImageIO.read(new File("./Image files/woodenSwordW.png"));
          woodenSwordS = ImageIO.read(new File("./Image files/woodenSwordS.png"));
          woodenSwordA = ImageIO.read(new File("./Image files/woodenSwordA.png"));
@@ -230,7 +189,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
 
       if (player.hp <= 0) {
          if (!currentTrack.equals("dead")) {
-            AudioEngine.playBGM("./Sound files/you_died_loop.wav");
+            AudioEngine.playBGM("./Sound files/you_died_start.wav", "./Sound files/you_died_loop.wav");
             currentTrack = "dead";
          }
 
@@ -368,6 +327,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
           * P->80
           */
          if (!menu.gameHasStarted) {
+            // TODO: Write menu.doMenu() function.
             switch (e.getKeyCode()) {
                case KeyEvent.VK_W:
                   if (!menu.registrating)
@@ -382,29 +342,34 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                      menu.changeKeyBoardSelection('S');
                   break;
                case KeyEvent.VK_A:
-                  if(menu.registrating)
+                  if (menu.registrating)
                      menu.changeKeyBoardSelection('A');
                   break;
                case KeyEvent.VK_D:
-                  if(menu.registrating)
+                  if (menu.registrating)
                      menu.changeKeyBoardSelection('D');
                   break;
                case KeyEvent.VK_ENTER:
-                  if(!menu.registrating)
+                  if (!menu.registrating)
                      menu.selectArrow(activeMenu, player, room);
                   else
                      menu.addKey(player);
                   break;
                case KeyEvent.VK_DELETE:
-               if(!menu.registrating){
-                  if (menu.saveFileSelected == 0)
-                     f1.deleteSave(player);
-                  if (menu.saveFileSelected == 1)
-                     f2.deleteSave(player);
-                  if (menu.saveFileSelected == 2)
-                     f3.deleteSave(player);
-               }
-               else menu.removeKey();
+                  System.out.println("Changed to backspace!");
+                  break;
+
+               // TODO: Michael you need to add a prompt.
+               case KeyEvent.VK_BACK_SPACE:
+                  if (!menu.registrating) {
+                     if (menu.saveFileSelected == 0)
+                        f1.deleteSave(player);
+                     if (menu.saveFileSelected == 1)
+                        f2.deleteSave(player);
+                     if (menu.saveFileSelected == 2)
+                        f3.deleteSave(player);
+                  } else
+                     menu.removeKey();
                   break;
             }
          } else if (Player.attackDelay <= 0 && !Player.isPaused && player.stun == 0 && Wand.delay <= 0) {
@@ -592,89 +557,31 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          g.fillRect(0, 0, Player.unitSize * 200, Player.unitSize * 200);
          DebugInterface.endSeg();
 
-         // in-game window to show active item, health, and amount of collectibles
-         DebugInterface.startSeg("UI repaint");
-         g.setColor(Color.BLACK);
-         g.fillRect(0, 0 + ActiveMenu.iterationNum, Player.unitSize * 200, Player.unitSize * (30 / 8));
-         activeMenu.drawItemBoxes(player, sword, g, this);
-         activeMenu.drawHearts(player, g, this);
-         activeMenu.handleActiveItem(g, this, player);
-
-         // draws the pause menu
-         activeMenu.drawPauseMenu(g, player, this);
-         activeMenu.handleActiveItem(g, this, player);
-         DebugInterface.endSeg();
+         //////////////////////////////////// DRAW PRE UI ///////////////////////////////////
 
          // draws enemies and objects
          DebugInterface.startSeg("Room draw");
          room.drawRooms(g, this, player, sword);
          DebugInterface.endSeg();
 
-         // draws in game text shown in certain rooms in levels
-         DebugInterface.startSeg("Text render");
-         room.drawText(g, sword, activeMenu);
-         for (int i = 0; i < Room.images.size(); i++) {
-            g.drawImage((BufferedImage) Room.images.get(0), 400 - Player.unitSize / 2,
-                  400 + ActiveMenu.iterationNum, 40, 60, this);
-            DebugInterface.segInstant("Text");
-         }
-         DebugInterface.endSeg();
-         // draws the bombs
-         DebugInterface.startSeg("Bomb sim");
-         for (int i = 0; i < bombs.size(); i++) {
-            Bomb bomb = bombs.get(i);
-            bomb.drawBomb(this, g);
-            if (!Player.isPaused)
-               bomb.explode();
-            DebugInterface.segInstant("Bomb entity");
-         }
-
-         // Sim bomb explosion and render it.
-         for (int i = 0; i < explosions.size(); i++) {
-            Explosion explosion = explosions.get(i);
-            explosion.drawExplosion(g, this);
-            DebugInterface.segInstant("Explosion entity");
-         }
-         DebugInterface.endSeg();
-         // draws the arrow & makes the arrow move
-         Arrow.move();
-         Arrow.draw(this, g);
          // draws the fire!!!!!!!!!!!!!!!!!
          DebugInterface.startSeg("Fire sim");
          for (int i = 0; i < fires.size(); i++) {
             Fire fire = (Fire) fires.get(i);
             fire.drawFire(g, this);
-            DebugInterface.segInstant("Flame");
-         }
-         DebugInterface.endSeg();
-         // draws the boomerang
-         DebugInterface.startSeg("boomerang sim");
-         if (Boomerang.cx < 900) {
-            Boomerang.move(player);
-            Boomerang.draw(g, this);
-         }
-         DebugInterface.endSeg();
-         // draws the projectiles
-         DebugInterface.startSeg("Enemy projectile sim");
-         for (int i = 0; i < projs.size(); i++) {
-            Projectile proj = (Projectile) projs.get(i);
-            if (proj.cx < 840 && proj.cx > -40 && proj.cy > -40 && proj.cy < 840 && proj.dirs[0] != 'n') {
-               if (!Player.isPaused) {
-                  proj.move();
-                  proj.hurtPlayer(player);
-               }
-               proj.drawProjectile(g);
-            } else
-               proj.despawn();
-            DebugInterface.segInstant("Projectile");
+            DebugInterface.segInstant("Flame" + i);
          }
          DebugInterface.endSeg();
 
          // does all of the cool stuff for the player
+         DebugInterface.startSeg("Player render");
          Cane.doThings(player);
+
+         DebugInterface.segInstant("cane tick");
+
          // draws the player
-         DebugInterface.startSeg("Player sim");
          player.draw(g, this);
+
          // Sword object
          if (sword.dir == 'a') {
             sword.width = 60;
@@ -697,9 +604,95 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             g.drawImage((Sword.type.equals("wooden") ? woodenSwordS : metalSwordS), sword.cx - Player.unitSize / 2,
                   sword.cy - Player.unitSize / 2 + ActiveMenu.iterationNum, 40, 60, this);
          }
-         DebugInterface.endSeg();
+
+         DebugInterface.segInstant("player render");
+
          // draws the magic wand(and moves it)
          Wand.draw(g, this, player);
+         DebugInterface.segInstant("wand render");
+
+         // draws the bombs
+         for (int i = 0; i < bombs.size(); i++) {
+            Bomb bomb = bombs.get(i);
+            bomb.drawBomb(this, g);
+            if (!Player.isPaused)
+               bomb.explode();
+            DebugInterface.segInstant("Bomb entity" + i);
+         }
+
+         // Sim bomb explosion and render it.
+         for (int i = 0; i < explosions.size(); i++) {
+            Explosion explosion = explosions.get(i);
+            explosion.drawExplosion(g, this);
+            DebugInterface.segInstant("Explosion entity" + i);
+         }
+
+         // draws the arrow & makes the arrow move
+         Arrow.move();
+         Arrow.draw(this, g);
+         DebugInterface.segInstant("arrow sim");
+
+         // draws the boomerang
+         DebugInterface.segInstant("boomerang sim");
+         if (Boomerang.cx < 900) {
+            Boomerang.move(player);
+            Boomerang.draw(g, this);
+         }
+         DebugInterface.endSeg();
+
+         // draws the projectiles
+         DebugInterface.startSeg("Enemy projectile sim");
+         for (int i = 0; i < projs.size(); i++) {
+            Projectile proj = (Projectile) projs.get(i);
+            if (proj.cx < 840 && proj.cx > -40 && proj.cy > -40 && proj.cy < 840 && proj.dirs[0] != 'n') {
+               if (!Player.isPaused) {
+                  proj.move();
+                  proj.hurtPlayer(player);
+               }
+               proj.drawProjectile(g);
+            } else
+               proj.despawn();
+            DebugInterface.segInstant("Projectile");
+         }
+         DebugInterface.endSeg();
+
+         ////////////////////////////////// DRAW POST UI END //////////////////////////////////
+
+         // Shader effects (like the mist of the lost woods).
+         DebugInterface.startSeg("Shader Effects");
+
+         // LOST WOODS!
+         if (Player.location[0] >= -4 && Player.location[0] <= 5 && Player.location[1] >= 6
+            && Player.location[1] <= 15) {
+            g.drawImage(lostWoodsTint, 0, 0, null);
+         }
+
+         DebugInterface.endSeg();
+
+         // UPDATE: Moved UI repaint after room repaint since that makes sense.
+         // in-game window to show active item, health, and amount of collectibles
+         DebugInterface.startSeg("UI repaint");
+         g.setColor(Color.BLACK);
+         g.fillRect(0, 0 + ActiveMenu.iterationNum, Player.unitSize * 200, Player.unitSize * (30 / 8));
+         activeMenu.drawItemBoxes(player, sword, g, this);
+         activeMenu.drawHearts(player, g, this);
+         activeMenu.handleActiveItem(g, this, player);
+
+         // draws the pause menu
+         activeMenu.drawPauseMenu(g, player, this);
+         activeMenu.handleActiveItem(g, this, player);
+         DebugInterface.endSeg();
+
+         // draws in game text shown in certain rooms in levels
+         DebugInterface.startSeg("Text render");
+         room.drawText(g, sword, activeMenu);
+         for (int i = 0; i < Room.images.size(); i++) {
+            g.drawImage((BufferedImage) Room.images.get(0), 400 - Player.unitSize / 2,
+                  400 + ActiveMenu.iterationNum, 40, 60, this);
+            DebugInterface.segInstant("Text");
+         }
+         DebugInterface.endSeg();
+
          // Mod render
          // modManager.render();
          // only let the objects move if the game isn't paused
@@ -711,9 +704,9 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             player.decreaseAtkDel(sword);
             DebugInterface.segInstant("decreaseAtkDel");
             rubpee.collectItem(player);
-            DebugInterface.segInstant("collectItem(rubpee)");
+            DebugInterface.segInstant("collectItem(rupee)");
             rubpee5.collectItem(player);
-            DebugInterface.segInstant("collectItem(rubpee5)");
+            DebugInterface.segInstant("collectItem(rupee5)");
             heart.collectItem(player);
             DebugInterface.segInstant("collectItem(heart)");
             key.collectItem(player);
@@ -727,15 +720,16 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          }
          // draw items
          rubpee.drawItem(g, this);
-         DebugInterface.segInstant("rubpee.draw");
+         DebugInterface.segInstant("rupee.draw");
          rubpee5.drawItem(g, this);
-         DebugInterface.segInstant("rupbee5.draw");
+         DebugInterface.segInstant("rupee5.draw");
          heart.drawItem(g, this);
          DebugInterface.segInstant("heart.draw");
          key.drawItem(g, this);
          DebugInterface.segInstant("key.draw");
          heartContainer.drawItem(g, this);
          DebugInterface.endSeg();
+
          if (player.activeItem.equals("cane"))
             Cane.drawCoolDownBox(g, this);
          if (Player.name.equals("SUPERSTAR!") || Player.name.equals("SUPER OVERPOWERED!"))
@@ -762,24 +756,30 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
           * g.drawRect(400-(x/2),400-(y/2),x,y);
           * }
           */
-      } else {
+      } 
+      else
+         showDeathScreen(g);
+   }
 
-         g.setColor(Color.BLACK);
-         g.fillRect(0, 0, 790, 790);
-         g.setColor(Color.RED);
-         Font font = new Font("Verdana", Font.PLAIN, 80);
-         g.setFont(font);
-         g.drawString("YOU DIED!", 120, 400);
-         if (menu.saveFileSelected == 0)
-            f1.saveGame(player);
-         if (menu.saveFileSelected == 1)
-            f2.saveGame(player);
-         if (menu.saveFileSelected == 2)
-            f3.saveGame(player);
-         Font f = new Font("Verdana", Font.PLAIN, 40);
-         g.setFont(f);
-         g.drawString("Your game has \n been saved", 120, 480);
-         
-      }
+   private void showDeathScreen(Graphics g) {
+      g.setColor(Color.BLACK);
+      g.fillRect(0, 0, 790, 790);
+      g.setColor(Color.RED);
+      Font font = new Font("Verdana", Font.PLAIN, 80);
+      g.setFont(font);
+      g.drawString("YOU DIED!", 120, 400);
+
+      if (menu.saveFileSelected == 0)
+         f1.saveGame(player);
+      if (menu.saveFileSelected == 1)
+         f2.saveGame(player);
+      if (menu.saveFileSelected == 2)
+         f3.saveGame(player);
+      
+      Font f = new Font("Verdana", Font.PLAIN, 40);
+      g.setFont(f);
+      g.drawString("Your game has \n been saved", 120, 480);
+
+      // TODO: Reload from save.
    }
 }

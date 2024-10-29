@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import neozelda.audio.AudioEngine;
+
 public class LoadingZone extends Entity {
    //private static final boolean GOT_HEART = true;
    private static final boolean HEART_UNCOLLECTED = false;
@@ -396,8 +398,11 @@ public class LoadingZone extends Entity {
             }
             // handle opening locked doors from the bottom
             else if (currentRoomBlock[1] == 2 && player.keys > 0) {
+               AudioEngine.playClip("./sfx/LTTP_Door_Unlock.wav");
+
                player.keys -= 1;
                currentRoomBlock[1] = 0;
+
                if (Player.level == 2) {
                   if (Player.location[0] == -2 && Player.location[1] == 2)
                      keyDoor[1][5] = DOOR_UNLOCKED;
@@ -444,9 +449,13 @@ public class LoadingZone extends Entity {
                   room.fillRoomArray(player);
                }
                // handle opening locked doors from the top
+               // TODO: Michael try to deduplicate this if possible?
                else if (currentRoomBlock[0] == 2 && player.keys > 0) {
+                  AudioEngine.playClip("./sfx/LTTP_Door_Unlock.wav");
+
                   player.keys -= 1;
                   currentRoomBlock[0] = 0;
+
                   if (Player.level == 1) {
                      if (Player.location[0] == 0 && Player.location[1] == 0)
                         keyDoor[0][0] = DOOR_UNLOCKED;
@@ -499,8 +508,11 @@ public class LoadingZone extends Entity {
             }
             // handle opening locked doors from the left
             else if (currentRoomBlock[2] == 2 && player.keys > 0) {
+               AudioEngine.playClip("./sfx/LTTP_Door_Unlock.wav");
+
                player.keys -= 1;
                currentRoomBlock[2] = 0;
+
                if (Player.level == 2) {
                   if (Player.location[0] == 3 && Player.location[1] == 2)
                      keyDoor[1][4] = DOOR_UNLOCKED;
@@ -571,8 +583,11 @@ public class LoadingZone extends Entity {
                }
                // handle opening locked doors from the right
                else if (currentRoomBlock[3] == 2 && player.keys > 0) {
+                  AudioEngine.playClip("./sfx/LTTP_Door_Unlock.wav");
+
                   player.keys -= 1;
                   currentRoomBlock[3] = 0;
+                  
                   if (Player.level == 2) {
                      if (Player.location[0] == 2 && Player.location[1] == 1)
                         keyDoor[1][2] = DOOR_UNLOCKED;

@@ -89,11 +89,15 @@ public class Entity {
          this.calcEnemyDir();
          for (Obstacle o : Driver.obstacles)
             o.collide(this, true);
+
+         // TODO: Is this duplicated code?
          this.hurtEntity(sword);
          Arrow.hurt(this);
+
          this.hurtExplosion();
          for (Fire fire : Driver.fires)
             fire.burn(this);
+
       } else {
          this.despawn();
          this.moveEntity();
@@ -124,6 +128,8 @@ public class Entity {
             // bombs pierce defense (BOMBS OP)
             this.hp -= explosion.damage / 1;
             this.inv = 60;
+
+            entityHitCallback();
          }
       }
 
@@ -147,10 +153,19 @@ public class Entity {
          // hurt entity based on damage calculations
          this.hp -= (int) (ent.damage / (1 - this.defense));
          this.inv = 60;
+
+         entityHitCallback();
       }
    }
 
-   public void hurtEntity (Sword sword) {
+   public void hurtRawDamage(int damage) {
+      this.hp -= (int) (damage / (1 - this.defense));
+      this.inv = 60;
+
+      entityHitCallback();
+   }
+
+   public void hurtEntity(Sword sword) {
       if (cx - unitSize / 2 < sword.cx + sword.width / 2
             && cx + unitSize / 2 > sword.cx - sword.width / 2
             && cy - unitSize / 2 < sword.cy + sword.height / 2
@@ -160,20 +175,40 @@ public class Entity {
          this.hp -= (int) (Sword.damage / (this.defense + 1));
          this.inv = 60;
 
-         AudioEngine.playClip("./sfx/LOZ_Enemy_Hit.wav");
+         entityHitCallback();
       }
+
       // cheat code to immediatly kill all enemies
       if (Player.name.equals("peaceful mode!"))
          hp = 0;
    }
 
-   @SuppressWarnings("unlikely-arg-type")
+   /**
+    * Fire a callback in child classes when this entity is hit.
+    */
+   protected void entityHitCallback() {
+      AudioEngine.playClip("./sfx/LOZ_Enemy_Hit.wav");
+   }
+
+   /**
+    * Fire a callback in child classes when this entity is killed.
+    */
+    protected void entityDiesCallback() {
+      AudioEngine.playClip("./sfx/LTTP_Enemy_Kill.wav");
+   }
+
    public void despawn() {
+      // TODO: Michael -- look at this function.
+      // You're trying to remove an entity from an arraylist made of arraylists
+      // of entities. This line of code effectively does nothing.
       Room.currentRoom.remove(this);
+
       if (this.hp <= 0) {
          if (!isDead) {
             isDead = true;
             numKeyEnemiesAlive -= 1;
+
+            entityDiesCallback();
          }
          // generates a random number between 0 and 20 (inclusive) if the enemy isn't a
          // boss, otherwise spawn a heart container
@@ -199,6 +234,10 @@ public class Entity {
                break;
             }
          }
+         
+         // TODO: Why is this enemy being "despawned" instead of being legitimately
+         // deleted and garbage collected?
+         
          // "despawns" the enemy
          this.cx = 999;
          this.cy = 999;
@@ -264,7 +303,6 @@ public class Entity {
    }
 
    public void moveEntity() {
-
       if (stun <= 0) {
          // called every frame, moves the entity according to its direction-> w is up, s
          // is down, a is left, and d is right
