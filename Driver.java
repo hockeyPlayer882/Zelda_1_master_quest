@@ -116,7 +116,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       SuperBomb.init();
       Cane.setImages();
 
-      DebugInterface.debugInit(true);
+      DebugInterface.debugInit(false);
       Driver driver = new Driver(frame);
       frame.setAutoRequestFocus(true);
       driver.setFocusable(true);
