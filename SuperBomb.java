@@ -49,7 +49,8 @@ public class SuperBomb extends Entity{
                     for(int y = 0; y < Room.currentRoom.get(x).size();y++){
                         if(Room.currentRoom.get(x).get(y)instanceof Boss6)
                             Boss6.heads6.clear();
-                        Room.currentRoom.get(x).get(y).hp = 0;
+                        if(!(Room.currentRoom.get(x).get(y) instanceof Boss7))
+                            Room.currentRoom.get(x).get(y).hp = 0;
                     }
                 Room.currentRoom.get(X).remove(this);
             }

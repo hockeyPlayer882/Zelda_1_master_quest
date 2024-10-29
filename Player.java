@@ -46,7 +46,7 @@ public class Player extends Entity {
    public int keys;
    // blue means the player has blue medicine, red means the player has red
    // medicine, otherwise the player has no medicine
-   public static String medicine = "";
+   public static String medicine = "no medicine";
    // checks if the player has the candle(I removed the blue candle from the
    // original... its a poor mechanic lets be honest)
    public static boolean hasCandle;
@@ -91,7 +91,7 @@ public class Player extends Entity {
       }
       location[0] = 10;
       location[1] = 10;
-      level = 0;
+      
       this.hp = 6;
       this.Mhp = 6;
       attackDelay = 0;

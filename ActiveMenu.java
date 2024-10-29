@@ -25,7 +25,7 @@ public class ActiveMenu{
    public static int numTriforcePieces;
    public int selectedItem[] = new int[2];
    //creates an array of booleans that check if each location in the items is full or  not
-   public boolean itemExists[][] = new boolean[4][4];
+   public static boolean itemExists[][] = new boolean[4][4];
    //only empty is needed... there is only one class and it will always be the same
    boolean isPaused = false;
 
@@ -172,7 +172,6 @@ public class ActiveMenu{
          boxcy += 80;
 
       g.drawRect(boxcx,boxcy,40,80);
-
       if (player.activeItem.equals("boomerang") && Player.hasBoomerang) {
          g.drawImage(Boomerang.boomerang,351,101+iterationNum-800,38,78,driver);
          g.drawImage(Boomerang.boomerang,331,31+iterationNum,38,78,driver);

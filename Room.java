@@ -1106,8 +1106,9 @@ public class Room {
                // going up? yup! room on top of previous room
                else if (Player.location[0] == 11 && Player.location[1] == 13) {
                   if (y >= 11 && y <= 15 || y <= 4){
-                     roomToBeGenerated[x][y] = 1;
                      roomToBeGenerated[x][y] = makeRow("", "", "small river", x);
+                     if(roomToBeGenerated[x][y] != 4)
+                        roomToBeGenerated[x][y] = 1;
                      }
                   else
                      roomToBeGenerated[x][y] = makeRow("", "2R&BO", "small bridge", x);
