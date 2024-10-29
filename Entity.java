@@ -1,5 +1,7 @@
 import java.awt.Graphics;
 
+import neozelda.audio.AudioEngine;
+
 //Inherited class for all enemies and player
 public class Entity {
    // properties tht all entities in my game will have
@@ -157,6 +159,8 @@ public class Entity {
          // hurt entity based on damage calculations
          this.hp -= (int) (Sword.damage / (this.defense + 1));
          this.inv = 60;
+
+         AudioEngine.playClip("./sfx/LOZ_Enemy_Hit.wav");
       }
       // cheat code to immediatly kill all enemies
       if (Player.name.equals("peaceful mode!"))

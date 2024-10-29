@@ -533,7 +533,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
 
       if (player.hp > 0) {
          if (Player.isPaused)
-            activeMenu.pauseGame(player, room);
+            activeMenu.pauseGame(player, menu, room);
          if (Player.isPaused && activeMenu.isResuming)
             activeMenu.resumeGame(player, room);
 

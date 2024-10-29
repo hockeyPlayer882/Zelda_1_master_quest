@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import neozelda.audio.AudioEngine;
+
 public class ActiveMenu{
    public BufferedImage fullHeart;
    public BufferedImage halfHeart;
@@ -25,6 +27,7 @@ public class ActiveMenu{
    //creates an array of booleans that check if each location in the items is full or  not
    public boolean itemExists[][] = new boolean[4][4];
    //only empty is needed... there is only one class and it will always be the same
+   boolean isPaused = false;
 
    public ActiveMenu() {
       try {     
@@ -299,7 +302,12 @@ public class ActiveMenu{
       }
    }
 
-   public void pauseGame(Player player, Room room){
+   public void pauseGame(Player player, Menu menu, Room room) {
+      if (Player.isPaused && menu.gameHasStarted && !isPaused && !isResuming) {
+         AudioEngine.playClip("./sfx/LTTP_Pause_Open.wav");
+         isPaused = true;
+      }
+
       if(!isResuming){
          if(iterationNum <800){
             for (int x = 0; x < Room.currentRoom.size(); x++) {
@@ -316,6 +324,11 @@ public class ActiveMenu{
    }
 
    public void resumeGame(Player player, Room room){
+      if (Player.isPaused && isPaused && isResuming) {
+         AudioEngine.playClip("./sfx/LTTP_Pause_Close.wav");
+         isPaused = false;
+      }
+
       if (iterationNum >0){
          for (int x = 0; x < Room.currentRoom.size(); x++) {
             for (int y= 0; y < Room.currentRoom.get(x).size(); y++) {

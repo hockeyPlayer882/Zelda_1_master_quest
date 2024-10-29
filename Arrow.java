@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import neozelda.audio.AudioEngine;
+
 public abstract class Arrow {
    static int cx = 999;
    static int cy = 999;
@@ -46,6 +48,8 @@ public abstract class Arrow {
             // hurt entity based on damage calculations
             ent.hp -= (int) (damage / (ent.defense + 1));
             ent.inv = 60;
+            
+            AudioEngine.playClip("./sfx/LOZ_Enemy_Hit.wav");
          }
       }
    }
