@@ -14,12 +14,12 @@ public class Menu {
     boolean isUpper = false;
     final int ManimDelay = 40;
     int[] linkStates = { 0, 0, 0 };
-    
+
     String[][] keyBoard = {
-        { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" },
-        { "q", "w", "e", "r", "t", "y", "u", "i", "o", "p" },
-        { "a", "s", "d", "f", "g", "h", "j", "k", "l", "A/a" },
-        { "z", "x", "c", "v", "b", "n", "m", "!", "↵", "_" }
+            { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" },
+            { "q", "w", "e", "r", "t", "y", "u", "i", "o", "p" },
+            { "a", "s", "d", "f", "g", "h", "j", "k", "l", "A/a" },
+            { "z", "x", "c", "v", "b", "n", "m", "!", "↵", "_" }
 
     };
 
@@ -47,29 +47,26 @@ public class Menu {
             boolean gameWasLoaded = false;
             Player.name = fileNames[saveFileSelected];
             if (saveFileSelected == 0 && !Driver.f1.name.equals(emptySaveName)) {
-                Driver.f1.loadGame(p);
+                Driver.f1.loadGame(p, room, m);
                 gameWasLoaded = true;
             }
-            if (saveFileSelected == 1 && !Driver.f2.name.equals(emptySaveName)) {
-                Driver.f2.loadGame(p);
+            else if (saveFileSelected == 1 && !Driver.f2.name.equals(emptySaveName)) {
+                Driver.f2.loadGame(p, room, m);
                 gameWasLoaded = true;
             }
-            if (saveFileSelected == 2 && !Driver.f3.name.equals(emptySaveName)) {
-                Driver.f3.loadGame(p);
+            else if (saveFileSelected == 2 && !Driver.f3.name.equals(emptySaveName)) {
+                Driver.f3.loadGame(p, room, m);
                 gameWasLoaded = true;
             }
-
             if (gameWasLoaded) {
-                System.out.println(Player.level);
-                if (Player.level != 0) {
-                    Player.location[0] = 0;
-                    Player.location[1] = 0;
-                    room.spawnRoom(p);
-                    room.fillRoomArray(p);
-                    p.cx = 400;
-                    p.cy = 790;
-                    p.dir = 'w';
-                }
+                final int[] startLocOverworld = { 10, 10 };
+                final int[] startLocDungeon = { 0, 0 };
+                Player.location = Player.level == 0 ? startLocOverworld : startLocDungeon;
+                room.spawnRoom(p);
+                room.fillRoomArray(p);
+                p.cx = 400;
+                p.cy = Player.level == 0 ? 400:700;
+                p.dir = 'w';
                 gameHasStarted = true;
                 Player.isPaused = false;
                 while (ActiveMenu.iterationNum > 0) {
@@ -153,7 +150,7 @@ public class Menu {
         // Draw the selected key.
         // TODO: Some offset math is not working properly!
         g.drawRect(keyBoardPos[1] * 75 + 20, keyBoardPos[0] * 90 + 370, 40, 40);
-        
+
         // Draw the keyboard.
         for (int x = 0; x < keyBoard.length; x++) {
             for (int y = 0; y < keyBoard[x].length; y++) {
@@ -198,7 +195,7 @@ public class Menu {
                 Driver.f2.saveGame(p);
             if (saveFileSelected == 2)
                 Driver.f3.saveGame(p);
-            
+
             fileNames[0] = Driver.f1.name;
             fileNames[1] = Driver.f2.name;
             fileNames[2] = Driver.f3.name;
@@ -216,7 +213,7 @@ public class Menu {
             Driver.f2.name += isUpper ? kLookUp.toUpperCase() : kLookUp;
         if (saveFileSelected == 2)
             Driver.f3.name += isUpper ? kLookUp.toUpperCase() : kLookUp;
-        
+
         System.out.println(keyBoardPos[0] + "," + keyBoardPos[1]);
         AudioEngine.playClip("./sfx/LTTP_LowHealth.wav");
     }
@@ -235,6 +232,6 @@ public class Menu {
             case 'D':
                 keyBoardPos[1] += keyBoardPos[1] + 1 > 9 ? -9 : 1;
                 break;
-        }  
+        }
     }
 }

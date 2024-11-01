@@ -1,9 +1,9 @@
-name:peaceful mode!
+name:Empty. Press Enter to create a new save.
 rubpees:0
 keys:0
 bombs:0
-keyArray:[ false false false ] [ false false false false false false false ] [ false false false false false false false ] [ false false false false false false false false false false ] [ false false false false false false false false false ] [ false false false false false false false false false false false false false ] [ false false false false false false false false false false false false false ] [ false false false ] 
-keyDoor:[ false false false ] [ false false false false false false false ] [ false false false false false false false ] [ false false false false false false false false false false ] [ false false false false false false false false false ] [ false false false false false false false false false false false false false ] [ false false false false false false false false false false false false false ] [ false false false ] 
+keyArray:[ false false ] [ false false false false false false ] [ false false false false false false ] [ false false false false false false false false false ] [ false false false false false false false false ] [ false false false false false false false false false false false false ] [ false false false false false false false false false false false false ] [ false false ] 
+keyDoor:[ false false ] [ false false false false false false ] [ false false false false false false ] [ false false false false false false false false false ] [ false false false false false false false false ] [ false false false false false false false false false false false false ] [ false false false false false false false false false false false false ] [ false false ] 
 triforces:0
 bombs:0
 medicine:no medicine
@@ -16,11 +16,11 @@ arrows:false
 raft:false
 wand:false
 superBomb:false
-heartContainers:[ false false false false false false false false false false ]
+heartContainers:[ false false false false false false false false false ]
 numDefeatedBosses:0
-swordType:wooden
+swordType:No_Sword
 damage:1
-exists:[ false false false false false ] [ false false false false false ] [ false false false false false ] [ false false false false false ] 
+exists:[ false false false false ] [ false false false false ] [ false false false false ] [ false false false false ] 
 shield:1
 level:0
 superBombBlownRock:false

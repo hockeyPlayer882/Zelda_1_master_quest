@@ -38,6 +38,7 @@ public class Swordsman extends Entity {
    }
 
    public void draw(Graphics g, Driver driver) {
+      if(inv %2 == 0){
       g.setColor(Color.ORANGE);
       g.fillRect(cx - unitSize, cy - unitSize, unitSize, unitSize);
       g.setColor(Color.BLACK);
@@ -49,5 +50,6 @@ public class Swordsman extends Entity {
          g.fillRect(cx - unitSize, cy - unitSize, 10, unitSize);
       else if (this.dir == 'd')
          g.fillRect(cx + unitSize / 22, cy - unitSize, 10, unitSize);
+      }
    }
 }

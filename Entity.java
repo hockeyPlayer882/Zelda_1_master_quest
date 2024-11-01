@@ -90,8 +90,7 @@ public class Entity {
          for (Obstacle o : Driver.obstacles)
             o.collide(this, true);
 
-         // TODO: Is this duplicated code?
-         this.hurtEntity(sword);
+        
          Arrow.hurt(this);
 
          this.hurtExplosion();
@@ -197,6 +196,7 @@ public class Entity {
       AudioEngine.playClip("./sfx/LTTP_Enemy_Kill.wav");
    }
 
+   @SuppressWarnings("unlikely-arg-type")
    public void despawn() {
       // TODO: Michael -- look at this function.
       // You're trying to remove an entity from an arraylist made of arraylists

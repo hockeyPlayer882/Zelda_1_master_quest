@@ -7,6 +7,7 @@ public class Obstacle extends Entity {
    // from the top to bottom, 4 is moveable from the bottom to top, and 5 is
    // moveable from any direction
    // TODO: Bro just use an enum ;)
+   //enums aren't real.....
    private int moveable;
    public boolean isBurnable;
    public boolean isExplodable;

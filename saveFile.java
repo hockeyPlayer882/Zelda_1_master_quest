@@ -167,8 +167,22 @@ public class saveFile {
         }
     }
 
-    public void loadGame(Player p) {        
+    public void loadGame(Player p, Room room, ActiveMenu m) {        
         Player.name = name;
+        p.hp = 6;
+        p.cx = 400;
+        p.inv = 1;
+        p.cy = Player.level == 0 ? 400:700;
+        final int[] startLocOverworld = {10,10};
+        final int[] startLocDungeon = {0,0};
+        p.dir = Player.level == 0 ? 's':'w';
+        Player.location = Player.level == 0 ? startLocOverworld:startLocDungeon;
+        room.spawnRoom(p);
+        room.fillRoomArray(p);
+        Player.isPaused = false;
+        while (ActiveMenu.iterationNum > 0) {
+            m.resumeGame(p, room);
+        }
         Obstacle.superBombBlownRock = searchFile("superBombBlownRock").equals("true");
         LoadingZone.heartContainers = parseArray(searchFile("heartContainers"), 8);
         Player.hasCandle = searchFile("candle").equals("true");

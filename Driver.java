@@ -182,8 +182,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    // timer function to be called every frame
    public void actionPerformed(ActionEvent e) {
       // repaints the canvas
+      //repaint(0,0,fullscreen ? 1600:800,fullscreen ? 1600:800);
       repaint();
-
       // debugger
       DebugInterface.debugMain();
 
@@ -391,14 +391,15 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                      player.stDir = player.dir;
                   // stops the player from moving
                   player.dir = 'e';
-                  player.attack(sword);
+                  if(player.hp > 0)
+                     player.attack(sword);
                   break;
                case KeyEvent.VK_ENTER:
                   if (player.dir != 'n' && player.dir != 'e')
                      player.stDir = player.dir;
                   // stops the player from moving
                   player.dir = 'e';
-                  player.attack(sword);
+                     player.attack(sword);
                   break;
                case KeyEvent.VK_Q:
                   if (player.dir != 'n' && player.dir != 'e')
@@ -495,6 +496,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                   break;
             }
          }
+         else if(player.hp <= 0 && e.getKeyCode() == KeyEvent.VK_ENTER)
+               restart();
       }
    }
 
@@ -530,8 +533,6 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             activeMenu.pauseGame(player, menu, room);
          if (Player.isPaused && activeMenu.isResuming)
             activeMenu.resumeGame(player, room);
-
-         // TODO: Add a fog effect to the lost woods (do this in effects function?)
 
          // adds refrence items to arrayList
          DebugInterface.startSeg("Image collection");
@@ -778,8 +779,16 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       
       Font f = new Font("Verdana", Font.PLAIN, 40);
       g.setFont(f);
-      g.drawString("Your game has \n been saved", 120, 480);
-
-      // TODO: Reload from save.
+      g.drawString("Your game has been saved" , 120, 480);
+      g.drawString("press enter to continue", 120, 520);
+   }
+   private void restart(){
+      System.out.println("game restarting....");
+      if(menu.saveFileSelected == 0)
+         f1.loadGame(player,room,activeMenu);
+      else if(menu.saveFileSelected == 1)
+         f2.loadGame(player,room,activeMenu);
+      else if(menu.saveFileSelected == 2)
+         f3.loadGame(player,room,activeMenu);
    }
 }
