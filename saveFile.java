@@ -62,7 +62,7 @@ public class saveFile {
             String[] vals = s.split("[:]");
             if (vals[0].equals(key)) {
                 saveReader.close();
-                return vals[1];
+                return vals[1].strip();
             }
         }
         return null;
