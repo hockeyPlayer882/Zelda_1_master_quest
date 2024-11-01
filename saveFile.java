@@ -59,13 +59,14 @@ public class saveFile {
             String s = saveReader.readLineSafe();
             if (s.equals(""))
                 break;
+
             String[] vals = s.split("[:]");
-            if (vals[0].equals(key)) {
+            if (vals[0].equals(key) && vals.length > 1) {
                 saveReader.close();
                 return vals[1].strip();
             }
         }
-        return null;
+        return "";
     }
 
     public void saveGame(Player player) {

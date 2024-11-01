@@ -696,7 +696,9 @@ public class Room {
                && imagecy + Entity.unitSize / 2 > player.cy - Entity.unitSize / 2) {
             BufferedImage image = (BufferedImage) images.get(i);
             
-            if (!Driver.metalSwordW.equals(image) || player.Mhp >= 14) {
+            // In english please: This is for collecting other items that are "not"
+            // the master sword (but why or player.maxhp > 14?)
+            if (!Driver.metalSwordW.equals(image)) {
                AudioEngine.playHighlight("./sfx/LTTP_ItemFanfare.wav");
             }
 
@@ -714,7 +716,12 @@ public class Room {
                Player.hasCane = true;
             else if (images.get(i).equals(SuperBomb.superBomb))
                Player.hasSuperBomb = true;
+
+            // TODO: Buff later?
             else if (Driver.metalSwordW.equals(image) && player.Mhp >= 14) {
+               // Player got the master sword -- clean this up later please.
+               AudioEngine.playHighlight("./new_ost/16-The Master Sword.wav");
+
                Sword.type = "metal";
                Sword.damage += 1;
             }
