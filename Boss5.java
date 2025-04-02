@@ -39,7 +39,7 @@ public class Boss5 extends Entity {
                     // formula for X points, cx = middle point's cx + (radius * math.cos(degree))
                     // formula for Y points, cy = middle point's cy + (radius * math.sin(degree))
                     Driver.projs.add(new Projectile(cx + (int) ((Entity.unitSize / 1.5) * Math.cos(i * 36)),
-                            cy + (int) ((Entity.unitSize / 1.5) * Math.sin(i * 36)), 1, 8, i*36 > 180 ? 'a':'d', i*36 <= 90 || i*63 >= 270 ? 'w':'s',0));
+                            cy + (int) ((Entity.unitSize / 1.5) * Math.sin(i * 36)), 1, 8, i*36 > 180 ? 'a':'d', i*36 <= 90 || i*63 >= 270 ? 'w':'s'));
                 }
             }
             this.resetProjectileTimer();

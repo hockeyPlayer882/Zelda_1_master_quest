@@ -7,10 +7,10 @@ import javax.imageio.ImageIO;
 import neozelda.audio.AudioEngine;
 
 public class LoadingZone extends Entity {
-   // private static final boolean GOT_HEART = true;
+   //private static final boolean GOT_HEART = true;
    private static final boolean HEART_UNCOLLECTED = false;
-
-   // private static final boolean HAS_KEY = true;
+   
+   //private static final boolean HAS_KEY = true;
    private static final boolean HAS_NO_KEY = false;
 
    private static final boolean DOOR_LOCKED = false;
@@ -21,35 +21,32 @@ public class LoadingZone extends Entity {
    // is in, every index after that is used to determine if a room in the
    // corresponding level has had a key dropped, if so, that index of the array is
    // true, otherwise it is false
-   public static boolean[][] keyArray = {
-         { HAS_NO_KEY, HAS_NO_KEY },
-         { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY },
-         { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY },
-         { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY },
-         { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY },
-         { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY,
-               HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY },
-         { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY,
-               HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY },
-         { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY,
-               HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY}
-         };
+   public static boolean[][] keyArray = { 
+      { HAS_NO_KEY, HAS_NO_KEY }, 
+      { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY },
+      { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY },
+      { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY },
+      { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY},
+      { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY} ,
+      { HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY, HAS_NO_KEY},
+      {  HAS_NO_KEY, HAS_NO_KEY
+        
+      }
+   };
    // same idea as the keyArray, but checks if the door that each key is intended
    // for(some keys can be used out of order, but it doesn't affect anything)
-   public static boolean[][] keyDoor = {
-         { DOOR_LOCKED, DOOR_LOCKED },
-         { DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED },
-         { DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED },
-         { DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED,
-               DOOR_LOCKED },
-         { DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED },
-         { DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED,
-               DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED },
-         { DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED,
-               DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED },
-         { DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED,
-               DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED}
-         };
+   public static boolean[][] keyDoor = { 
+      { DOOR_LOCKED, DOOR_LOCKED }, 
+      { DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED },
+      { DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED },
+      { DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED }, 
+      { DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED},
+      { DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED},
+      { DOOR_LOCKED , DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED, DOOR_LOCKED},
+      { DOOR_LOCKED, DOOR_LOCKED
+          
+      }
+   };
    // checks how many bosses have been defeated
    public static int numDefeatedBosses = 0;
    private static BufferedImage topWallBLOCKED;
@@ -89,15 +86,11 @@ public class LoadingZone extends Entity {
    // first index is the heart container at location (9,12), second one is the
    // heart container at (11,12), the third item is at(6,13), the fourth one is the
    // heartContainer at (9,13), the fith one is a heartContainer at(15,10), the
-   // sixth one is at (15,12), the seventh one is at(16,12), the eighth one is at
-   // (9,15)
+   // sixth one is at (15,12), the seventh one is at(16,12), the eighth one is at (9,15)
    // the seventh one is at (9,6)
-   public static boolean[] heartContainers = { HEART_UNCOLLECTED, HEART_UNCOLLECTED, HEART_UNCOLLECTED,
-         HEART_UNCOLLECTED, HEART_UNCOLLECTED, HEART_UNCOLLECTED, HEART_UNCOLLECTED, HEART_UNCOLLECTED,
-         HEART_UNCOLLECTED };
+   public static boolean[] heartContainers = { HEART_UNCOLLECTED, HEART_UNCOLLECTED, HEART_UNCOLLECTED, HEART_UNCOLLECTED, HEART_UNCOLLECTED, HEART_UNCOLLECTED, HEART_UNCOLLECTED, HEART_UNCOLLECTED , HEART_UNCOLLECTED};
 
    public LoadingZone(int cx, int cy, int areaToBeEntered) {
-
       try {
          if (wallImages[0][0] == null) {
             wallImages[0][1] = ImageIO.read(new File("./Image files/topWallBLOCKED.png"));
@@ -139,8 +132,8 @@ public class LoadingZone extends Entity {
          room.clearText();
          player.cx = 400;
          player.cy = unitSize * 18;
-         // in-dungeon loading zones
-         if (Player.level == 7 && Player.location[0] == 1 && Player.location[1] == 2) {
+         //in-dungeon loading zones
+         if(Player.level == 7 && Player.location[0] == 1 && Player.location[1] == 2){
             Player.location[0] = -3;
             Player.location[1] = -1;
             room.spawnRoom(player);
@@ -148,67 +141,12 @@ public class LoadingZone extends Entity {
             player.cx = 400;
             player.cy = 400;
             return;
-         } else if (Player.level == 7 && Player.location[0] == -3 && Player.location[1] == -1) {
+         }
+         else if (Player.level == 7 && Player.location[0] == -3 && Player.location[1] == -1){
             Player.location[0] = 1;
             Player.location[1] = 2;
             player.cx = 400;
             player.cy = 350;
-            room.spawnRoom(player);
-            room.fillRoomArray(player);
-            return;
-         } else if (Player.level == 8) {
-            if (Player.location[0] == -1 && Player.location[1] == 0) {
-               Player.location[0] = 3;
-               Player.location[1] = -3;
-               player.cx = 400;
-               player.cy = 350;
-            } else if (Player.location[0] == 3 && Player.location[1] == -3) {
-               Player.location[0] = -1;
-               Player.location[1] = 0;
-               player.cx = 400;
-               player.cy = 350;
-            } else if (Player.location[0] == 1 && Player.location[1] == 0) {
-               Player.location[0] = -2;
-               Player.location[1] = -2;
-               player.cx = 400;
-               player.cy = 350;
-            } else if (Player.location[0] == -2 && Player.location[1] == -2) {
-               Player.location[0] = 1;
-               Player.location[1] = 0;
-               player.cx = 400;
-               player.cy = 350;
-            } else if (Player.location[0] == 2 && Player.location[1] == 1) {
-               Player.location[0] = 0;
-               Player.location[1] = -3;
-               player.cx = 400;
-               player.cy = 350;
-            } else if (Player.location[0] == 0 && Player.location[1] == -3) {
-               Player.location[0] = 2;
-               Player.location[1] = 1;
-               player.cx = 400;
-               player.cy = 350;
-            } else if (Player.location[0] == -1 && Player.location[1] == 2) {
-               Player.location[0] = 0;
-               Player.location[1] = -1;
-               player.cx = 400;
-               player.cy = 350;
-            } else if (Player.location[0] == 0 && Player.location[1] == -1) {
-               Player.location[0] = -1;
-               Player.location[1] = 2;
-               player.cx = 400;
-               player.cy = 350;
-            } else if (Player.location[0] == 3 && Player.location[1] == 2) {
-               Player.location[0] = -3;
-               Player.location[1] = -6;
-               player.cx = 400;
-               player.cy = 350;
-            } else if (Player.location[0] == -3 && Player.location[1] == -6) {
-               Player.location[0] = 3;
-               Player.location[1] = 2;
-               player.cx = 400;
-               player.cy = 350;
-            }
-
             room.spawnRoom(player);
             room.fillRoomArray(player);
             return;
@@ -226,7 +164,7 @@ public class LoadingZone extends Entity {
             }
          }
          // Entrance dungeon rooms in the game
-         if (Player.location[0] == 6 && Player.location[1] == 11
+         if (Player.location[0] == 6 && Player.location[1] == 11 
                || Player.location[0] == 12 && Player.location[1] == 13
                || Player.location[0] == -5 && Player.location[1] == 10
                || Player.location[0] == 14 && Player.location[1] == 9
@@ -240,31 +178,31 @@ public class LoadingZone extends Entity {
             room.spawnRoom(player);
             player.cy = unitSize * 17;
          }
-         room.fillRoomArray(player);
+         room.fillRoomArray(player);   
          if (Player.location[0] == 10 && Player.location[1] == 10 && ActiveMenu.numTriforcePieces != 7) {
             if (Sword.type != "wooden") {
-               room.setText(Player.name + ",", "It's dangerous to go alone,", " take this!");
+               room.setText( Player.name + ",", "It's dangerous to go alone,", " take this!");
                room.setImages(Driver.woodenSwordW);
                imageName = "woodenSword";
             } else
-               room.setText(Player.name + ",", "REALLY?", "What were you expecting?");
+               room.setText( Player.name + ",", "REALLY?", "What were you expecting?");
          } else if (Player.location[0] >= -4 && Player.location[0] <= 5 && Player.location[1] >= 6
                && Player.location[1] <= 15) {
             if (Sword.type != "metal") {
-               room.setText(Player.name + ",", "master using it and you,", " can have this");
+               room.setText( Player.name + ",", "master using it and you,", " can have this");
                room.setImages(Driver.metalSwordW);
                imageName = "metal sword";
             } else
-               room.setText(Player.name + ",", "REALLY?", "What were you expecting?");
+               room.setText( Player.name + ",", "REALLY?", "What were you expecting?");
          } else if (Player.location[0] == 9 && Player.location[1] == 11
                || Player.location[0] == 6 && Player.location[1] == 12
                || Player.location[0] == 16 && Player.location[1] == 11) {
-            room.setText(Player.name + ",", "Buy somethin'", "Will Ya!");
+            room.setText( Player.name + ",", "Buy somethin'", "Will Ya!");
             setShop(g, player, driver);
          }
          // caves with "helpful" advice
          else if (Player.location[0] == 16 & Player.location[1] == 8) {
-            room.setText(Player.name + ",", "secrets are hidden in trees,", "set them on fire to find them");
+            room.setText( Player.name + ",", "secrets are hidden in trees,", "set them on fire to find them");
          }
          // caves that can be opened with a bomb or in a tree that hold heartContainers
          else if ((Player.location[0] == 9 && Player.location[1] == 12)
@@ -285,12 +223,12 @@ public class LoadingZone extends Entity {
                   || Player.location[0] == 16 && Player.location[1] == 12 && !heartContainers[6]
                   || Player.location[0] == 9 && Player.location[1] == 15 && !heartContainers[7]
                   || Player.location[0] == 9 && Player.location[1] == 6 && !heartContainers[8]) {
-               room.setText(Player.name + ",", "THIS IS A SECRET", "DON'T TELL ANYONE!");
+               room.setText( Player.name + ",", "THIS IS A SECRET", "DON'T TELL ANYONE!");
                Item heartContainer = (Item) Driver.items.get(5);
                heartContainer.cx = 400;
                heartContainer.cy = 400;
             } else
-               room.setText(Player.name + ",", "REALLY?", "What were you expecting?");
+               room.setText( Player.name + ",", "REALLY?", "What were you expecting?");
          }
       }
    }
@@ -322,8 +260,8 @@ public class LoadingZone extends Entity {
          cost1 = 100;
          item2 = "blue medicine";
          cost2 = 60;
-         item3 = ActiveMenu.numTriforcePieces >= 6 ? "superbomb" : "heart";
-         cost3 = ActiveMenu.numTriforcePieces >= 6 ? 500 : 2;
+         item3 = ActiveMenu.numTriforcePieces >= 6 ? "superbomb":"heart";
+         cost3 = ActiveMenu.numTriforcePieces >= 6 ? 500:2;
       }
 
       else if (Player.location[0] == 16 && Player.location[1] == 11) {
@@ -336,7 +274,7 @@ public class LoadingZone extends Entity {
       }
       activeShop = new Shop(item1, item2, item3, cost1, cost2, cost3);
    }
-
+   
    // lets the player exit a cave, or move rooms in a dungeon
    public static void exit(Player player, Room room) {
       if (Player.level == -1) {
@@ -370,8 +308,7 @@ public class LoadingZone extends Entity {
                   && Player.location[1] <= 15) {
                player.cx = 400;
                player.cy = 400;
-            } else if (Player.location[0] == 16 && Player.location[1] == 8
-                  || Player.location[0] == 9 && Player.location[1] == 6) {
+            } else if (Player.location[0] == 16 && Player.location[1] == 8 || Player.location[0] == 9 && Player.location[1] == 6) {
                player.cx = 400;
                player.cy = 650;
             }
@@ -422,7 +359,7 @@ public class LoadingZone extends Entity {
                room.spawnRoom(player);
                room.clearImages();
                room.fillRoomArray(player);
-            } else if (Player.level == 5) {
+            } else if (Player.level == 5){
                Player.location[0] = 11;
                Player.location[1] = 15;
                Player.level = 0;
@@ -431,7 +368,8 @@ public class LoadingZone extends Entity {
                room.spawnRoom(player);
                room.clearImages();
                room.fillRoomArray(player);
-            } else if (Player.level == 6) {
+            }
+            else if (Player.level == 6){
                Player.location[0] = 7;
                Player.location[1] = 6;
                Player.level = 0;
@@ -440,7 +378,8 @@ public class LoadingZone extends Entity {
                room.spawnRoom(player);
                room.clearImages();
                room.fillRoomArray(player);
-            } else if (Player.level == 7) {
+            }
+            else if (Player.level == 7){
                Player.location[0] = 8;
                Player.location[1] = 5;
                Player.level = 0;
@@ -479,27 +418,25 @@ public class LoadingZone extends Entity {
                      keyDoor[3][1] = DOOR_UNLOCKED;
                   else if (Player.location[0] == -3 && Player.location[1] == 1)
                      keyDoor[3][8] = DOOR_UNLOCKED;
-               } else if (Player.level == 5) {
-                  if (Player.location[0] == -2 && Player.location[1] == 2)
+               }
+               else if (Player.level == 5){
+                  if(Player.location[0] == -2 && Player.location[1] == 2)
                      keyDoor[4][7] = DOOR_UNLOCKED;
-
-               } else if (Player.level == 6) {
-                  if (Player.location[0] == 2 && Player.location[1] == 2)
-                     keyDoor[5][2] = DOOR_UNLOCKED;
-                  else if (Player.location[0] == 2 && Player.location[1] == 1)
-                     keyDoor[5][3] = DOOR_UNLOCKED;
-                  else if (Player.location[0] == 2 && Player.location[1] == 0)
-                     keyDoor[5][4] = DOOR_UNLOCKED;
-                  else if (Player.location[0] == 2 && Player.location[1] == -1)
-                     keyDoor[5][5] = DOOR_UNLOCKED;
-               } else if (Player.level == 7) {
-                  if (Player.location[0] == 1 && Player.location[1] == 4)
-                     keyDoor[6][11] = DOOR_UNLOCKED;
-               } else if (Player.level == 8){
-                  if(Player.location[0] == 5 && Player.location[1] == -6)
-                  keyDoor[7][12] = DOOR_UNLOCKED;
-
                   
+               }
+               else if (Player.level == 6){
+                  if(Player.location[0] == 2 && Player.location[1] == 2)
+                     keyDoor[5][2] = DOOR_UNLOCKED;
+                  else if(Player.location[0] == 2 && Player.location[1] == 1)
+                     keyDoor[5][3] = DOOR_UNLOCKED;
+                  else if(Player.location[0] == 2 && Player.location[1] == 0)
+                     keyDoor[5][4] = DOOR_UNLOCKED;
+                  else if(Player.location[0] == 2 && Player.location[1] == -1)
+                     keyDoor[5][5] = DOOR_UNLOCKED;
+               }
+               else if (Player.level == 7){
+                  if(Player.location[0] == 1 && Player.location[1] == 4)
+                     keyDoor[6][11] = DOOR_UNLOCKED;
                }
             } else
                player.dir = 'n';
@@ -538,24 +475,25 @@ public class LoadingZone extends Entity {
                      if (Player.location[0] == 0 && Player.location[1] == 0)
                         keyDoor[3][0] = DOOR_UNLOCKED;
                   } else if (Player.level == 5) {
-                     if (Player.location[0] == 0 && Player.location[1] == 0)
-                        keyDoor[4][0] = DOOR_UNLOCKED;
-                     else if (Player.location[0] == 0 && Player.location[1] == 1)
-                        keyDoor[4][1] = DOOR_UNLOCKED;
-                  } else if (Player.level == 7) {
-                     if (Player.location[0] == 1 && Player.location[1] == 0)
-                        keyDoor[6][1] = DOOR_UNLOCKED;
-                     else if (Player.location[0] == 4 && Player.location[1] == 1)
-                        keyDoor[6][5] = DOOR_UNLOCKED;
-                     else if (Player.location[0] == 4 && Player.location[1] == 2)
-                        keyDoor[6][6] = DOOR_UNLOCKED;
-                     else if (Player.location[0] == 4 && Player.location[1] == 3)
-                        keyDoor[6][7] = DOOR_UNLOCKED;
-
-                  } else if (Player.level == 8) {
-                     if (Player.location[0] == 0 && Player.location[1] == 0)
-                        keyDoor[7][0] = DOOR_UNLOCKED;
-
+                        if(Player.location[0] == 0 && Player.location[1] == 0)
+                           keyDoor[4][0] = DOOR_UNLOCKED;
+                        else if (Player.location[0] == 0 && Player.location[1] == 1)
+                           keyDoor[4][1] = DOOR_UNLOCKED;
+                  } else if (Player.level == 7){
+                        if(Player.location[0] == 1 && Player.location[1] == 0)   
+                           keyDoor[6][1] = DOOR_UNLOCKED;
+                        else if(Player.location[0] == 4 && Player.location[1] == 1)
+                           keyDoor[6][5] = DOOR_UNLOCKED;
+                        else if(Player.location[0] == 4 && Player.location[1] == 2)
+                           keyDoor[6][6] = DOOR_UNLOCKED;
+                        else if(Player.location[0] == 4 && Player.location[1] == 3)
+                           keyDoor[6][7] = DOOR_UNLOCKED;
+                        
+                        
+                  } else if (Player.level == 8){
+                      if(Player.location[0] == 0 && Player.location[1] == 0)
+                          keyDoor[7][0] = DOOR_UNLOCKED;
+                      
                   }
                } else
                   player.dir = 'n';
@@ -607,28 +545,28 @@ public class LoadingZone extends Entity {
                      keyDoor[4][5] = DOOR_UNLOCKED;
                   else if (Player.location[0] == -1 && Player.location[1] == -3)
                      keyDoor[4][6] = DOOR_UNLOCKED;
-               } else if (Player.level == 6) {
-                  if (Player.location[0] == 1 && Player.location[1] == -2)
+               } else if (Player.level == 6){
+                  if(Player.location[0] == 1 && Player.location[1] == -2)
                      keyDoor[5][6] = DOOR_UNLOCKED;
-                  else if (Player.location[0] == 0 && Player.location[1] == -2)
+                  else if(Player.location[0] == 0 && Player.location[1] == -2)
                      keyDoor[5][7] = DOOR_UNLOCKED;
-                  else if (Player.location[0] == -1 && Player.location[1] == -2)
+                  else if(Player.location[0] == -1 && Player.location[1] == -2)
                      keyDoor[5][8] = DOOR_UNLOCKED;
-                  else if (Player.location[0] == -2 && Player.location[1] == -2)
+                  else if(Player.location[0] == -2 && Player.location[1] == -2)
                      keyDoor[5][9] = DOOR_UNLOCKED;
-                  else if (Player.location[0] == -3 && Player.location[1] == -2)
+                  else if(Player.location[0] == -3 && Player.location[1] == -2)
                      keyDoor[5][10] = DOOR_UNLOCKED;
-                  else if (Player.location[0] == -2 && Player.location[1] == 1)
+                  else if(Player.location[0] == -2 && Player.location[1] == 1)
                      keyDoor[5][11] = DOOR_UNLOCKED;
-               } else if (Player.level == 7) {
-                  if (Player.location[0] == 4 && Player.location[1] == 4)
+               } else if (Player.level == 7){
+                  if(Player.location[0] == 4 && Player.location[1] == 4)
                      keyDoor[6][8] = DOOR_UNLOCKED;
-                  else if (Player.location[0] == 3 && Player.location[1] == 4)
+                  else if(Player.location[0] == 3 && Player.location[1] == 4)
                      keyDoor[6][9] = DOOR_UNLOCKED;
-                  else if (Player.location[0] == 2 && Player.location[1] == 4)
-                     keyDoor[6][10] = DOOR_UNLOCKED;
-               } else if (Player.level == 8) {
-                  // door code go here
+                     else if(Player.location[0] == 2 && Player.location[1] == 4)
+                        keyDoor[6][10] = DOOR_UNLOCKED;
+               } else if (Player.level == 8){
+                   //door code go here
                }
 
             } else
@@ -649,56 +587,30 @@ public class LoadingZone extends Entity {
 
                   player.keys -= 1;
                   currentRoomBlock[3] = 0;
-
+                  
                   if (Player.level == 2) {
                      if (Player.location[0] == 2 && Player.location[1] == 1)
                         keyDoor[1][2] = DOOR_UNLOCKED;
-                  } else if (Player.level == 6) {
-                     if (Player.location[0] == -1 && Player.location[1] == 2)
+                  }
+                  else if(Player.level == 6){
+                     if(Player.location[0] == -1 && Player.location[1] == 2)
                         keyDoor[5][0] = DOOR_UNLOCKED;
-                     else if (Player.location[0] == 1 && Player.location[1] == 2)
+                     else if(Player.location[0] == 1 && Player.location[1] == 2)
                         keyDoor[5][1] = DOOR_UNLOCKED;
-                  } else if (Player.level == 7) {
-                     if (Player.location[0] == 0 && Player.location[1] == 0)
+                  }
+                  else if(Player.level == 7){
+                     if(Player.location[0] == 0 && Player.location[1] == 0)
                         keyDoor[6][0] = DOOR_UNLOCKED;
-                     else if (Player.location[0] == 1 && Player.location[1] == 1)
+                     else if(Player.location[0] == 1 && Player.location[1] == 1)
                         keyDoor[6][2] = DOOR_UNLOCKED;
-                     else if (Player.location[0] == 2 && Player.location[1] == 1)
+                     else if(Player.location[0] == 2 && Player.location[1] == 1)
                         keyDoor[6][3] = DOOR_UNLOCKED;
-                     else if (Player.location[0] == 3 && Player.location[1] == 1)
+                     else if(Player.location[0] == 3 && Player.location[1] == 1)
                         keyDoor[6][4] = DOOR_UNLOCKED;
-                  } else if (Player.level == 8) {
-                     if (Player.location[0] == 0 && Player.location[1] == 0)
+                  }
+                  else if(Player.level ==  8){
+                      if(Player.location[0] == 0 && Player.location[1] == 0)
                         keyDoor[7][1] = DOOR_UNLOCKED;
-
-                     if (Player.location[0] == 0 && Player.location[1] == 1)
-                        keyDoor[7][2] = DOOR_UNLOCKED;
-
-                     if (Player.location[0] == 1 && Player.location[1] == 1)
-                        keyDoor[7][3] = DOOR_UNLOCKED;
-
-                     if (Player.location[0] == -3 && Player.location[1] == -6)
-                        keyDoor[7][4] = DOOR_UNLOCKED;
-
-                     if (Player.location[0] == -2 && Player.location[1] == -6)
-                        keyDoor[7][5] = DOOR_UNLOCKED;
-
-                     if (Player.location[0] == -1 && Player.location[1] == -6)
-                        keyDoor[7][6] = DOOR_UNLOCKED;
-
-                     if (Player.location[0] == 0 && Player.location[1] == -6)
-                        keyDoor[7][7] = DOOR_UNLOCKED;
-
-                     if (Player.location[0] == 1 && Player.location[1] == -6)
-                        keyDoor[7][8] = DOOR_UNLOCKED;
-
-                     if (Player.location[0] == 2 && Player.location[1] == -6)
-                        keyDoor[7][9] = DOOR_UNLOCKED;
-
-                     if (Player.location[0] == 3 && Player.location[1] == -6)
-                        keyDoor[7][10] = DOOR_UNLOCKED;
-                     if (Player.location[0] == 5 && Player.location[1] == -6)
-                        keyDoor[7][10] = DOOR_UNLOCKED;
                   }
                } else
                   player.dir = 'n';

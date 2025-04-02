@@ -436,23 +436,6 @@ public class Entity {
                   
                   )
                   )
-               || (Player.level == 8 
-                  && ((Player.location[0] == 2 && Player.location[1] == -2 && !LoadingZone.keyArray[7][0])
-                  || (Player.location[0] == 1 && Player.location[1] == -1 && !LoadingZone.keyArray[7][1])
-                  || (Player.location[0] == -1 && Player.location[1] == -1 && !LoadingZone.keyArray[7][2])
-                  || (Player.location[0] == -1 && Player.location[1] == -3 && !LoadingZone.keyArray[7][3])
-                  || (Player.location[0] == 0 && Player.location[1] == -4 && !LoadingZone.keyArray[7][4])
-                  || (Player.location[0] == -1 && Player.location[1] == -4 && !LoadingZone.keyArray[7][5])
-                  || (Player.location[0] == -2 && Player.location[1] == -4 && !LoadingZone.keyArray[7][6])
-                  || (Player.location[0] == -2 && Player.location[1] == -5 && !LoadingZone.keyArray[7][7])
-                  || (Player.location[0] == -1 && Player.location[1] == -5 && !LoadingZone.keyArray[7][8])
-                  || (Player.location[0] == 0 && Player.location[1] == -1 && !LoadingZone.keyArray[7][9])
-                  || (Player.location[0] == 3 && Player.location[1] == 1 && !LoadingZone.keyArray[7][10])
-                  || (Player.location[0] == 4 && Player.location[1] == 1 && !LoadingZone.keyArray[7][11])
-                  || (Player.location[0] == 3 && Player.location[1] == 0 && !LoadingZone.keyArray[7][12])
-               
-                  )
-                  )
                      && item.type.equals("key")) {
             if (numKeyEnemiesAlive == 0) {
                item.cx = 400;
@@ -463,20 +446,6 @@ public class Entity {
                   || Player.level == 5 && (Player.location[0] == 3 && Player.location[1] == 1)) {
                   item.cx = 80;
                   item.cy = 400;
-               }
-               if(Player.level == 8){
-                  if(Player.location[0] == 3 && Player.location[1] == 1){
-                  item.cx = 70;
-                  item.cy = 190;
-                  }
-                  else if(Player.location[0] == 4 && Player.location[1] == 1){
-                     item.cx = 720;
-                     item.cy = 400;
-                  }
-                  else if(Player.location[0] == 3 && Player.location[1] == 0){
-                     item.cx = 720;
-                     item.cy = 660;
-                  }
                }
             }
          }

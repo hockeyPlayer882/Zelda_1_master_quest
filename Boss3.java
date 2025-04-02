@@ -89,7 +89,7 @@ public class Head extends Entity{
    projectileTimer -= 1;
    if(projectileTimer <= 0){
    projectileTimer = MprojectileTimer;
-   Driver.projs.add(new Projectile(cx,cy,7,3,'a',0,1));
+   Driver.projs.add(new Projectile(cx,cy,7,3,'a'));
    }
    }
 }

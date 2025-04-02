@@ -428,13 +428,13 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                      useableTimer = 10;
                      Fire.numFire += 1;
                      if (player.stDir == 'w')
-                        fires.add(new Fire(player.cx, player.cy - Player.unitSize, 'w',false));
+                        fires.add(new Fire(player.cx, player.cy - Player.unitSize, 'w'));
                      else if (player.stDir == 's')
-                        fires.add(new Fire(player.cx, player.cy + Player.unitSize, 's',false));
+                        fires.add(new Fire(player.cx, player.cy + Player.unitSize, 's'));
                      else if (player.stDir == 'a')
-                        fires.add(new Fire(player.cx - Player.unitSize, player.cy, 'a',false));
+                        fires.add(new Fire(player.cx - Player.unitSize, player.cy, 'a'));
                      else if (player.stDir == 'd')
-                        fires.add(new Fire(player.cx + Player.unitSize, player.cy, 'd',false));
+                        fires.add(new Fire(player.cx + Player.unitSize, player.cy, 'd'));
                   } else if (player.activeItem.equals("boomerang") && Player.hasBoomerang
                         && (Boomerang.cx > 800 || Boomerang.cx < 0 || Boomerang.cy > 800 || Boomerang.cy < 0))
                      Boomerang.spawn(player);

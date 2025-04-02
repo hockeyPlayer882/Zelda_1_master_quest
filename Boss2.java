@@ -40,7 +40,7 @@ this.projectileTimer -= 1;
 if(projectileTimer <= 0){
 if(this.dir != 'n'){
    //spawn 1 super fast projectile that absolutely destroys the player and deals WAY to much damage;
-   Driver.projs.add(new Projectile(cx,cy,2,20,'w',1,0));
+   Driver.projs.add(new Projectile(cx,cy,2,20,'w'));
  }
 this.resetProjectileTimer();
 this.movementTimer = 0;
