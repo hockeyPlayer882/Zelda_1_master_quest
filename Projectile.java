@@ -8,10 +8,13 @@ public class Projectile {
    private int damage;
    public int cx;
    public int cy;
+   private double acceleration;
+   private double velocity = 0;
+   private int delay;
    // array for top and bottom directions(becuase projectiles can move diagnolly.
    public char[] dirs = new char[2];
 
-   public Projectile(int cx, int cy, int projectileStrength, int speed, char dir1) {
+   public Projectile(int cx, int cy, int projectileStrength, int speed, char dir1, double acceleration, int delay) {
       this.dirs[0] = dir1;
       this.dirs[1] = 'n';
       this.speed = speed;
@@ -19,30 +22,41 @@ public class Projectile {
       this.cy = cy;
       this.damage = 1;
       this.projectileStrength = projectileStrength;
+      this.acceleration = acceleration;
+      this.delay = delay;
    }
 
-   public Projectile(int cx, int cy, int projectileStrength, int speed, char dir1, char dir2) {
+   public Projectile(int cx, int cy, int projectileStrength, int speed, char dir1, char dir2, double acceleration,int delay) {
       this.dirs[0] = dir1;
       this.dirs[1] = dir2;
       this.speed = speed;
       this.cx = cx;
       this.cy = cy;
-      this.damage = 1;
+      //the stronger the projectile, the more it hurts you
+      this.damage = projectileStrength;
       this.projectileStrength = projectileStrength;
-
+      this.acceleration = acceleration;
+      this.delay = delay;
    }
 
    public void move() {
+      if(delay == 0){
+      if(acceleration != 1)
+         velocity += acceleration;
+      else
+         velocity = 1;
       for (int i = 0; i < dirs.length; i++) {
          if (dirs[i] == 'w')
-            this.cy += speed;
+            this.cy += speed*velocity;
          else if (dirs[i] == 's')
-            this.cy -= speed;
+            this.cy -= speed*velocity;
          else if (dirs[i] == 'a')
-            this.cx -= speed;
+            this.cx -= speed*velocity;
          else if (dirs[i] == 'd')
-            this.cx += speed;
+            this.cx += speed*velocity;
       }
+   }
+   else delay--;
    }
 
    public void drawProjectile(Graphics g) {
@@ -76,10 +90,7 @@ public class Projectile {
                   || !((player.stDir == 'w' && dirs[0] == 's' || player.stDir == 's' && dirs[0] == 'w'
                         || player.stDir == 'a' && dirs[0] == 'd' || player.stDir == 'd' && dirs[0] == 'a')))) {
                // hurt player based on damage calculations
-
-               // UPDATE: Switched to use a wrapper function (no external classes
-               // should be setting player hp).
-               player.hurtRawDamage((int) (this.damage / (1 - player.defense)));
+               player.hurtRawDamage(this.damage);
             }
          }
 

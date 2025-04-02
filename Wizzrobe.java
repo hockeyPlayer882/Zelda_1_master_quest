@@ -49,7 +49,7 @@ public class Wizzrobe extends Entity{
      */
     public void shootProjectile(Player player){
         if(projectileTimer == 0){
-            Driver.projs.add(new Projectile(cx, cy, 2, 7, player.cx > cx ? 'd':'a'));
+            Driver.projs.add(new Projectile(cx, cy, 2, 7, player.cx > cx ? 'd':'a',1,0));
             projectileTimer = MprojectileTimer;
         }
         else projectileTimer--;

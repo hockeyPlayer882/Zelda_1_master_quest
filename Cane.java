@@ -56,6 +56,7 @@ public abstract class Cane {
             isActive = true;
             activeTimer = MactiveTimer;
             coolDownTimer = McoolDown;
+            Snake.poisonTimer = MactiveTimer;
         }
         for (int i = 0; i < 5; i++) {
             /*  MATH THINGIES FOR CIRCLE
@@ -72,6 +73,7 @@ public abstract class Cane {
         if (!Player.isPaused && player.activeItem.equals("cane")) {
             if (activeTimer > 0 && isActive) {
                 player.inv = player.inv == 2 ? 2 : 3;
+                
                 activeTimer--;
                 for (int i = 0; i < 5; i++) {
                     // MATH THINGIES FOR CIRCLE

@@ -347,7 +347,7 @@ public class ActiveMenu{
 
    public void drawHearts(Player player, Graphics g,Driver driver){
       if(Snake.poisonTimer > 0)Snake.poisonTimer--;
-      if(Snake.poisonTimer%80 == 1) player.hp--;
+      if(Snake.poisonTimer%80 == 1 && player.hp > 1) player.hp--;
       for(int i = 0;i<(player.Mhp/2);i++){ 
          if (i<player.hp/2)
             g.drawImage(Snake.poisonTimer > 0 ? poisonedFullHeart:fullHeart,i*30+500-(i >= 9 ? 270:0),(i < 9 ? 90:60)+iterationNum,30,30,driver);

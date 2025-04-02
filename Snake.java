@@ -49,9 +49,9 @@ public class Snake extends Entity{
         && this.cy - unitSize / 2 < player.cy + unitSize / 2
         && this.cy + unitSize / 2 > player.cy - unitSize / 2
         && player.inv <= 0) {
-     // poison the player (AND THERES NOTHING THEY CAN DO ABOUT IT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!) (other than dodgeg)
+     // poison the player (AND THERES NOTHING THEY CAN DO ABOUT IT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!) (other than dodge)
      player.inv = 60;
-     poisonTimer = MpoisonTimer;
+     poisonTimer = MpoisonTimer; 
   }
     }
     public void calcEnemyDir() {

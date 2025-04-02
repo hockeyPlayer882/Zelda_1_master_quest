@@ -32,9 +32,9 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    public static ArrayList<Explosion> explosions = new ArrayList<Explosion>();
    public static ArrayList<Fire> fires = new ArrayList<Fire>();
    public static Player player = new Player();
-   public static saveFile f1 = new saveFile("./save files/save_file_1.txt", player);
-   public static saveFile f2 = new saveFile("./save files/save_file_2.txt", player);
-   public static saveFile f3 = new saveFile("./save files/save_file_3.txt", player);
+   public static saveFile f1 = new saveFile("./save files/save_file_1.save", player);
+   public static saveFile f2 = new saveFile("./save files/save_file_2.save", player);
+   public static saveFile f3 = new saveFile("./save files/save_file_3.save", player);
    public static String name;
    Sword sword = new Sword();
    static Menu menu;
@@ -350,8 +350,14 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                      menu.changeKeyBoardSelection('D');
                   break;
                case KeyEvent.VK_ENTER:
-                  if (!menu.registrating)
+                  if (!menu.registrating){
                      menu.selectArrow(activeMenu, player, room);
+                  
+                     Player.location[0] = 5;
+                     Player.location[1] = -6;
+                     Player.level = 8;
+                     //(TESING!)
+                  }
                   else
                      menu.addKey(player);
                   break;
@@ -422,13 +428,13 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                      useableTimer = 10;
                      Fire.numFire += 1;
                      if (player.stDir == 'w')
-                        fires.add(new Fire(player.cx, player.cy - Player.unitSize, 'w'));
+                        fires.add(new Fire(player.cx, player.cy - Player.unitSize, 'w',false));
                      else if (player.stDir == 's')
-                        fires.add(new Fire(player.cx, player.cy + Player.unitSize, 's'));
+                        fires.add(new Fire(player.cx, player.cy + Player.unitSize, 's',false));
                      else if (player.stDir == 'a')
-                        fires.add(new Fire(player.cx - Player.unitSize, player.cy, 'a'));
+                        fires.add(new Fire(player.cx - Player.unitSize, player.cy, 'a',false));
                      else if (player.stDir == 'd')
-                        fires.add(new Fire(player.cx + Player.unitSize, player.cy, 'd'));
+                        fires.add(new Fire(player.cx + Player.unitSize, player.cy, 'd',false));
                   } else if (player.activeItem.equals("boomerang") && Player.hasBoomerang
                         && (Boomerang.cx > 800 || Boomerang.cx < 0 || Boomerang.cy > 800 || Boomerang.cy < 0))
                      Boomerang.spawn(player);
@@ -529,6 +535,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       DebugInterface.endSeg();
 
       if (player.hp > 0) {
+         if(!Zelda.gameIsOver){
          if (Player.isPaused)
             activeMenu.pauseGame(player, menu, room);
          if (Player.isPaused && activeMenu.isResuming)
@@ -670,17 +677,17 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
 
          DebugInterface.endSeg();
 
-         // UPDATE: Moved UI repaint after room repaint since that makes sense.
-         // in-game window to show active item, health, and amount of collectibles
-         DebugInterface.startSeg("UI repaint");
-         g.setColor(Color.BLACK);
-         g.fillRect(0, 0 + ActiveMenu.iterationNum, Player.unitSize * 200, Player.unitSize * (30 / 8));
-         activeMenu.drawItemBoxes(player, sword, g, this);
-         activeMenu.drawHearts(player, g, this);
-         activeMenu.handleActiveItem(g, this, player);
+            // UPDATE: Moved UI repaint after room repaint since that makes sense.
+            // in-game window to show active item, health, and amount of collectibles
+            DebugInterface.startSeg("UI repaint");
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0 + ActiveMenu.iterationNum, Player.unitSize * 200, Player.unitSize * (30 / 8));
+            activeMenu.drawItemBoxes(player, sword, g, this);
+            activeMenu.drawHearts(player, g, this);
+            activeMenu.handleActiveItem(g, this, player);
 
-         // draws the pause menu
-         activeMenu.drawPauseMenu(g, player, this);
+            // draws the pause menu
+            activeMenu.drawPauseMenu(g, player, this);
          activeMenu.handleActiveItem(g, this, player);
          DebugInterface.endSeg();
 
@@ -757,6 +764,28 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
           * g.drawRect(400-(x/2),400-(y/2),x,y);
           * }
           */
+      }
+      else{
+         // UPDATE: Moved UI repaint after room repaint since that makes sense.
+         // in-game window to show active item, health, and amount of collectibles
+         //draw things
+         g.setColor(Color.BLACK);
+         room.drawRooms(g, this, player, sword);
+         DebugInterface.startSeg("UI repaint");
+         g.setColor(Color.BLACK);
+         g.fillRect(0, 0 + ActiveMenu.iterationNum, Player.unitSize * 200, Player.unitSize * (30 / 8));
+         activeMenu.drawItemBoxes(player, sword, g, this);
+         activeMenu.drawHearts(player, g, this);
+         activeMenu.handleActiveItem(g, this, player);
+
+         // draws the pause menu
+         activeMenu.drawPauseMenu(g, player, this);
+         //draws the player
+         player.draw(g, this);
+      }
+      if(Zelda.loadCredits){
+         Credits.loadCredits();
+      }
       } 
       else
          showDeathScreen(g);

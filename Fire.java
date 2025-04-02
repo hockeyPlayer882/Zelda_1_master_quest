@@ -10,10 +10,11 @@ public class Fire extends Entity {
    private int lifetime = 30;
    private BufferedImage fire;
    public static int numFire = 0;
-
-   public Fire(int cx, int cy, char dir) {
+   private boolean persistant = false;
+   public Fire(int cx, int cy, char dir, boolean persistant) {
       this.cx = cx;
       this.cy = cy;
+      this.persistant = persistant;
       this.dir = dir;
       this.speed = 3;
       try {
@@ -40,7 +41,8 @@ public class Fire extends Entity {
    }
 
    public void drawFire(Graphics g, Driver driver) {
-      this.lifetime -= 1;
+      if(!persistant)
+         this.lifetime -= 1;
       if (lifetime % 10 == 0)
          this.speed -= 1;
       this.moveEntity();

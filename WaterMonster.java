@@ -89,7 +89,7 @@ public abstract class WaterMonster extends Entity {
             dir2 = 'w';
          else
             dir2 = 's';
-         Driver.projs.add(new Projectile(cx, cy, 2, 5, dir1, dir2));
+         Driver.projs.add(new Projectile(cx, cy, 2, 5, dir1, dir2,1));
       }
       lifetime -= 1;
    }

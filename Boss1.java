@@ -46,9 +46,9 @@ public class Boss1 extends Entity {
             if (this.dir != 'n') {
                 // spawns 3 projectiles stronger than the players shield & moves faster than the
                 // other projectiles!
-                Driver.projs.add(new Projectile(this.cx, this.cy, 2, 10, 'a'));
-                Driver.projs.add(new Projectile(this.cx, this.cy, 2, 10, 'a', 'w'));
-                Driver.projs.add(new Projectile(this.cx, this.cy, 2, 10, 'a', 's'));
+                Driver.projs.add(new Projectile(this.cx, this.cy, 2, 10, 'a',1,0));
+                Driver.projs.add(new Projectile(this.cx, this.cy, 2, 10, 'a', 'w',1));
+                Driver.projs.add(new Projectile(this.cx, this.cy, 2, 10, 'a', 's',1));
             }
             this.resetProjectileTimer();
             this.movementTimer = 0;

@@ -76,7 +76,7 @@ projectileTimer -= 1;
 if(projectileTimer <= 0){
 projectileTimer = MprojectileTimer;
 int Rand = rand.nextInt(4);
-Driver.projs.add(new Projectile(cx,cy,7,3, Rand == 0 ? 'w': Rand == 1 ? 's' : Rand == 2 ? 'a':'d'));
+Driver.projs.add(new Projectile(cx,cy,7,3, Rand == 0 ? 'w': Rand == 1 ? 's' : Rand == 2 ? 'a':'d',1,0));
 }
 }
 public void draw(Graphics g, Driver driver){

@@ -26,12 +26,16 @@ public class Room {
    // exploded, 13 is a swordsman, 14 is a tree(normal
    // obstacle), 15 is a burnable tree(set on fire with candle! fun!),
    // 16 is a shieldEater
-   // 17,18,19,and 20 are all docks(allows the player to use the raftto cross water)
-   //(17 sends the player to the up, 18 sends the player to the down, 19 sends the player left and 20 sends the player right)
+   // 17,18,19,and 20 are all docks(allows the player to use the raftto cross
+   // water)
+   // (17 sends the player to the up, 18 sends the player to the down, 19 sends the
+   // player left and 20 sends the player right)
    // 21 is a Mummy
    // 22 is a Wizzrobe
    // 23 is a snake
    // 24 is a rock that can be blown up with only a superbomb(BOOOOOOOM)
+   //25 is zelda
+   //26 is fire that can only be destroyed with the sword
    public int[][] roomToBeGenerated = new int[19][18];
    // created a 10 by 10 grid that stores the lost woods maze
    public static int[][] lostWoods = new int[10][10];
@@ -43,10 +47,10 @@ public class Room {
    private BufferedImage wall;
    public static BufferedImage raft;
    private int numWater;
-   //private GlobalModManager modManager;
+   // private GlobalModManager modManager;
 
-   public Room(String area/*, GlobalModManager modManager*/) {
-      //this.modManager = modManager;
+   public Room(String area/* , GlobalModManager modManager */) {
+      // this.modManager = modManager;
       try {
          if (rock == null)
             rock = ImageIO.read(new File("./Image files/rock.png"));
@@ -71,7 +75,6 @@ public class Room {
       }
    }
 
-
    // Room erasure and load.
    public void fillRoomArray(Player player) {
       // empty arrayLists and reset number of enemies spawned in a room
@@ -86,7 +89,7 @@ public class Room {
       Driver.bombs.clear();
       Driver.fires.clear();
       Driver.obstacles.clear();
-      //modManager.unloadRoom();
+      // modManager.unloadRoom();
       Fire.numFire = 0;
       Bomb.numBombs = 0;
       numWater = 0;
@@ -94,7 +97,7 @@ public class Room {
       Entity.numKeyEnemiesAlive = 0;
 
       // Room load starts here.
-      boolean skipBuiltinRoomLoad = false;//modManager.loadRoom(Player.location);
+      boolean skipBuiltinRoomLoad = false;// modManager.loadRoom(Player.location);
       if (skipBuiltinRoomLoad)
          return; // Our job here is done... especially if this room doesn't exist in the source.
       for (Item item : Driver.items) {
@@ -111,7 +114,8 @@ public class Room {
                String type = (Player.level <= 0 ? "rock" : "wall");
                boolean isExplodable = (roomToBeGenerated[x][y] == 12 ? true : false);
                Obstacle obstacle = new Obstacle(x * 41 + 23, y * 41 + 140, type, 0, false, true, isExplodable);
-               if(roomToBeGenerated[x][y] == 24) obstacle.isSuperBombable = true;
+               if (roomToBeGenerated[x][y] == 24)
+                  obstacle.isSuperBombable = true;
                row.add(obstacle);
                Driver.obstacles.add(obstacle);
                continue;
@@ -154,20 +158,23 @@ public class Room {
                row.add(new Skeleton(x * 41 + 23, y * 41 + 140));
                continue;
             } else if (roomToBeGenerated[x][y] == 10) {
-               if (Player.level == 1) 
+               if (Player.level == 1)
                   row.add(new Boss1(x * 41 + 23, y * 41 + 140, 's'));
-               else if (Player.level == 2) 
+               else if (Player.level == 2)
                   row.add(new Boss2());
-               else if (Player.level == 3) 
+               else if (Player.level == 3)
                   row.add(new Boss3(x * 41 + 23, y * 41 + 140, 10));
                else if (Player.level == 4)
                   row.add(new Boss4(x * 41 + 23, y * 41 + 140));
-               else if (Player.level == 5)  
-                  row.add(new Boss5(x * 41 + 23, y * 41 + 140,'w'));
-               else if (Player.level == 6)  
-                  row.add(new Boss6(x * 41 + 23, y * 41 + 140,20));
+               else if (Player.level == 5)
+                  row.add(new Boss5(x * 41 + 23, y * 41 + 140, 'w'));
+               else if (Player.level == 6)
+                  row.add(new Boss6(x * 41 + 23, y * 41 + 140, 20));
                else if (Player.level == 7)
-                  row.add(new Boss7(x*41+23,y*41+140));
+                  row.add(new Boss7(x * 41 + 23, y * 41 + 140));
+               else if (Player.level == 8){
+                  row.add(new Ganon());
+               }
 
                continue;
             } else if (roomToBeGenerated[x][y] == 11)
@@ -191,6 +198,8 @@ public class Room {
                row.add(new Wizzrobe(x * 41 + 21, y * 41 + 140));
             else if (roomToBeGenerated[x][y] == 23)
                row.add(new Snake(x * 41 + 21, y * 41 + 140));
+            else if(roomToBeGenerated[x][y] == 25)
+               row.add(new Zelda(x*41+21,y*41+140));
 
          }
          currentRoom.add(row);
@@ -207,21 +216,20 @@ public class Room {
    }
 
    @SuppressWarnings("unlikely-arg-type")
-   public void drawRooms(Graphics g, Driver driver, Player player,Sword sword) {
-      if (Player.level > 0 ) {
+   public void drawRooms(Graphics g, Driver driver, Player player, Sword sword) {
+      if (Player.level > 0) {
          // draws the ground tiles for the dungeon
-         if(Boss7.darkTimer == 0){
+         if (Boss7.darkTimer == 0) {
             for (int x = 0; x < 18; x++) {
                for (int y = 0; y < 15; y++) {
                   g.drawImage(tile, x * Entity.unitSize + 40, y * Entity.unitSize + 135 + ActiveMenu.iterationNum,
                         Entity.unitSize, Entity.unitSize, driver);
                }
             }
-         }
-         else{
+         } else {
             g.setColor(Color.black);
-            g.fillRect(40,135+ActiveMenu.iterationNum,800,800);
-            
+            g.fillRect(40, 135 + ActiveMenu.iterationNum, 800, 800);
+
          }
          // draws the top walls accoding to their location
          LoadingZone.drawBarriers(g, driver);
@@ -232,30 +240,34 @@ public class Room {
                // draws a loading zone in its corrosponding spot
                if (currentRoom.get(x).get(y) instanceof LoadingZone) {
                   LoadingZone loadingZone = (LoadingZone) currentRoom.get(x).get(y);
-                  loadingZone.enter(driver, player, this,g);
+                  loadingZone.enter(driver, player, this, g);
                   g.setColor(Color.BLACK);
-                  g.fillRect(loadingZone.cx - Entity.unitSize / 2, loadingZone.cy - Entity.unitSize / 2, Entity.unitSize, Entity.unitSize);
+                  g.fillRect(loadingZone.cx - Entity.unitSize / 2, loadingZone.cy - Entity.unitSize / 2,
+                        Entity.unitSize, Entity.unitSize);
                   continue;
                }
                // draws an obstacle in its corrosponding spot & waterMonster
                else if (currentRoom.get(x).get(y) instanceof Obstacle) {
                   Obstacle obstacle = (Obstacle) currentRoom.get(x).get(y);
                   if (obstacle.type.equals("rock")) {
-                     g.drawImage(obstacle.isSuperBombable ? rockSuperBombable:rock, obstacle.cx - Entity.unitSize / 2, obstacle.cy - Entity.unitSize / 2, Entity.unitSize, Entity.unitSize,
+                     g.drawImage(obstacle.isSuperBombable ? rockSuperBombable : rock, obstacle.cx - Entity.unitSize / 2,
+                           obstacle.cy - Entity.unitSize / 2, Entity.unitSize, Entity.unitSize,
                            driver);
                      if (obstacle.isExplodable || obstacle.isSuperBombable) {
                         obstacle.openExplosion(this, x, y);
                      }
                      continue;
                   } else if (obstacle.type.equals("wall")) {
-                     g.drawImage(wall, obstacle.cx - Entity.unitSize / 2, obstacle.cy - Entity.unitSize / 2, Entity.unitSize, Entity.unitSize,
+                     g.drawImage(wall, obstacle.cx - Entity.unitSize / 2, obstacle.cy - Entity.unitSize / 2,
+                           Entity.unitSize, Entity.unitSize,
                            driver);
                      if (obstacle.isExplodable) {
                         obstacle.openExplosion(this, x, y);
                      }
                      continue;
                   } else if (obstacle.type.equals("water")) {
-                     g.drawImage(water, obstacle.cx - Entity.unitSize / 2, obstacle.cy - Entity.unitSize / 2, Entity.unitSize, Entity.unitSize,
+                     g.drawImage(water, obstacle.cx - Entity.unitSize / 2, obstacle.cy - Entity.unitSize / 2,
+                           Entity.unitSize, Entity.unitSize,
                            driver);
                      if (!WaterMonster.isSpawned && !Player.isPaused && player.stun == 0) {
                         if ((int) (Math.random() * Math.abs((50 - numWater))) <= 0) {
@@ -269,7 +281,8 @@ public class Room {
                      }
                      continue;
                   } else if (obstacle.type.equals("tree")) {
-                     g.drawImage(tree, obstacle.cx - Entity.unitSize / 2, obstacle.cy - Entity.unitSize / 2, Entity.unitSize, Entity.unitSize,
+                     g.drawImage(tree, obstacle.cx - Entity.unitSize / 2, obstacle.cy - Entity.unitSize / 2,
+                           Entity.unitSize, Entity.unitSize,
                            driver);
                      if (obstacle.isBurnable)
                         obstacle.openFire(this, x, y);
@@ -312,7 +325,7 @@ public class Room {
                   Skeleton skeleton = (Skeleton) currentRoom.get(x).get(y);
                   skeleton.draw(g, driver);
                   if (!Player.isPaused) {
-                     skeleton.dropItem(player,driver, g);
+                     skeleton.dropItem(player, driver, g);
                      if (skeleton.hp > 0) {
                         skeleton.callBaseFunctions(player, sword);
                      } else {
@@ -328,9 +341,8 @@ public class Room {
                      player.hurtEntity(mummy);
                      if (mummy.hp > 0) {
                         mummy.callBaseFunctions(player, sword);
-                     }
-                     else {
-                        mummy.dropItem(player,driver,g);
+                     } else {
+                        mummy.dropItem(player, driver, g);
                         mummy.despawn();
                      }
                   }
@@ -346,19 +358,19 @@ public class Room {
                         swordsman.calcEnemyDir();
                         Wand.hurt(swordsman);
                         swordsman.moveEntity();
-                        for (Obstacle obstacle : Driver.obstacles) 
+                        for (Obstacle obstacle : Driver.obstacles)
                            obstacle.collide(swordsman, true);
                      } else {
                         swordsman.despawn();
                      }
                   }
-                  swordsman.draw(g,driver);
+                  swordsman.draw(g, driver);
                } else if (currentRoom.get(x).get(y) instanceof Wizzrobe) {
                   Wizzrobe wizzrobe = (Wizzrobe) currentRoom.get(x).get(y);
                   if (!Player.isPaused) {
                      wizzrobe.dropItem(player, driver, g);
                      if (wizzrobe.hp > 0) {
-                        wizzrobe.callBaseFunctions(sword, player,driver,g);
+                        wizzrobe.callBaseFunctions(sword, player, driver, g);
                      } else {
 
                         wizzrobe.despawn();
@@ -377,11 +389,11 @@ public class Room {
                         Wand.hurt(shieldEater);
                         shieldEater.hurt(player);
                         Boomerang.stun(shieldEater);
-                        for (Fire fire : Driver.fires) 
-                           fire.burn(shieldEater);                        
+                        for (Fire fire : Driver.fires)
+                           fire.burn(shieldEater);
                         shieldEater.calcEnemyDir();
                         shieldEater.moveEntity();
-                        for (Obstacle obstacle : Driver.obstacles) 
+                        for (Obstacle obstacle : Driver.obstacles)
                            obstacle.collide(shieldEater, true);
                      } else {
                         currentRoom.remove(shieldEater);
@@ -404,10 +416,9 @@ public class Room {
                   if (!Player.isPaused) {
                      snake.hurtEntity(player);
                      if (snake.hp > 0) {
-                         snake.callBaseFunctions(player,sword);  
-                     }
-                     else {
-                        snake.dropItem(player,driver,g);
+                        snake.callBaseFunctions(player, sword);
+                     } else {
+                        snake.dropItem(player, driver, g);
                         snake.despawn();
                      }
                   }
@@ -526,8 +537,7 @@ public class Room {
                      }
                      continue;
                   }
-               }
-               else if (currentRoom.get(x).get(y) instanceof Boss5) {
+               } else if (currentRoom.get(x).get(y) instanceof Boss5) {
                   Boss5 boss5 = (Boss5) currentRoom.get(x).get(y);
                   boss5.hurtEntity(sword);
                   boss5.decreaseInv();
@@ -537,7 +547,7 @@ public class Room {
                         boss5.moveEntity();
                         boss5.shootProjectile(player);
                         player.hurtEntity(boss5);
-                        if(boss5.inv%2 == 0)
+                        if (boss5.inv % 2 == 0)
                            boss5.draw(g, driver);
                      } else if (LoadingZone.numDefeatedBosses == 4) {
                         Item heartContainer = (Item) Driver.items.get(5);
@@ -550,7 +560,7 @@ public class Room {
                      }
                   }
                   continue;
-               }else if (currentRoom.get(x).get(y) instanceof Boss6) {
+               } else if (currentRoom.get(x).get(y) instanceof Boss6) {
                   Boss6 boss6 = (Boss6) currentRoom.get(x).get(y);
                   boss6.decreaseInv();
                   if (!Player.isPaused) {
@@ -583,54 +593,60 @@ public class Room {
                      }
                      continue;
                   }
-               } else if(currentRoom.get(x).get(y) instanceof Boss7){
+               } else if (currentRoom.get(x).get(y) instanceof Boss7) {
                   Boss7 boss7 = (Boss7) currentRoom.get(x).get(y);
-                  if(!Player.isPaused){
-                  if(boss7.hp > 0){ 
-                  boss7.moveEntity();  
-                  boss7.teleport(player);
-                  boss7.hurtEntity(sword);
-                  boss7.attack(player);
-                  player.hurtEntity(boss7);
-                  if(boss7.inv > 0)
-                     boss7.inv--;
-                  boss7.calcEnemyDir(player);
-                  
-                  boss7.draw(g,driver);
-                  for(int i = 0; i < Boss7.darkSwords.size();i++){
-                     DarkSword darkSword = Boss7.darkSwords.get(i);
-                     darkSword.draw(driver,g);
-                     darkSword.move();
-                     darkSword.hurtPlayer(player);
+                  if (!Player.isPaused) {
+                     if (boss7.hp > 0) {
+                        boss7.moveEntity();
+                        boss7.teleport(player);
+                        boss7.hurtEntity(sword);
+                        boss7.attack(player);
+                        player.hurtEntity(boss7);
+                        if (boss7.inv > 0)
+                           boss7.inv--;
+                        boss7.calcEnemyDir(player);
+
+                        boss7.draw(g, driver);
+                        for (int i = 0; i < Boss7.darkSwords.size(); i++) {
+                           DarkSword darkSword = Boss7.darkSwords.get(i);
+                           darkSword.draw(driver, g);
+                           darkSword.move();
+                           darkSword.hurtPlayer(player);
+                        }
+                     } else if (LoadingZone.numDefeatedBosses == 6) {
+                        Item heartContainer = (Item) Driver.items.get(5);
+                        heartContainer.cx = boss7.cx;
+                        Boss7.darkTimer = 0;
+                        Boss7.darkSwords.clear();
+                        heartContainer.cy = boss7.cy;
+                        boss7.despawn();
+                        currentRoom.remove(currentRoom.get(x).get(y));
+                        LoadingZone.numDefeatedBosses += 1;
+                        LoadingZone.currentRoomBlock[3] = 0;
+                        LoadingZone.currentRoomBlock[0] = 3;
+                     }
                   }
-                  }else if (LoadingZone.numDefeatedBosses == 6) {
-                     Item heartContainer = (Item) Driver.items.get(5);
-                     heartContainer.cx = boss7.cx;
-                     Boss7.darkTimer = 0;
-                     Boss7.darkSwords.clear();
-                     heartContainer.cy = boss7.cy;
-                     boss7.despawn();
-                     currentRoom.remove(currentRoom.get(x).get(y));
-                     LoadingZone.numDefeatedBosses += 1;
-                     LoadingZone.currentRoomBlock[3] = 0;
-                     LoadingZone.currentRoomBlock[0] = 3;
+
+               }else if (currentRoom.get(x).get(y) instanceof Ganon){
+                  Ganon ganon = (Ganon) currentRoom.get(x).get(y);
+                  ganon.exist(g,driver,player,sword);  
+               }else if (currentRoom.get(x).get(y) instanceof SuperBomb) {
+                  if (!Player.isPaused) {
+                     SuperBomb superbomb = (SuperBomb) currentRoom.get(x).get(y);
+                     superbomb.drawBomb(driver, g, x);
                   }
-                  }
-               
-               }
-               else if (currentRoom.get(x).get(y) instanceof SuperBomb){
-                  if(!Player.isPaused){
-                  SuperBomb superbomb = (SuperBomb) currentRoom.get(x).get(y);
-                  superbomb.drawBomb(driver,g,x);
-                  }
-               }
-               else if (currentRoom.get(x).get(y) instanceof TriforcePiece) {
+               } else if (currentRoom.get(x).get(y) instanceof TriforcePiece) {
                   TriforcePiece triforcePiece = (TriforcePiece) currentRoom.get(x).get(y);
-                  triforcePiece.collectTriforce(this,player);
+                  triforcePiece.collectTriforce(this, player);
                   triforcePiece.draw(g, driver);
                   continue;
                }
-
+               else if(currentRoom.get(x).get(y) instanceof Zelda){
+                  Zelda zelda = (Zelda) currentRoom.get(x).get(y);
+                  zelda.draw(g,driver);
+                  zelda.checkGameOver(player);
+                  zelda.drawGameOverText(g);
+               }
 
             }
 
@@ -644,7 +660,7 @@ public class Room {
          }
       }
    }
-   
+
    public void setText(String line1, String line2, String line3) {
       text.add(line1);
       text.add(line2);
@@ -695,7 +711,7 @@ public class Room {
                && imagecy - Entity.unitSize / 2 < player.cy + Entity.unitSize / 2
                && imagecy + Entity.unitSize / 2 > player.cy - Entity.unitSize / 2) {
             BufferedImage image = (BufferedImage) images.get(i);
-            
+
             // In english please: This is for collecting other items that are "not"
             // the master sword (but why or player.maxhp > 14?)
             if (!Driver.metalSwordW.equals(image)) {
@@ -720,6 +736,7 @@ public class Room {
             // TODO: Buff later?
             else if (Driver.metalSwordW.equals(image) && player.Mhp >= 14) {
                // Player got the master sword -- clean this up later please.
+               //no
                AudioEngine.playHighlight("./new_ost/16-The Master Sword.wav");
 
                Sword.type = "metal";
@@ -828,7 +845,8 @@ public class Room {
                      roomToBeGenerated[x][y] = 1;
                   else
                      roomToBeGenerated[x][y] = 0;
-                  if(LoadingZone.numDefeatedBosses >= 4) roomToBeGenerated[18][5] = 12;
+                  if (LoadingZone.numDefeatedBosses >= 4)
+                     roomToBeGenerated[18][5] = 12;
                }
                // room directly down from the start
                else if (Player.location[0] == 10 && Player.location[1] == 9) {
@@ -1112,12 +1130,11 @@ public class Room {
                }
                // going up? yup! room on top of previous room
                else if (Player.location[0] == 11 && Player.location[1] == 13) {
-                  if (y >= 11 && y <= 15 || y <= 4){
+                  if (y >= 11 && y <= 15 || y <= 4) {
                      roomToBeGenerated[x][y] = makeRow("", "", "small river", x);
-                     if(roomToBeGenerated[x][y] != 4)
+                     if (roomToBeGenerated[x][y] != 4)
                         roomToBeGenerated[x][y] = 1;
-                     }
-                  else
+                  } else
                      roomToBeGenerated[x][y] = makeRow("", "2R&BO", "small bridge", x);
                }
                // The second dungeon room(1 room to the left of the previous room
@@ -1377,8 +1394,8 @@ public class Room {
                      roomToBeGenerated[x][y] = 0;
                   continue;
                }
-               //room below the previous room(has a bridge and leads to dungeons 6 & 7)
-               else if (Player.location[0] == 8 && Player.location[1] == 7){
+               // room below the previous room(has a bridge and leads to dungeons 6 & 7)
+               else if (Player.location[0] == 8 && Player.location[1] == 7) {
                   if ((y > 10 || y < 4) && (x != 10 && x != 11))
                      roomToBeGenerated[x][y] = 1;
                   else if (y <= 10 && y >= 4)
@@ -1391,37 +1408,56 @@ public class Room {
                   roomToBeGenerated[11][4] = 18;
                   continue;
                }
-               //room below the previous room (branches room, left leads to dungeon 6, right has a heartPiece, and down leads to dungeon 7)
-               else if (Player.location[0] == 8 && Player.location[1] == 6){
-                  if(y >= 14 && (x < 2  || x > 16)) roomToBeGenerated[x][y] = 1;
-                  else if(y >= 14) roomToBeGenerated[x][y] = Obstacle.superBombBlownRock ? 0:24;
-                  else if( y == 0 && x != 10 && x != 11) roomToBeGenerated[x][y] = 1;
-                  else if ((x == 7 || x == 13) && y <= 14) roomToBeGenerated[x][y] = x == 7 ? 7:8;
-                  else roomToBeGenerated[x][y] = 0; 
+               // room below the previous room (branches room, left leads to dungeon 6, right
+               // has a heartPiece, and down leads to dungeon 7)
+               else if (Player.location[0] == 8 && Player.location[1] == 6) {
+                  if (y >= 14 && (x < 2 || x > 16))
+                     roomToBeGenerated[x][y] = 1;
+                  else if (y >= 14)
+                     roomToBeGenerated[x][y] = Obstacle.superBombBlownRock ? 0 : 24;
+                  else if (y == 0 && x != 10 && x != 11)
+                     roomToBeGenerated[x][y] = 1;
+                  else if ((x == 7 || x == 13) && y <= 14)
+                     roomToBeGenerated[x][y] = x == 7 ? 7 : 8;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the right of the previous room
-               else if (Player.location[0] == 9 && Player.location[1] == 6){
-                  if(y == 10 && x == 18) roomToBeGenerated[x][y] = 12;
-                  else if(y == 0 || y >= 14 || x == 18) roomToBeGenerated[x][y] = 1;
-                  else if(x > 1 && y < 5 && x <= 6) roomToBeGenerated[x][y] = 8;
-                  else if(x > 3 && y%2 == 0) roomToBeGenerated[x][y] = 7;
-                  else roomToBeGenerated[x][y] = 0;
+               // room to the right of the previous room
+               else if (Player.location[0] == 9 && Player.location[1] == 6) {
+                  if (y == 10 && x == 18)
+                     roomToBeGenerated[x][y] = 12;
+                  else if (y == 0 || y >= 14 || x == 18)
+                     roomToBeGenerated[x][y] = 1;
+                  else if (x > 1 && y < 5 && x <= 6)
+                     roomToBeGenerated[x][y] = 8;
+                  else if (x > 3 && y % 2 == 0)
+                     roomToBeGenerated[x][y] = 7;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //2 rooms to the left of the previous room 
-               else if (Player.location[0] == 7 && Player.location[1] == 6){
-                  if(y == 10 && x == 10 && LoadingZone.numDefeatedBosses == 5) roomToBeGenerated[x][y] = 15;
-                  else if(y == 0 || y >= 14 || x == 0) roomToBeGenerated[x][y] = 1;
-                  else if(x <= 15 && y < 14)roomToBeGenerated[x][y] = y%2 == 0 ? 7:8;
-                  else roomToBeGenerated[x][y] = 0;
+               // 2 rooms to the left of the previous room
+               else if (Player.location[0] == 7 && Player.location[1] == 6) {
+                  if (y == 10 && x == 10 && LoadingZone.numDefeatedBosses == 5)
+                     roomToBeGenerated[x][y] = 15;
+                  else if (y == 0 || y >= 14 || x == 0)
+                     roomToBeGenerated[x][y] = 1;
+                  else if (x <= 15 && y < 14)
+                     roomToBeGenerated[x][y] = y % 2 == 0 ? 7 : 8;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //1 room to the right and below the previous room (dungeon 7)
-               else if (Player.location[0] == 8 && Player.location[1] == 5){
-                  if(x == 0 || y >= 14 || x == 18) roomToBeGenerated[x][y] = 1;
-                  else if(y == 0) roomToBeGenerated[x][y] = makeRow("openingMiddle","","",x);
-                  else if (x == 10 && y == 10 && LoadingZone.numDefeatedBosses == 6) roomToBeGenerated[x][y] = 6;
-                  else roomToBeGenerated[x][y] = 0;
+               // 1 room to the right and below the previous room (dungeon 7)
+               else if (Player.location[0] == 8 && Player.location[1] == 5) {
+                  if (x == 0 || y >= 14 || x == 18)
+                     roomToBeGenerated[x][y] = 1;
+                  else if (y == 0)
+                     roomToBeGenerated[x][y] = makeRow("openingMiddle", "", "", x);
+                  else if (x == 10 && y == 10 && LoadingZone.numDefeatedBosses == 6)
+                     roomToBeGenerated[x][y] = 6;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room 1 below and to the left of the start room
+               // room 1 below and to the left of the start room
                else if (Player.location[0] == 9 && Player.location[1] == 9) {
                   if (y == 0)
                      roomToBeGenerated[x][y] = makeRow("rocks on right", "", "", x);
@@ -2604,13 +2640,13 @@ public class Room {
                // has a wizzrobe(AAAAAAAAAAAAAAAAAAAAA) and a key, right has a row of
                // wizzrobes(HELP ME!!!!!!!!!!!!!), and up has a keyDoor
                if (Player.location[0] == 0 && Player.location[1] == 0) {
-                  LoadingZone.currentRoomBlock[0] = LoadingZone.keyDoor[4][0] ? 0:2;
+                  LoadingZone.currentRoomBlock[0] = LoadingZone.keyDoor[4][0] ? 0 : 2;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
                   roomToBeGenerated[x][y] = 0;
                }
-               //room to the right of the previous room (has a single wizzrobe and a key) 
+               // room to the right of the previous room (has a single wizzrobe and a key)
                else if (Player.location[0] == 1 && Player.location[1] == 0) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
@@ -2622,7 +2658,7 @@ public class Room {
                      roomToBeGenerated[x][y] = 0;
 
                }
-               //room to the left of the start room(has a row of wizzrobes) 
+               // room to the left of the start room(has a row of wizzrobes)
                else if (Player.location[0] == -1 && Player.location[1] == 0) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
@@ -2633,296 +2669,368 @@ public class Room {
                   else
                      roomToBeGenerated[x][y] = 0;
                }
-               //room above the start room (open branch room, has a mixed row of shieldEaters and wizzrobes)
-               else if (Player.location[0] == 0  && Player.location[1] == 1){
-                  LoadingZone.currentRoomBlock[0] = LoadingZone.keyDoor[4][1] ? 0:2;
+               // room above the start room (open branch room, has a mixed row of shieldEaters
+               // and wizzrobes)
+               else if (Player.location[0] == 0 && Player.location[1] == 1) {
+                  LoadingZone.currentRoomBlock[0] = LoadingZone.keyDoor[4][1] ? 0 : 2;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(y == 4) 
-                     roomToBeGenerated[x][y] = x > 14 ? 16:22;
+                  if (y == 4)
+                     roomToBeGenerated[x][y] = x > 14 ? 16 : 22;
                   else
                      roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the previous room (has a row of mummies and wizzrobes)
-               else if(Player.location[0] == -1 && Player.location[1] == 1){
+               // room to the left of the previous room (has a row of mummies and wizzrobes)
+               else if (Player.location[0] == -1 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x  == 5) 
+                  if (x == 5)
                      roomToBeGenerated[x][y] = 1;
-                  else if(x == 4) 
+                  else if (x == 4)
                      roomToBeGenerated[x][y] = 22;
-                  else if(x == 3)
+                  else if (x == 3)
                      roomToBeGenerated[x][y] = 21;
                   else
                      roomToBeGenerated[x][y] = 0;
                }
-               // 1 room to the left of the branch room above the start room (has every enemy found in dungeons so far)
-               else if(Player.location[0] == 1 && Player.location[1] == 1){
+               // 1 room to the left of the branch room above the start room (has every enemy
+               // found in dungeons so far)
+               else if (Player.location[0] == 1 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 10) roomToBeGenerated[x][y] = y <= 3 ? 22 : y <= 7 ? 21: y <= 10 ? 16: y <= 13 ? 13:9;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (x == 10)
+                     roomToBeGenerated[x][y] = y <= 3 ? 22 : y <= 7 ? 21 : y <= 10 ? 16 : y <= 13 ? 13 : 9;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the previous room (branch room)
-               else if(Player.location[0] == 2 && Player.location[1] == 1){
+               // room to the left of the previous room (branch room)
+               else if (Player.location[0] == 2 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  
+
                   roomToBeGenerated[x][y] = 0;
                }
-               //room below the branch room at (2,1), (leads down to keys, but doesn't have a key in this room)
-               else if(Player.location[0] == 2 && Player.location[1] == 0){
+               // room below the branch room at (2,1), (leads down to keys, but doesn't have a
+               // key in this room)
+               else if (Player.location[0] == 2 && Player.location[1] == 0) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(y == 10 || y == 11) roomToBeGenerated[x][y] = x < 6 ? 22 : x <= 12 ? y == 10 ? 21:13
-                  : y == 10 ? 16:9;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y == 10 || y == 11)
+                     roomToBeGenerated[x][y] = x < 6 ? 22
+                           : x <= 12 ? y == 10 ? 21 : 13
+                                 : y == 10 ? 16 : 9;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room (has a key and leads down into another key)
-               else if(Player.location[0] == 2 && Player.location[1] == -1){
+               // room below the previous room (has a key and leads down into another key)
+               else if (Player.location[0] == 2 && Player.location[1] == -1) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if((x == 10 || x == 11) && (y == 10 || y == 11)) roomToBeGenerated[x][y] = 22;
-                  else roomToBeGenerated[x][y] = 0;
+                  if ((x == 10 || x == 11) && (y == 10 || y == 11))
+                     roomToBeGenerated[x][y] = 22;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room (has a bunch of swordmen, skeletons, and a key)
-               else if(Player.location[0] == 2 && Player.location[1] == -2){
+               // room below the previous room (has a bunch of swordmen, skeletons, and a key)
+               else if (Player.location[0] == 2 && Player.location[1] == -2) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(y >= 14) roomToBeGenerated[x][y] = 9;
-                  else if(y > 15) roomToBeGenerated[x][y] = 13;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y >= 14)
+                     roomToBeGenerated[x][y] = 9;
+                  else if (y > 15)
+                     roomToBeGenerated[x][y] = 13;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               // room to the left of the branch room at (2,1) (dead end, but has a key that can only be acessed from this entrance)
-               else if(Player.location[0] == 3 && Player.location[1] == 1){
-               LoadingZone.currentRoomBlock[0] = 0;
-               LoadingZone.currentRoomBlock[1] = 0;
-               LoadingZone.currentRoomBlock[2] = 0;
-               LoadingZone.currentRoomBlock[3] = 1;
-               if ((x == 3 && y >= 4 && y <= 13) || ((x == 1 || x == 2) && (y > 1 && y < 4)))
-                  roomToBeGenerated[x][y] = 1;
-               else if(x == 15) roomToBeGenerated[x][y] = y <= 3 ? 22 : y <= 7 ? 21: y <= 10 ? 16: y <= 13 ? 13:9;
-               else roomToBeGenerated[x][y] = 0;
-               }
-               //the 2 rooms above and then to the left of the branch room at(2,1)
-               else if ((Player.location[0] == 2 || Player.location[0] == 3) && Player.location[1] == 2){
-                  LoadingZone.currentRoomBlock[0] = 1;
-                  LoadingZone.currentRoomBlock[1] = 0;
-                  LoadingZone.currentRoomBlock[2] = Player.location[0] == 2 ? 1:0;
-                  LoadingZone.currentRoomBlock[3] = Player.location[0] == 2 ? 0:1;
-                  if(y == 0) roomToBeGenerated[x][y] = Player.location[0] == 2 ? 22:21;
-                  else roomToBeGenerated[x][y] = 0;
-               }
-               //room to the right and below the branch room at (2,1) (another branch room and 1 wizzrobe)
-               else if (Player.location[0] == 3 && Player.location[1] == 0){
+               // room to the left of the branch room at (2,1) (dead end, but has a key that
+               // can only be acessed from this entrance)
+               else if (Player.location[0] == 3 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
-                  LoadingZone.currentRoomBlock[2] = 1;
-                  LoadingZone.currentRoomBlock[3] = 0;
-                  if(y == 10 && x == 10) roomToBeGenerated[x][y] = 22;
-                  else roomToBeGenerated[x][y] = 0;
-               }
-               //room below the branch room at (3,0) (has a row of wizzrobes)
-               else if (Player.location[0] == 3 && Player.location[1] == -1){
-                  LoadingZone.currentRoomBlock[0] = 0;
-                  LoadingZone.currentRoomBlock[1] = 0;
-                  LoadingZone.currentRoomBlock[2] = 1;
-                  LoadingZone.currentRoomBlock[3] = 1;
-                  if(y == 10) roomToBeGenerated[x][y] = 22;
-                  else roomToBeGenerated[x][y] = 0;
-               }
-               //room below the previous room (has a wall that prevents entrance from below, a wizzrobe, a shieldEater, and a key)
-               else if (Player.location[0] == 3 && Player.location[1] == -2){
-                  LoadingZone.currentRoomBlock[0] = 0;
-                  LoadingZone.currentRoomBlock[1] = 0;
-                  LoadingZone.currentRoomBlock[2] = 1;
-                  LoadingZone.currentRoomBlock[3] = 1;
-                  if(y == 9) roomToBeGenerated[x][y] = 22;
-                  else if (y == 10) roomToBeGenerated[x][y] = 16;
-                  else if (y == 11) roomToBeGenerated[x][y] = 1;
-                  else roomToBeGenerated[x][y] = 0;
-               }
-               //room to the left of the branch room at (3,0) (has a row of wizzrobes and a key)
-               else if (Player.location[0] == 4 && Player.location[1] == 0){
-               LoadingZone.currentRoomBlock[0] = 1;
-               LoadingZone.currentRoomBlock[1] = 0;
-               LoadingZone.currentRoomBlock[2] = 0;
-               LoadingZone.currentRoomBlock[3] = 1;
-               if(y == 0) roomToBeGenerated[x][y] = 22;
-               else roomToBeGenerated[x][y] = 0;
-               }
-               //next 2 rooms below the previous room (has 1 room with a row of mummies, and the other has a row of sworfdsmen and a row of skeletons)
-               else if (Player.location[0] == 4 && (Player.location[1] == -1 || Player.location[1] == -2)){
-               LoadingZone.currentRoomBlock[0] = 0;
-               LoadingZone.currentRoomBlock[1] = 0;
-               LoadingZone.currentRoomBlock[2] = 1;
-               LoadingZone.currentRoomBlock[3] = 1;
-               if(y == 10) roomToBeGenerated[x][y] = Player.location[1] == -2 ? 13:21;
-               else if (y == 11 && Player.location[1] == -2 ) roomToBeGenerated[x][y] = 9;
-               else roomToBeGenerated[x][y] = 0;
-               }  
-               //room to the below the previous room (has a row of wizzrobes, a row of swordsmen, and a key as well as starts the path to the cane of invincibility)
-               else if (Player.location[0] == 4 && Player.location[1] == -3){
-               LoadingZone.currentRoomBlock[0] = 0;
-               LoadingZone.currentRoomBlock[1] = 1;
-               LoadingZone.currentRoomBlock[2] = 0;
-               LoadingZone.currentRoomBlock[3] = 1;
-               if(y == 15) roomToBeGenerated[x][y] = 22;
-               else if (y >= 14) roomToBeGenerated[x][y] = 13;
-               else roomToBeGenerated[x][y] = 0;
-               }  
-               //room to the left of the previous room (nothing here, up is a dead end, and left leads to death and the cane of invincibility)
-               else if (Player.location[0] == 3 && Player.location[1] == -3){
-                  LoadingZone.currentRoomBlock[0] = 0;
-                  LoadingZone.currentRoomBlock[1] = 1;
-                  LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[4][2] ? 0:2;
-                  LoadingZone.currentRoomBlock[3] = 0;
-                  roomToBeGenerated[x][y] = 0;
-               }  
-               //these next couple of rooms are torturous to the player, but lead to the cane of invincibility
-               else if (Player.location[0] == 2 && Player.location[1] == -3){
-                  LoadingZone.currentRoomBlock[0] = 1;
-                  LoadingZone.currentRoomBlock[1] = 1;
-                  LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[4][3] ? 0:2;
-                  LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 10) roomToBeGenerated[x][y] = 9;
-                  else roomToBeGenerated[x][y] = 0;
-               }
-               else if (Player.location[0] == 1 && Player.location[1] == -3){
-                  LoadingZone.currentRoomBlock[0] = 1;
-                  LoadingZone.currentRoomBlock[1] = 1;
-                  LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[4][4] ? 0:2;
-                  LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 10) roomToBeGenerated[x][y] = 13;
-                  else roomToBeGenerated[x][y] = 0;
-               }
-               else if (Player.location[0] == 0 && Player.location[1] == -3){
-                  LoadingZone.currentRoomBlock[0] = 1;
-                  LoadingZone.currentRoomBlock[1] = 1;
-                  LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[4][5] ? 0:2;
-                  LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 10) roomToBeGenerated[x][y] = 16;
-                  else roomToBeGenerated[x][y] = 0;
-               }
-               else if (Player.location[0] == -1 && Player.location[1] == -3){
-                  LoadingZone.currentRoomBlock[0] = 1;
-                  LoadingZone.currentRoomBlock[1] = 1;
-                  LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[4][6] ? 0:2;
-                  LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 10) roomToBeGenerated[x][y] = 21;
-                  else roomToBeGenerated[x][y] = 0;
-               }
-               //room to the left of the room with the cane of incinvibility
-               else if (Player.location[0] == -2 && Player.location[1] == -3){
-                  LoadingZone.currentRoomBlock[0] = 1;
-                  LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
-                  LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 10) roomToBeGenerated[x][y] = 22;
-                  else roomToBeGenerated[x][y] = 0;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  if ((x == 3 && y >= 4 && y <= 13) || ((x == 1 || x == 2) && (y > 1 && y < 4)))
+                     roomToBeGenerated[x][y] = 1;
+                  else if (x == 15)
+                     roomToBeGenerated[x][y] = y <= 3 ? 22 : y <= 7 ? 21 : y <= 10 ? 16 : y <= 13 ? 13 : 9;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //absolute torture for the player, but gives the the cane of invincibility
-               else if (Player.location[0] == -3 && Player.location[1] == -3){
+               // the 2 rooms above and then to the left of the branch room at(2,1)
+               else if ((Player.location[0] == 2 || Player.location[0] == 3) && Player.location[1] == 2) {
                   LoadingZone.currentRoomBlock[0] = 1;
-                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = Player.location[0] == 2 ? 1 : 0;
+                  LoadingZone.currentRoomBlock[3] = Player.location[0] == 2 ? 0 : 1;
+                  if (y == 0)
+                     roomToBeGenerated[x][y] = Player.location[0] == 2 ? 22 : 21;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               }
+               // room to the right and below the branch room at (2,1) (another branch room and
+               // 1 wizzrobe)
+               else if (Player.location[0] == 3 && Player.location[1] == 0) {
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(y == 0 || y == 1) roomToBeGenerated[x][y] = x <= 6 ? 22: x <= 10 ? 21:16;
-                  else if(y == 2) roomToBeGenerated[x][y] = x <= 6 && x >= 10 ? 9:13;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y == 10 && x == 10)
+                     roomToBeGenerated[x][y] = 22;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //going a completely different route, 1 room above the branch room at (0,1) (left leads to the boss, right is a dead end)
-               else if (Player.location[0] == 0 && Player.location[1] == 2 ){
+               // room below the branch room at (3,0) (has a row of wizzrobes)
+               else if (Player.location[0] == 3 && Player.location[1] == -1) {
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  if (y == 10)
+                     roomToBeGenerated[x][y] = 22;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               }
+               // room below the previous room (has a wall that prevents entrance from below, a
+               // wizzrobe, a shieldEater, and a key)
+               else if (Player.location[0] == 3 && Player.location[1] == -2) {
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  if (y == 9)
+                     roomToBeGenerated[x][y] = 22;
+                  else if (y == 10)
+                     roomToBeGenerated[x][y] = 16;
+                  else if (y == 11)
+                     roomToBeGenerated[x][y] = 1;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               }
+               // room to the left of the branch room at (3,0) (has a row of wizzrobes and a
+               // key)
+               else if (Player.location[0] == 4 && Player.location[1] == 0) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 0;
-                  LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 10 && y == 10)roomToBeGenerated[x][y] = 22;
-                  else roomToBeGenerated[x][y] = 0;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  if (y == 0)
+                     roomToBeGenerated[x][y] = 22;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the right of the previous room (dead end, literally nothing here)
-               else if (Player.location[0] == 1 && Player.location[1] == 2){
-                  LoadingZone.currentRoomBlock[0] = 1;
+               // next 2 rooms below the previous room (has 1 room with a row of mummies, and
+               // the other has a row of sworfdsmen and a row of skeletons)
+               else if (Player.location[0] == 4 && (Player.location[1] == -1 || Player.location[1] == -2)) {
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  if (y == 10)
+                     roomToBeGenerated[x][y] = Player.location[1] == -2 ? 13 : 21;
+                  else if (y == 11 && Player.location[1] == -2)
+                     roomToBeGenerated[x][y] = 9;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               }
+               // room to the below the previous room (has a row of wizzrobes, a row of
+               // swordsmen, and a key as well as starts the path to the cane of invincibility)
+               else if (Player.location[0] == 4 && Player.location[1] == -3) {
+                  LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(x >= 18 && y >= 14) roomToBeGenerated[x][y] = y <= 15 ? 22:21;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y == 15)
+                     roomToBeGenerated[x][y] = 22;
+                  else if (y >= 14)
+                     roomToBeGenerated[x][y] = 13;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //2 rooms to the left of the previous room (leads to the boss)
-               else if (Player.location[0] == -1 && Player.location[1] == 2){
-                  LoadingZone.currentRoomBlock[0] = 1;
+               // room to the left of the previous room (nothing here, up is a dead end, and
+               // left leads to death and the cane of invincibility)
+               else if (Player.location[0] == 3 && Player.location[1] == -3) {
+                  LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 1;
-                  LoadingZone.currentRoomBlock[2] = 0;
-                  LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 10 || x == 11) roomToBeGenerated[x][y] = x == 10 ? 13:9;
-                  else roomToBeGenerated[x][y] = 0;
-               }
-               //room to the left of the previous room (left is a dead end, right leads to the boss)
-               else if (Player.location[0] == -2 && Player.location[1] == 2){
-                  LoadingZone.currentRoomBlock[0] = 1;
-                  LoadingZone.currentRoomBlock[1] = LoadingZone.keyDoor[4][7] ? 0:2;
-                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[4][2] ? 0 : 2;
                   LoadingZone.currentRoomBlock[3] = 0;
                   roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the previous room(literal dead end)
-               else if (Player.location[0] == -3 && Player.location[1] == 2){
+               // these next couple of rooms are torturous to the player, but lead to the cane
+               // of invincibility
+               else if (Player.location[0] == 2 && Player.location[1] == -3) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[4][3] ? 0 : 2;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  if (x == 10)
+                     roomToBeGenerated[x][y] = 9;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               } else if (Player.location[0] == 1 && Player.location[1] == -3) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[4][4] ? 0 : 2;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  if (x == 10)
+                     roomToBeGenerated[x][y] = 13;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               } else if (Player.location[0] == 0 && Player.location[1] == -3) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[4][5] ? 0 : 2;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  if (x == 10)
+                     roomToBeGenerated[x][y] = 16;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               } else if (Player.location[0] == -1 && Player.location[1] == -3) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[4][6] ? 0 : 2;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  if (x == 10)
+                     roomToBeGenerated[x][y] = 21;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               }
+               // room to the left of the room with the cane of incinvibility
+               else if (Player.location[0] == -2 && Player.location[1] == -3) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  if (x == 10)
+                     roomToBeGenerated[x][y] = 22;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               }
+               // absolute torture for the player, but gives the the cane of invincibility
+               else if (Player.location[0] == -3 && Player.location[1] == -3) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 0) roomToBeGenerated[x][y] = 22;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y == 0 || y == 1)
+                     roomToBeGenerated[x][y] = x <= 6 ? 22 : x <= 10 ? 21 : 16;
+                  else if (y == 2)
+                     roomToBeGenerated[x][y] = x <= 6 && x >= 10 ? 9 : 13;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the right and below the previous room (has a row of wizzrobes leads to the boss)
-               else if (Player.location[0] == -2 && Player.location[1] == 1){
+               // going a completely different route, 1 room above the branch room at (0,1)
+               // (left leads to the boss, right is a dead end)
+               else if (Player.location[0] == 0 && Player.location[1] == 2) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  if (x == 10 && y == 10)
+                     roomToBeGenerated[x][y] = 22;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               }
+               // room to the right of the previous room (dead end, literally nothing here)
+               else if (Player.location[0] == 1 && Player.location[1] == 2) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  if (x >= 18 && y >= 14)
+                     roomToBeGenerated[x][y] = y <= 15 ? 22 : 21;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               }
+               // 2 rooms to the left of the previous room (leads to the boss)
+               else if (Player.location[0] == -1 && Player.location[1] == 2) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  if (x == 10 || x == 11)
+                     roomToBeGenerated[x][y] = x == 10 ? 13 : 9;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               }
+               // room to the left of the previous room (left is a dead end, right leads to the
+               // boss)
+               else if (Player.location[0] == -2 && Player.location[1] == 2) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = LoadingZone.keyDoor[4][7] ? 0 : 2;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+               }
+               // room to the left of the previous room(literal dead end)
+               else if (Player.location[0] == -3 && Player.location[1] == 2) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  if (x == 0)
+                     roomToBeGenerated[x][y] = 22;
+                  else
+                     roomToBeGenerated[x][y] = 0;
+               }
+               // room to the right and below the previous room (has a row of wizzrobes leads
+               // to the boss)
+               else if (Player.location[0] == -2 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(y == 10) roomToBeGenerated[x][y] = 22;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y == 10)
+                     roomToBeGenerated[x][y] = 22;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room (has a row of mummies and leads to the boss room)
-               else if (Player.location[0] == -2 && Player.location[1] == 0){
+               // room below the previous room (has a row of mummies and leads to the boss
+               // room)
+               else if (Player.location[0] == -2 && Player.location[1] == 0) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(y == 16) roomToBeGenerated[x][y] = 21;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y == 16)
+                     roomToBeGenerated[x][y] = 21;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the previous room (has a colums of shieldEaters and the room above the boss room
-               else if(Player.location[0] == -3 && Player.location[1] == 0){
+               // room to the left of the previous room (has a colums of shieldEaters and the
+               // room above the boss room
+               else if (Player.location[0] == -3 && Player.location[1] == 0) {
                   LoadingZone.currentRoomBlock[0] = 1;
-                  LoadingZone.currentRoomBlock[1] = LoadingZone.numDefeatedBosses == 4 ? 0:1;
+                  LoadingZone.currentRoomBlock[1] = LoadingZone.numDefeatedBosses == 4 ? 0 : 1;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 0) roomToBeGenerated[x][y] = 16;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (x == 0)
+                     roomToBeGenerated[x][y] = 16;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room (BOSS ROOM)
-               else if(Player.location[0] == -3 && Player.location[1] == -1){
+               // room below the previous room (BOSS ROOM)
+               else if (Player.location[0] == -3 && Player.location[1] == -1) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 3;
-                  if(x == 10 && y == 10) roomToBeGenerated[x][y] = 10;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (x == 10 && y == 10)
+                     roomToBeGenerated[x][y] = 10;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
                // Room with the fourth triforce piece
                else if (Player.location[0] == -2 && Player.location[1] == -1) {
@@ -2939,188 +3047,243 @@ public class Room {
                      roomToBeGenerated[x][y] = 11;
                }
             }
-            //dungeon #6
-            else if (Player.level == 6){
-               //start room (branches off in all 4 directions: down is to leave, right leads to a key and a snake, left leads to a row of snakes and nothing, and up progresses into the dungeon)
-               if(Player.location[0] == 0 && Player.location[1] == 0){
+            // dungeon #6
+            else if (Player.level == 6) {
+               // start room (branches off in all 4 directions: down is to leave, right leads
+               // to a key and a snake, left leads to a row of snakes and nothing, and up
+               // progresses into the dungeon)
+               if (Player.location[0] == 0 && Player.location[1] == 0) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
                   roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the previous room (has a single snake)
-               else if(Player.location[0] == -1 && Player.location[1] == 0){
+               // room to the left of the previous room (has a single snake)
+               else if (Player.location[0] == -1 && Player.location[1] == 0) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 10 && y == 10)
+                  if (x == 10 && y == 10)
                      roomToBeGenerated[x][y] = 23;
                   else
                      roomToBeGenerated[x][y] = 0;
                }
-               //room to the right of the previous room (has a column of snakes and a key)
-               else if(Player.location[0] == 1 && Player.location[1] == 0){
+               // room to the right of the previous room (has a column of snakes and a key)
+               else if (Player.location[0] == 1 && Player.location[1] == 0) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(x == 10 && y < 14)
+                  if (x == 10 && y < 14)
                      roomToBeGenerated[x][y] = 23;
                   else
                      roomToBeGenerated[x][y] = 0;
                }
-               //room above the start room (right and up are separated from the left and down by a wall, has a key that can only be acessed from the other side of the wall)
-               else if(Player.location[0] == 0 && Player.location[1] == 1){
+               // room above the start room (right and up are separated from the left and down
+               // by a wall, has a key that can only be acessed from the other side of the
+               // wall)
+               else if (Player.location[0] == 0 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if((x >= 7 && y == 10) || (y <= 10 && x == 7)) roomToBeGenerated[x][y] = 1;
-                  else if((y == 3) && (x == 10 || x == 2)) roomToBeGenerated[x][y] = 23;
-                  else roomToBeGenerated[x][y]  = 0;
+                  if ((x >= 7 && y == 10) || (y <= 10 && x == 7))
+                     roomToBeGenerated[x][y] = 1;
+                  else if ((y == 3) && (x == 10 || x == 2))
+                     roomToBeGenerated[x][y] = 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the previous room (has a row of snakes and progresses the dungeon)
-               else if(Player.location[0] == -1 && Player.location[1] == 1){
+               // room to the left of the previous room (has a row of snakes and progresses the
+               // dungeon)
+               else if (Player.location[0] == -1 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 2 && y < 14) roomToBeGenerated[x][y] = 23;
-                  else roomToBeGenerated[x][y]  = 0;
+                  if (x == 2 && y < 14)
+                     roomToBeGenerated[x][y] = 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room above the previous room(has a key, left is death and leads to the boss, right leads to more thingies)
-               else if(Player.location[0] == -1 && Player.location[1] == 2){
+               // room above the previous room(has a key, left is death and leads to the boss,
+               // right leads to more thingies)
+               else if (Player.location[0] == -1 && Player.location[1] == 2) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 0;
-                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[5][0]  ? 0:2;
-                  if(x == 2 && y < 14) roomToBeGenerated[x][y] = 23;
-                  else roomToBeGenerated[x][y]  = 0;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[5][0] ? 0 : 2;
+                  if (x == 2 && y < 14)
+                     roomToBeGenerated[x][y] = 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the previous room(empty branch room)
-               else if(Player.location[0] == 0 && Player.location[1] == 2){
+               // room to the left of the previous room(empty branch room)
+               else if (Player.location[0] == 0 && Player.location[1] == 2) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  roomToBeGenerated[x][y]  = 0;
+                  roomToBeGenerated[x][y] = 0;
                }
-               //room to the right of the branch room at (0,1) (witteraw dead end)
-               else if(Player.location[0] == 1 && Player.location[1] == 1){
+               // room to the right of the branch room at (0,1) (witteraw dead end)
+               else if (Player.location[0] == 1 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(y < 14 && (x == 10 || x == 11 || x == 12)) roomToBeGenerated[x][y] = x == 10 ? 9:x == 11 ? 21:23;
-                  else roomToBeGenerated[x][y]  = 0;
+                  if (y < 14 && (x == 10 || x == 11 || x == 12))
+                     roomToBeGenerated[x][y] = x == 10 ? 9 : x == 11 ? 21 : 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the right of the branch room at (0,2) (has a key door and a row of skeletons)
-               else if(Player.location[0] == 1 && Player.location[1] == 2){
+               // room to the right of the branch room at (0,2) (has a key door and a row of
+               // skeletons)
+               else if (Player.location[0] == 1 && Player.location[1] == 2) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
-                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[5][1] ? 0 : 2; 
-                  if(y < 14 && x == 10) roomToBeGenerated[x][y] = 9;
-                  else roomToBeGenerated[x][y]  = 0;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[5][1] ? 0 : 2;
+                  if (y < 14 && x == 10)
+                     roomToBeGenerated[x][y] = 9;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the right of the previous room (has a row of snakes and a key door)
-               else if(Player.location[0] == 2 && Player.location[1] == 2){
+               // room to the right of the previous room (has a row of snakes and a key door)
+               else if (Player.location[0] == 2 && Player.location[1] == 2) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = LoadingZone.keyDoor[5][2] ? 0 : 2;
                   LoadingZone.currentRoomBlock[2] = 0;
-                  LoadingZone.currentRoomBlock[3] = 1; 
-                  if(y < 14 && x == 18) roomToBeGenerated[x][y] = 23;
-                  else roomToBeGenerated[x][y]  = 0;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  if (y < 14 && x == 18)
+                     roomToBeGenerated[x][y] = 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room (has a key and a key door below it as well as a row of swordsmen)
-               else if(Player.location[0] == 2 && Player.location[1] == 1){
+               // room below the previous room (has a key and a key door below it as well as a
+               // row of swordsmen)
+               else if (Player.location[0] == 2 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = LoadingZone.keyDoor[5][3] ? 0 : 2;
                   LoadingZone.currentRoomBlock[2] = 1;
-                  LoadingZone.currentRoomBlock[3] = 1; 
-                  if(x > 0 && y == 10) roomToBeGenerated[x][y] = 13;
-                  else roomToBeGenerated[x][y]  = 0;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  if (x > 0 && y == 10)
+                     roomToBeGenerated[x][y] = 13;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room (has a key and a key door down as well as a row of snakes)
-               else if(Player.location[0] == 2 && Player.location[1] == 0){
+               // room below the previous room (has a key and a key door down as well as a row
+               // of snakes)
+               else if (Player.location[0] == 2 && Player.location[1] == 0) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = LoadingZone.keyDoor[5][4] ? 0 : 2;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(y < 14 && x == 18) roomToBeGenerated[x][y] = 23;
-                  else roomToBeGenerated[x][y]  = 0;
+                  if (y < 14 && x == 18)
+                     roomToBeGenerated[x][y] = 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room (empty, down has a key door and has multiple key doors leading to the super bomb, left has a bunch of keys)
-               else if(Player.location[0] == 2 && Player.location[1] == -1){
+               // room below the previous room (empty, down has a key door and has multiple key
+               // doors leading to the super bomb, left has a bunch of keys)
+               else if (Player.location[0] == 2 && Player.location[1] == -1) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = LoadingZone.keyDoor[5][5] ? 0 : 2;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 1;
                   roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room (empty, left leads to the superbomb)
-               else if(Player.location[0] == 2 && Player.location[1] == -2){
+               // room below the previous room (empty, left leads to the superbomb)
+               else if (Player.location[0] == 2 && Player.location[1] == -2) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 1;
                   roomToBeGenerated[x][y] = 0;
                }
-               //next 6 rooms to the left of the previous rooms (has a row of enemies in the pattern below and each room has a key)
-               //In addition, this is the next 6 rooms to the left of the branch room above the previous room
-               else if (Player.location[1] == -1 || Player.location[1] == -2){
+               // next 6 rooms to the left of the previous rooms (has a row of enemies in the
+               // pattern below and each room has a key)
+               // In addition, this is the next 6 rooms to the left of the branch room above
+               // the previous room
+               else if (Player.location[1] == -1 || Player.location[1] == -2) {
                   LoadingZone.currentRoomBlock[0] = 1;
-                  LoadingZone.currentRoomBlock[1] = Player.location[1] == -2 && Player.location[0] == -4 ? 0:1;
-                  LoadingZone.currentRoomBlock[2] = Player.location[0] == -4 ? 1: Player.location[1] == -2 ? Player.location[0] == 1 ? LoadingZone.keyDoor[5][6] ? 0:2:Player.location[0] == 0 ? LoadingZone.keyDoor[5][7] ? 0:2:Player.location[0] == -1 ? LoadingZone.keyDoor[5][8] ? 0:2:Player.location[0] == -2 ? LoadingZone.keyDoor[5][9] ? 0:2:Player.location[0] == -3 ? LoadingZone.keyDoor[5][10] ? 0:2:1:0;
+                  LoadingZone.currentRoomBlock[1] = Player.location[1] == -2 && Player.location[0] == -4 ? 0 : 1;
+                  LoadingZone.currentRoomBlock[2] = Player.location[0] == -4 ? 1
+                        : Player.location[1] == -2
+                              ? Player.location[0] == 1 ? LoadingZone.keyDoor[5][6] ? 0 : 2
+                                    : Player.location[0] == 0 ? LoadingZone.keyDoor[5][7] ? 0 : 2
+                                          : Player.location[0] == -1 ? LoadingZone.keyDoor[5][8] ? 0 : 2
+                                                : Player.location[0] == -2 ? LoadingZone.keyDoor[5][9] ? 0 : 2
+                                                      : Player.location[0] == -3 ? LoadingZone.keyDoor[5][10] ? 0 : 2
+                                                            : 1
+                              : 0;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(y < 14 && x == 10) roomToBeGenerated[x][y] = Player.location[0] == -4 ? 23 : Player.location[0] == -3 ? 22 : Player.location[0] == -2 ? 21 : Player.location[0] == -1 ? 16 : Player.location[0] == 0 ? 13:9;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y < 14 && x == 10)
+                     roomToBeGenerated[x][y] = Player.location[0] == -4 ? 23
+                           : Player.location[0] == -3 ? 22
+                                 : Player.location[0] == -2 ? 21
+                                       : Player.location[0] == -1 ? 16 : Player.location[0] == 0 ? 13 : 9;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room below the farther room in the set of six above (has a whoooooooooooole bunch of enemies and the superbomb(BOOOOOOOOOOOOOOOOOM!!!!!!!!!!!!!!!!!!!!))
-               //note there is a glitch where using the superbomb in the room will allow the superbomb to infinetely respawn, but i'm too lazy to fix it :)
-               else if (Player.location[0] == -4 && Player.location[1] == -3 ){
+               // room below the farther room in the set of six above (has a whoooooooooooole
+               // bunch of enemies and the superbomb(BOOOOOOOOOOOOOOOOOM!!!!!!!!!!!!!!!!!!!!))
+               // note there is a glitch where using the superbomb in the room will allow the
+               // superbomb to infinetely respawn, but i'm too lazy to fix it :)
+               else if (Player.location[0] == -4 && Player.location[1] == -3) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(x < 14 && y > 5) roomToBeGenerated[x][y] = y <= 5 ? 23 : y <=7 ? 22 : y <= 9 ? 21 : y <= 11 ? 16 : y <= 13 ? 13:9;
-                  else roomToBeGenerated[x][y]  = 0;
+                  if (x < 14 && y > 5)
+                     roomToBeGenerated[x][y] = y <= 5 ? 23
+                           : y <= 7 ? 22 : y <= 9 ? 21 : y <= 11 ? 16 : y <= 13 ? 13 : 9;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //going a completely different direction: room to the left of the branch room at (-1,2)
-               //leads to the boss room
-               //has a bunch of enemies and a key
-               else if (Player.location[0] == -2 && Player.location[1] == 2){
+               // going a completely different direction: room to the left of the branch room
+               // at (-1,2)
+               // leads to the boss room
+               // has a bunch of enemies and a key
+               else if (Player.location[0] == -2 && Player.location[1] == 2) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(y < 16) roomToBeGenerated[x][y] = x < 4 ? 9 : x < 6 ? 21 : x < 8 ? 23: x < 10 ? 13:0;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y < 16)
+                     roomToBeGenerated[x][y] = x < 4 ? 9 : x < 6 ? 21 : x < 8 ? 23 : x < 10 ? 13 : 0;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room, has a key door on the right and a row of mummies that are on at the bottom of the room
-               //continues the path to the boss room
-               else if (Player.location[0] == -2 && Player.location[1] == 1){
+               // room below the previous room, has a key door on the right and a row of
+               // mummies that are on at the bottom of the room
+               // continues the path to the boss room
+               else if (Player.location[0] == -2 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 1;
-                  LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[5][11] ? 0:2;
+                  LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[5][11] ? 0 : 2;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(y == 15) roomToBeGenerated[x][y] = 21;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y == 15)
+                     roomToBeGenerated[x][y] = 21;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the previous room (has a row of snakes)
-               //below is the boss room!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-               else if (Player.location[0] == -3 && Player.location[1] == 1){
+               // room to the left of the previous room (has a row of snakes)
+               // below is the boss room!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+               else if (Player.location[0] == -3 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 1;
-                  LoadingZone.currentRoomBlock[1] = LoadingZone.numDefeatedBosses < 6 ? 0:1;
+                  LoadingZone.currentRoomBlock[1] = LoadingZone.numDefeatedBosses < 6 ? 0 : 1;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 1) roomToBeGenerated[x][y] = 23;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (x == 1)
+                     roomToBeGenerated[x][y] = 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room
-               //BOSS ROOM !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+               // room below the previous room
+               // BOSS ROOM !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                else if (Player.location[0] == -3 && Player.location[1] == 0) {
                   roomToBeGenerated[x][y] = 0;
                   LoadingZone.currentRoomBlock[0] = 1;
@@ -3146,19 +3309,18 @@ public class Room {
                } else
                   roomToBeGenerated[x][y] = 1;
                continue;
-            }
-            else if (Player.level == 7){
-               //start room for dungeon #7
-               if(Player.location[0] == 0 && Player.location[1] == 0){
+            } else if (Player.level == 7) {
+               // start room for dungeon #7
+               if (Player.location[0] == 0 && Player.location[1] == 0) {
                   roomToBeGenerated[x][y] = 0;
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 0;
-                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[6][0] ? 0:2;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[6][0] ? 0 : 2;
                   continue;
                }
-               //room to the left of the start room (lead to a path with a bunch of keys)
-               else if(Player.location[0] == -1 && Player.location[1] == 0){
+               // room to the left of the start room (lead to a path with a bunch of keys)
+               else if (Player.location[0] == -1 && Player.location[1] == 0) {
                   roomToBeGenerated[x][y] = 0;
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 1;
@@ -3167,8 +3329,8 @@ public class Room {
                   roomToBeGenerated[10][10] = 13;
                   continue;
                }
-               //room above the previous room (has a row of swordsmen and a key)
-               else if(Player.location[0] == -1 && Player.location[1] == 1){
+               // room above the previous room (has a row of swordsmen and a key)
+               else if (Player.location[0] == -1 && Player.location[1] == 1) {
                   roomToBeGenerated[x][y] = 0;
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
@@ -3177,217 +3339,278 @@ public class Room {
                   roomToBeGenerated[17][y] = 13;
                   continue;
                }
-               //room to the left of the previous room (has snakes in the formation of the letter 'i' and a key)
-               else if(Player.location[0] == -2 && Player.location[1] == 1){
+               // room to the left of the previous room (has snakes in the formation of the
+               // letter 'i' and a key)
+               else if (Player.location[0] == -2 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 10 && (y == 9 || y >= 12) && y < 14) roomToBeGenerated[x][y] = 23;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (x == 10 && (y == 9 || y >= 12) && y < 14)
+                     roomToBeGenerated[x][y] = 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                   continue;
                }
-               //room to the left of the previous room (has a variety of enemies in the formation of the letter 'H' and a key)
-               else if(Player.location[0] == -3 && Player.location[1] == 1){
+               // room to the left of the previous room (has a variety of enemies in the
+               // formation of the letter 'H' and a key)
+               else if (Player.location[0] == -3 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 8 || x == 12 || ((x <= 11 && x >= 9) && y == 10)) roomToBeGenerated[x][y] = x == 8 ? 9: x == 12 ? 13:21;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (x == 8 || x == 12 || ((x <= 11 && x >= 9) && y == 10))
+                     roomToBeGenerated[x][y] = x == 8 ? 9 : x == 12 ? 13 : 21;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                   continue;
                }
-               //room to the left of the previous room (has a row of shieldEaters and a key)
-               else if(Player.location[0] == -4 && Player.location[1] == 1){
+               // room to the left of the previous room (has a row of shieldEaters and a key)
+               else if (Player.location[0] == -4 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 3)roomToBeGenerated[x][y] = 16;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (x == 3)
+                     roomToBeGenerated[x][y] = 16;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                   continue;
                }
-               //room above the previous room and the first 2 rooms in the upper path on the left side of the skull (has a bunch of enemies and a key)
-               else if(((Player.location[0] == -4 || Player.location[0] == -1) && Player.location[1] == 2) || (Player.location[0] == -1 && Player.location[1] == 3)){
+               // room above the previous room and the first 2 rooms in the upper path on the
+               // left side of the skull (has a bunch of enemies and a key)
+               else if (((Player.location[0] == -4 || Player.location[0] == -1) && Player.location[1] == 2)
+                     || (Player.location[0] == -1 && Player.location[1] == 3)) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(y >= 5 && y <= 10) roomToBeGenerated[x][y] = y == 5 ? 13:y == 6 ? 16:y == 7 ? 23:y == 8 ? 22:y == 9 ? 21:9;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y >= 5 && y <= 10)
+                     roomToBeGenerated[x][y] = y == 5 ? 13 : y == 6 ? 16 : y == 7 ? 23 : y == 8 ? 22 : y == 9 ? 21 : 9;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                   continue;
                }
-               //room above the previous room (has a row of snakes and a key)
-               else if(Player.location[0] == -4 && Player.location[1] == 3){
+               // room above the previous room (has a row of snakes and a key)
+               else if (Player.location[0] == -4 && Player.location[1] == 3) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(x == 1 && y > 1 && y < 14) roomToBeGenerated[x][y] = 23;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (x == 1 && y > 1 && y < 14)
+                     roomToBeGenerated[x][y] = 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room above the previous room (has a row of mummies and a key)
-               else if(Player.location[0] == -4 && Player.location[1] == 4){
+               // room above the previous room (has a row of mummies and a key)
+               else if (Player.location[0] == -4 && Player.location[1] == 4) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(y == 1) roomToBeGenerated[x][y] = 21;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y == 1)
+                     roomToBeGenerated[x][y] = 21;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the previous room (has skeletons in the shape of a "T" and a key)
-               else if(Player.location[0] == -3 && Player.location[1] == 4){
+               // room to the left of the previous room (has skeletons in the shape of a "T"
+               // and a key)
+               else if (Player.location[0] == -3 && Player.location[1] == 4) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(y == 1 || x == 10) roomToBeGenerated[x][y] = 9;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y == 1 || x == 10)
+                     roomToBeGenerated[x][y] = 9;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the previous room (has a mix of enemies in the shape of an "H" and a key)
-               else if(Player.location[0] == -2 && Player.location[1] == 4){
+               // room to the left of the previous room (has a mix of enemies in the shape of
+               // an "H" and a key)
+               else if (Player.location[0] == -2 && Player.location[1] == 4) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 8 || x == 12 || ((x <= 11 && x >= 9) && y == 10)) roomToBeGenerated[x][y] = x == 8 ? 9: x == 12 ? 13:21;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (x == 8 || x == 12 || ((x <= 11 && x >= 9) && y == 10))
+                     roomToBeGenerated[x][y] = x == 8 ? 9 : x == 12 ? 13 : 21;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the previous room (has a mix of enemies in the shape of an "E" and a key)
-               else if(Player.location[0] == -1 && Player.location[1] == 4){
+               // room to the left of the previous room (has a mix of enemies in the shape of
+               // an "E" and a key)
+               else if (Player.location[0] == -1 && Player.location[1] == 4) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(x == 4) roomToBeGenerated[x][y] = 16;
-                  else if (y == 1 && x > 4) roomToBeGenerated[x][y] = 22;
-                  else if (y == 8 && x > 4) roomToBeGenerated[x][y] = 21;
-                  else if (y == 12 && x > 4) roomToBeGenerated[x][y] = 23;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (x == 4)
+                     roomToBeGenerated[x][y] = 16;
+                  else if (y == 1 && x > 4)
+                     roomToBeGenerated[x][y] = 22;
+                  else if (y == 8 && x > 4)
+                     roomToBeGenerated[x][y] = 21;
+                  else if (y == 12 && x > 4)
+                     roomToBeGenerated[x][y] = 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the start room (has a snake and a key door)
-               else if(Player.location[0] == 1 && Player.location[1] == 0){
-                  LoadingZone.currentRoomBlock[0] = LoadingZone.keyDoor[6][1] ? 0:2;
+               // room to the left of the start room (has a snake and a key door)
+               else if (Player.location[0] == 1 && Player.location[1] == 0) {
+                  LoadingZone.currentRoomBlock[0] = LoadingZone.keyDoor[6][1] ? 0 : 2;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(x == 10 && y == 10) roomToBeGenerated[x][y] = 23;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (x == 10 && y == 10)
+                     roomToBeGenerated[x][y] = 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room above the previous room (empty)
-               else if (Player.location[0] == 1 && Player.location[1] == 1){
+               // room above the previous room (empty)
+               else if (Player.location[0] == 1 && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
-                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[6][2] ? 0:2;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[6][2] ? 0 : 2;
                   roomToBeGenerated[x][y] = 0;
                }
-               //next 2 rooms to the left of the previous room (also empty)
-               else if ((Player.location[0] == 2 || Player.location[0] == 3) && Player.location[1] == 1){
+               // next 2 rooms to the left of the previous room (also empty)
+               else if ((Player.location[0] == 2 || Player.location[0] == 3) && Player.location[1] == 1) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
-                  LoadingZone.currentRoomBlock[3] = Player.location[0] == 2 ? LoadingZone.keyDoor[6][3] ? 0 : 2 : LoadingZone.keyDoor[6][4] ? 0:2;
+                  LoadingZone.currentRoomBlock[3] = Player.location[0] == 2 ? LoadingZone.keyDoor[6][3] ? 0 : 2
+                        : LoadingZone.keyDoor[6][4] ? 0 : 2;
                   roomToBeGenerated[x][y] = 0;
                }
-               //room to the right of the previous room (empty as a jar of peanut butter that my doggo got into)
-               else if (Player.location[0] == 4 && Player.location[1] == 1){
-                  LoadingZone.currentRoomBlock[0] = LoadingZone.keyDoor[6][5] ? 0:2;
+               // room to the right of the previous room (empty as a jar of peanut butter that
+               // my doggo got into)
+               else if (Player.location[0] == 4 && Player.location[1] == 1) {
+                  LoadingZone.currentRoomBlock[0] = LoadingZone.keyDoor[6][5] ? 0 : 2;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 1;
                   roomToBeGenerated[x][y] = 0;
                }
-               //next 2 rooms above the previous room (emptyyyyyy)
-               else if (Player.location[0] == 4 && (Player.location[1] == 2 || Player.location[1] == 3)){
-                  LoadingZone.currentRoomBlock[0] = Player.location[1] == 2 ? LoadingZone.keyDoor[6][6] ? 0 : 2 : LoadingZone.keyDoor[6][7] ? 0:2;
+               // next 2 rooms above the previous room (emptyyyyyy)
+               else if (Player.location[0] == 4 && (Player.location[1] == 2 || Player.location[1] == 3)) {
+                  LoadingZone.currentRoomBlock[0] = Player.location[1] == 2 ? LoadingZone.keyDoor[6][6] ? 0 : 2
+                        : LoadingZone.keyDoor[6][7] ? 0 : 2;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
                   roomToBeGenerated[x][y] = 0;
                }
-               //room above the previous room (EMPTYYYYYYY)
-               else if (Player.location[0] == 4 && Player.location[1] == 4){
+               // room above the previous room (EMPTYYYYYYY)
+               else if (Player.location[0] == 4 && Player.location[1] == 4) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[6][8] ? 0 : 2;
                   LoadingZone.currentRoomBlock[3] = 1;
                   roomToBeGenerated[x][y] = 0;
                }
-               //next room to the left of the previous room (has a set of snakes in the shape of the letter 'D')
-               else if (Player.location[0] == 3 && Player.location[1] == 4){
+               // next room to the left of the previous room (has a set of snakes in the shape
+               // of the letter 'D')
+               else if (Player.location[0] == 3 && Player.location[1] == 4) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[6][9] ? 0 : 2;
                   LoadingZone.currentRoomBlock[3] = 0;
                   roomToBeGenerated[x][y] = 0;
-                  if(y > 0 && y < 14){
-                     if(x == 4 || x == 5) roomToBeGenerated[x][y] = 23;
-                     else if((x == 6 || x == 7) && (y == 3 || y == 4 || y == 12 || y == 13)) roomToBeGenerated[x][y] = 23;
-                     else if ((x == 7 || x == 8) && y >= 5 && y <= 12) roomToBeGenerated[x][y] = 23;
+                  if (y > 0 && y < 14) {
+                     if (x == 4 || x == 5)
+                        roomToBeGenerated[x][y] = 23;
+                     else if ((x == 6 || x == 7) && (y == 3 || y == 4 || y == 12 || y == 13))
+                        roomToBeGenerated[x][y] = 23;
+                     else if ((x == 7 || x == 8) && y >= 5 && y <= 12)
+                        roomToBeGenerated[x][y] = 23;
                   }
                }
-               //room to the left of the previous room (has a mix of enemies in the shape of a the letter 'N"')
-               else if (Player.location[0] == 2 && Player.location[1] == 4){
+               // room to the left of the previous room (has a mix of enemies in the shape of a
+               // the letter 'N"')
+               else if (Player.location[0] == 2 && Player.location[1] == 4) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = LoadingZone.keyDoor[6][10] ? 0 : 2;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 3 || x == 12) roomToBeGenerated[x][y] = x == 3? 13:9;
-                  else if (y == x && x > 3 && x < 12 && y < 14) roomToBeGenerated[x][y] = 23;
-                  else roomToBeGenerated [x][y] = 0;
+                  if (x == 3 || x == 12)
+                     roomToBeGenerated[x][y] = x == 3 ? 13 : 9;
+                  else if (y == x && x > 3 && x < 12 && y < 14)
+                     roomToBeGenerated[x][y] = 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room to the left of the previous room (has a mix of enemies in the shape of the letter 'E')
-               else if(Player.location[0] == 1 && Player.location[1] == 4){
+               // room to the left of the previous room (has a mix of enemies in the shape of
+               // the letter 'E')
+               else if (Player.location[0] == 1 && Player.location[1] == 4) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = LoadingZone.keyDoor[6][11] ? 0 : 2;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x == 4) roomToBeGenerated[x][y] = 16;
-                  else if (y == 1 && x > 4 && x < 13) roomToBeGenerated[x][y] = 22;
-                  else if (y == 8 && x > 4 && x < 13) roomToBeGenerated[x][y] = 21;
-                  else if (y == 12 && x > 4 && x < 13) roomToBeGenerated[x][y] = 23;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (x == 4)
+                     roomToBeGenerated[x][y] = 16;
+                  else if (y == 1 && x > 4 && x < 13)
+                     roomToBeGenerated[x][y] = 22;
+                  else if (y == 8 && x > 4 && x < 13)
+                     roomToBeGenerated[x][y] = 21;
+                  else if (y == 12 && x > 4 && x < 13)
+                     roomToBeGenerated[x][y] = 23;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room (EMPTYYYYYYYYY)
-               else if(Player.location[0] == 1 && Player.location[1] == 3){
+               // room below the previous room (EMPTYYYYYYYYY)
+               else if (Player.location[0] == 1 && Player.location[1] == 3) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
                   roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room (blocked by rocks on the bottom, has a loading zone that leads to the boss)
-               else if(Player.location[0] == 1 && Player.location[1] == 2){
+               // room below the previous room (blocked by rocks on the bottom, has a loading
+               // zone that leads to the boss)
+               else if (Player.location[0] == 1 && Player.location[1] == 2) {
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(y == 11) roomToBeGenerated[x][y] = 1;
-                  else if (y == 10 && x == 10) roomToBeGenerated[x][y] = 6;
-                  else roomToBeGenerated[x][y] = 0;
+                  if (y == 11)
+                     roomToBeGenerated[x][y] = 1;
+                  else if (y == 10 && x == 10)
+                     roomToBeGenerated[x][y] = 6;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room inside of the loading zone in the previous room 
-               else if(Player.location[0] == -3 && Player.location[1] == -1){               
-               LoadingZone.currentRoomBlock[0] = 1;
-               LoadingZone.currentRoomBlock[1] = 1;
-               LoadingZone.currentRoomBlock[2] = 1;
-               LoadingZone.currentRoomBlock[3] = 0;
-               if(x == 0 && y == 0) setText(Player.name,"Congradulations are in order","");
-               if(x == 5 && y == 5) roomToBeGenerated[x][y] = 6;
-               else roomToBeGenerated[x][y] = 0;
+               // room inside of the loading zone in the previous room
+               else if (Player.location[0] == -3 && Player.location[1] == -1) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  if (x == 0 && y == 0)
+                     setText(Player.name, "Congradulations are in order", "");
+                  if (x == 5 && y == 5)
+                     roomToBeGenerated[x][y] = 6;
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //the next couple of rooms are builup to the boss, I used strings to add to the effect ;)
-               else if ((Player.location[0] >= -2 && Player.location[0] <= 1) && Player.location[1] == -1){
-               LoadingZone.currentRoomBlock[0] = 1;
-               LoadingZone.currentRoomBlock[1] = Player.location[0] == 1 ? 0:1;
-               LoadingZone.currentRoomBlock[2] = 0;
-               LoadingZone.currentRoomBlock[3] = Player.location[0] == 1 ? 1:0;
-               if(x == 0 && y == 0) setText(Player.location[0] == -2 ? "Your long journey is over":Player.location[0] == -1 ? "The end is near":Player.location[0] == 0 ? "Now, prepare for the END!!!!!!!!!":"Once more,",Player.location[0] == 1 ? "darkness shall rise over Hyrule!!!":"","");
-               else roomToBeGenerated[x][y] = 0;
+               // the next couple of rooms are builup to the boss, I used strings to add to the
+               // effect ;)
+               else if ((Player.location[0] >= -2 && Player.location[0] <= 1) && Player.location[1] == -1) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = Player.location[0] == 1 ? 0 : 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = Player.location[0] == 1 ? 1 : 0;
+                  if (x == 0 && y == 0)
+                     setText(
+                           Player.location[0] == -2 ? "Your long journey is over"
+                                 : Player.location[0] == -1 ? "The end is near"
+                                       : Player.location[0] == 0 ? "Now, prepare for the END!!!!!!!!!" : "Once more,",
+                           Player.location[0] == 1 ? "darkness shall rise over Hyrule!!!" : "", "");
+                  else
+                     roomToBeGenerated[x][y] = 0;
                }
-               //room below the previous room
-               //BOSS ROOM !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+               // room below the previous room
+               // BOSS ROOM !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                else if (Player.location[0] == 1 && Player.location[1] == -2) {
                   roomToBeGenerated[x][y] = 0;
                   LoadingZone.currentRoomBlock[0] = 1;
@@ -3441,45 +3664,48 @@ public class Room {
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
                   roomToBeGenerated[10][10] = 6;
-               } 
-               //room above the previous room (has a ton of wizzrobes)
+               }
+               // room above the previous room (has a ton of wizzrobes)
                else if (Player.location[0] == 3 && Player.location[1] == -2) {
                   roomToBeGenerated[x][y] = 0;
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(x > 4 && y < 10) roomToBeGenerated[x][y] = 22;
+                  if (x > 4 && y < 10)
+                     roomToBeGenerated[x][y] = 22;
                }
-               //room to the left of the previous room (has a ton of snakes and a key)
+               // room to the left of the previous room (has a ton of snakes and a key)
                else if (Player.location[0] == 2 && Player.location[1] == -2) {
                   roomToBeGenerated[x][y] = 0;
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x > 4 && x < 12 && y < 13) roomToBeGenerated[x][y] = 23;
+                  if (x > 4 && x < 12 && y < 13)
+                     roomToBeGenerated[x][y] = 23;
                }
-               //room to the left of the previous room (has a ton of MUMMIES and a key)
+               // room to the left of the previous room (has a ton of MUMMIES and a key)
                else if (Player.location[0] == 1 && Player.location[1] == -2) {
                   roomToBeGenerated[x][y] = 0;
                   LoadingZone.currentRoomBlock[0] = 0;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if(x < 12 && y > 4) roomToBeGenerated[x][y] = 21;
+                  if (x < 12 && y > 4)
+                     roomToBeGenerated[x][y] = 21;
                }
-               //room above the previous room (has a ton of enemies and a key)
+               // room above the previous room (has a ton of enemies and a key)
                else if (Player.location[0] == 1 && Player.location[1] == -1) {
                   roomToBeGenerated[x][y] = 0;
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 1;
-                  if(y < 12) roomToBeGenerated[x][y] = y > 10 ? 13 :y>8 ? 9:y >
-                   4 ? 23:22;
+                  if (y < 12)
+                     roomToBeGenerated[x][y] = y > 10 ? 13 : y > 8 ? 9 : y > 4 ? 23 : 22;
                }
-               //room to the right of the start room (staircase that to more keys)
+               // room to the right of the start room (staircase that to more keys)
                else if (Player.location[0] == 1 && Player.location[1] == 0) {
                   roomToBeGenerated[x][y] = 0;
                   LoadingZone.currentRoomBlock[0] = 1;
@@ -3488,15 +3714,474 @@ public class Room {
                   LoadingZone.currentRoomBlock[3] = 1;
                   roomToBeGenerated[10][10] = 6;
                }
-               //next room after the staircase (leads to more keys)
+               // next room after the staircase (leads to more keys)
                else if (Player.location[0] == -2 && Player.location[1] == -2) {
                   roomToBeGenerated[x][y] = 0;
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[10][10] = 6;
+               }
+               // room above the room after the staircase has a bunch of enemies
+               else if (Player.location[0] == -2 && Player.location[1] == -1) {
+                  roomToBeGenerated[x][y] = 0;
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = y == 5 ? 13 : y == 6 ? 9 : y == 7 ? 16 : y == 8 ? 22 : y == 9 ? 23 : 0;
+               }
+               // room to the left of the room after the staircase (has a couple snakes and
+               // wizzrobes) (branch room)
+               else if (Player.location[0] == -1 && Player.location[1] == -2) {
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = y == 5 || y == 12 ? 23 : y == 13 ? 22 : 0;
+               }
+               // room above the previous room (has a bunch of swordsmen and a key)
+               else if (Player.location[0] == -1 && Player.location[1] == -1) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = 13;
+               }
+               // room to the left of the branch room(has a bunch of skeletons)
+               else if (Player.location[0] == 0 && Player.location[1] == -2) {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = 9;
+               }
+               // room below the branch room(has a bunch of shieldEaters)
+               else if (Player.location[0] == -1 && Player.location[1] == -3) {
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = 16;
+               }
+               // room above the start room (left has a single key, right leads further into
+               // the dungeon)
+               else if (Player.location[0] == 0 && Player.location[1] == 1) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[7][2] ? 0 : 2;
+                  roomToBeGenerated[x][y] = 0;
+               }
+               // room to the right of the previous room
+               else if (Player.location[0] == 1 && Player.location[1] == 1) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[7][3] ? 0 : 2;
+                  roomToBeGenerated[x][y] = 0;
+               }
+               // room to the right of the previous room (has a loading zone and also leads
+               // further into the dungeon)
+               else if (Player.location[0] == 2 && Player.location[1] == 1) {
+                  roomToBeGenerated[x][y] = 0;
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
                   roomToBeGenerated[10][10] = 6;
-               } else
+               }
+               // room inside of the loading zone at (2,1) (has a bunch of enemies)
+               else if (Player.location[0] == 0 && Player.location[1] == -3) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = y == 10 ? 22 : y == 11 || y == 12 ? 23 : 0;
+                  roomToBeGenerated[10][4] = 6;
+               }
+               // room below the previous room (has a mummy and swordsmen in the formation of
+               // the letter 'H' and a key)
+               else if (Player.location[0] == 0 && Player.location[1] == -4) {
+                  roomToBeGenerated[x][y] = 0;
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  if (y == 10 && x > 8 && x < 12)
+                     roomToBeGenerated[x][y] = 21;
+                  if (x == 8 || x == 12)
+                     roomToBeGenerated[x][y] = 13;
+               }
+               // room the the left of the previous room (has a mix of enemies in the shape of
+               // a "T" and a key)
+               else if (Player.location[0] == -1 && Player.location[1] == -4) {
+                  roomToBeGenerated[x][y] = 0;
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][1] = 23;
+                  roomToBeGenerated[10][y] = 22;
+               }
+               // room to the left of the previous room (has a bunch of snakes in the shape of
+               // an "A" and a key)
+               else if (Player.location[0] == -2 && Player.location[1] == -4) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+                  if (((y == 10 || y == 1) && x > 8 && x < 12) || (y > 1 && y < 14 && (x == 8 || x == 12)))
+                     roomToBeGenerated[x][y] = 23;
+               }
+               // room below the previous room (has a bunch of enemies and a key)
+               else if (Player.location[0] == -2 && Player.location[1] == -5) {
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+                  if (x == 1)
+                     roomToBeGenerated[x][y] = 16;
+                  else if (y == 5)
+                     roomToBeGenerated[x][y] = 23;
+                  else if (y == 10)
+                     roomToBeGenerated[x][y] = 22;
+                  else if (y == 14)
+                     roomToBeGenerated[x][y] = 21;
+
+               }
+               //room to the left of the previous room(has a bunch of enemies and key)
+               else if (Player.location[0] == -1 && Player.location[1] == -5) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = 0;
+                  if (y > 0 && y < 14) {
+                     if (x == 6 || x == 8)
+                        roomToBeGenerated[x][y] = 22;
+                     else if ((x == 8 || x == 9) && (y == 3 || y == 4 || y == 12 || y == 13))
+                        roomToBeGenerated[x][y] = 23;
+                     else if ((x == 9 || x == 10) && y >= 5 && y <= 12)
+                        roomToBeGenerated[x][y] = 21;
+                  }
+               }
+               //room to the left of the branch room at (0,1) empty
+               else if (Player.location[0] == -1 && Player.location[1] == 1) {
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+               }
+               //room above the previous room leads to a key via staircase
+               else if (Player.location[0] == -1 && Player.location[1] == 2) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[10][10] = 6;
+                  
+               }
+               //room inside of the staircase in the prvious room (has a bunch of wizzrobes and a key)
+               else if (Player.location[0] == 0 && Player.location[1] == -1) {
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[10][10] = 6;
+                  if(y == 1 || y == 2 || y == 14)
+                     roomToBeGenerated[x][y] = 22;
+                  
+               }
+               //room to the right of the branch room at (2,1) (has 2 wizzrobes and 2 mummies and a key)
+               else if(Player.location[0] == 3 && Player.location[1] == 1){
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+                  if(y == 4)
+                     roomToBeGenerated[x][y] = 1;
+                  else if(x == 1 && y == 1 || x == 18 && y == 14)
+                     roomToBeGenerated[x][y] = 21;
+                  else if(x == 18 && y == 1 || x == 1 && y == 14)
+                     roomToBeGenerated[x][y] = 22;
+               }
+               //room to the left of the previous room (has swordsmen and a key)
+               else if(Player.location[0] == 4 && Player.location[1] == 1){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+                  if(x == 10)
+                     roomToBeGenerated[x][y] = 13;
+                  else if((x > 10 && (y == 3 || y == 12)) || (y > 3 && y < 12 && x == 11))
+                     roomToBeGenerated[x][y] = 1;
+               }
+               //room below the previous room (empty, branch room)
+               else if(Player.location[0] == 4 && Player.location[1] == 0){
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;                  
+               }
+               //room to the right of the previous room (troll room)
+               else if(Player.location[0] == 5 && Player.location[1] == 0){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 21;                  
+               }
+               //room to the left of the previous room (has a few shieldEaters and a key)
+               else if(Player.location[0] == 3 && Player.location[1] == 0){
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+                  if(y == 4 || y == 11)     
+                     roomToBeGenerated[x][y] = 1;
+                  if(y == 3)
+                     roomToBeGenerated[x][y] = 16;             
+               }
+               //room to the right of the previous room (has a single wizzrobe)
+               else if(Player.location[0] == 2 && Player.location[1] == 0){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[10][10] = 22;
+               }
+               //below the previous room (has a single wizzrobe)
+               else if(Player.location[0] == 2 && Player.location[1] == -1){
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[10][10] = 22;
+               }
+               //room to the right of the previous room (has a row of snakes and a row of wizzrobes)
+               else if(Player.location[0] == 3 && Player.location[1] == -1){
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[x][4] = 23;
+                  roomToBeGenerated[x][12] = 22;
+               }
+               //room to the right of the previous room (has lots of enemies in rows)
+               else if(Player.location[0] == 4 && Player.location[1] == -1){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[x][4] = 23;
+                  roomToBeGenerated[x][12] = 22;
+                  roomToBeGenerated[x][3] = 13;
+                  roomToBeGenerated[x][13] = 9;
+               }
+               //room to the right of the previous room (has lots of enemies in rows)
+               else if(Player.location[0] == 5 && Player.location[1] == -1){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[x][4] = 21;
+                  roomToBeGenerated[x][12] = 9;
+                  roomToBeGenerated[x][3] = 16;
+                  roomToBeGenerated[x][13] = 23;
+               }
+               //room to the right of the previous room (has a bunch of mummies)
+               else if(Player.location[0] == 6 && Player.location[1] == -1){
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[x][12] = 21;
+                  roomToBeGenerated[x][13] = 21;
+               }
+               //room above the previous room (has some wizzrobes)
+               else if(Player.location[0] == 6 && Player.location[1] == 0){
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = 0;
+                  if((y == 4 || y == 12) && x < 10 || x == 9 && y > 3 && y < 12)
+                     roomToBeGenerated[x][y] = 1;
+                  else if(x == 5 && (y > 3 && y < 12))   
+                     roomToBeGenerated[x][y] = 22;
+               }
+               //room above the previous room (has a row of snakes)
+               else if(Player.location[0] == 6 && Player.location[1] == 1){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[x][12] = 23;
+               }
+               //room to the left of the previous room(has a row of skeletons and swordsmen)
+               else if(Player.location[0] == 5 && Player.location[1] == 1){
+                  LoadingZone.currentRoomBlock[0] = 0;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[5][y] = 9;
+                  roomToBeGenerated[6][y] = 13;
+               }
+               //room above the previous room (empty... for suspense)
+               else if(Player.location[0] == 5 && Player.location[1] == 2){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = 0;
+               }
+               //room to the left of the previous room (also empty... for suspense)
+               else if(Player.location[0] == 4 && Player.location[1] == 2){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+               }
+               //room to the left of the previous room (the final staircase......)
+               else if(Player.location[0] == 3 && Player.location[1] == 2){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 0;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 0;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[10][10] = 6;
+               }
+               //room inside of the staircase in the previous room (leads to boss)
+               else if(Player.location[0] == -3 && Player.location[1] == -6){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[7][4] ? 0:2;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[10][10] = 6;
+               }
+               //room to the left of the previous room (continues path onto boss)
+               else if(Player.location[0] == -2 && Player.location[1] == -6){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[7][5] ? 0:2;
+                  roomToBeGenerated[x][y] = 0;
+                  if(x == 0 && y == 0)
+                     setText("For real this time....","your hard work has finaly amounted","to this final momement");
+               }
+               //next few rooms only exist to burn the players source of keys and troll them with text:)
+               else if(Player.location[0] == -1 && Player.location[1] == -6){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[7][6] ? 0:2;
+                  roomToBeGenerated[x][y] = 0;
+                  if(x == 0 && y == 0)
+                     setText("All of your hard work","those countless hours","all leading up to this");
+               }
+               else if(Player.location[0] == 0 && Player.location[1] == -6){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[7][7] ? 0:2;
+                  roomToBeGenerated[x][y] = 0;
+                  if(x == 0 && y == 0)
+                     setText("This is truly the grand finale","If you have anything left to do...","do it now before you meet your end...");
+               }
+               else if(Player.location[0] == 1 && Player.location[1] == -6){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[7][8] ? 0:2;
+                  roomToBeGenerated[x][y] = 0;
+                  if(x == 0 && y == 0)
+                     setText("seeing as you continue... It is clear... "," that you are determined...","determined to die!!!");
+               }
+               else if(Player.location[0] == 2 && Player.location[1] == -6){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[7][9] ? 0:2;
+                  roomToBeGenerated[x][y] = 0;
+                  if(x == 0 && y == 0)
+                     setText("Now face me, \"Great\" warrior",Player.name + ",","your time has finally come");
+               }
+               else if(Player.location[0] == 3 && Player.location[1] == -6){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = LoadingZone.keyDoor[7][10] ? 0:2;
+                  roomToBeGenerated[x][y] = 0;
+                  if(x == 0 && y == 0){
+                     setText("You should be thanking me,",Player.name + ",","you will perish having seen true power");
+                  }
+               }
+               else if(Player.location[0] == 4 && Player.location[1] == -6){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = player.keys == 1 ? 1:LoadingZone.keyDoor[7][11] ? 0:2;
+                  roomToBeGenerated[x][y] = 0;
+                  
+                  if(player.keys == 1 && x == 0 && y == 0)
+                     setText("wait...","you don't have enough keys?","welp. no fight for you...");
+                  else if(x == 0 && y == 0){
+                     setText("Prepare yourself","our battle shall go down in history","as the last futile attempt to stop...");
+                  }
+               }
+               //room to the left of the previous room.......... final room before ganon... 
+               else if(Player.location[0] == 5 && Player.location[1] == -6){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = LoadingZone.keyDoor[7][12] ? 0:2;
+                  LoadingZone.currentRoomBlock[2] = 0;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = 0;
+                  if(x == 0 && y == 0)
+                     setText("The one and only....","true...","KING OF DARKNESS!!!!!!!!");
+               }
+               //GANON ROOM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+               else if(Player.location[0] == 5 && Player.location[1] == -7){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = Ganon.isDefeated ? 0:3;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[10][10] = 10;
+               }
+               //final room in the game, zelda room
+               else if(Player.location[0] == 6 && Player.location[1] == -7){
+                  LoadingZone.currentRoomBlock[0] = 1;
+                  LoadingZone.currentRoomBlock[1] = 1;
+                  LoadingZone.currentRoomBlock[2] = 1;
+                  LoadingZone.currentRoomBlock[3] = 1;
+                  roomToBeGenerated[x][y] = 0;
+                  roomToBeGenerated[9][7] = 25;
+                  if((x > 5 && x < 13 && y == 2) || (y > 2 && y < 12 && (x == 5 || x == 13)))
+                     roomToBeGenerated[x][y] = 1;
+
+               }
+               else
                   roomToBeGenerated[x][y] = 1;
             }
          }
@@ -3504,7 +4189,6 @@ public class Room {
    }
 
    public int makeRow(String rockFormation, String enemyFormation, String waterFormation, int x) {
-
       if (waterFormation.equals("small river")) {
          if (x == 4 || x == 5)
             return 4;
