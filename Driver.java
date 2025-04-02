@@ -51,6 +51,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    Room room;
    // class used to store HUD for the player shown while the game is active
    ActiveMenu activeMenu = new ActiveMenu();
+   AffineTransform transform;
    // public GlobalModManager modManager;
 
    private static String currentTrack = "";
@@ -300,7 +301,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
 
    // NOTE: Part of the RSC Games fullscreen patch.
    private void drawBorders(Graphics2D g) {
-      g.setTransform(AffineTransform.getTranslateInstance(0, 0));
+      g.setTransform(transform/*AffineTransform.getTranslateInstance(0, 0)*/);
 
       Point topLeft = transformPoint;
       Point bottomRight = new Point((int) (topLeft.getX() + 790), (int) (topLeft.getY() + 770));
@@ -509,6 +510,9 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
 
    public void paintComponent(Graphics g) {
       try {
+         // Get the original transform (HIGHDPI BUG FIX!)
+         transform = ((Graphics2D)g).getTransform();
+
          updateOffset((Graphics2D) g);
          render(g);
          drawBorders((Graphics2D) g);
