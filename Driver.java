@@ -353,7 +353,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                case KeyEvent.VK_ENTER:
                   if (!menu.registrating){
                      menu.selectArrow(activeMenu, player, room);
-                  
+                     //TESTING, teleports the player
+                     
                      Player.location[0] = 5;
                      Player.location[1] = -6;
                      Player.level = 8;
@@ -383,14 +384,18 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             switch (e.getKeyCode()) {
                case KeyEvent.VK_W:
                   player.dir = 'w';
+                  Player.stepsWalked+=player.speed;
                   break;
                case KeyEvent.VK_S:
+                  Player.stepsWalked+=player.speed;
                   player.dir = 's';
                   break;
                case KeyEvent.VK_A:
+                  Player.stepsWalked+=player.speed;
                   player.dir = 'a';
                   break;
                case KeyEvent.VK_D:
+                  Player.stepsWalked+=player.speed;
                   player.dir = 'd';
                   break;
                case KeyEvent.VK_E:
@@ -769,7 +774,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
           * }
           */
       }
-      else{
+      else if (!Zelda.loadCredits){
          // UPDATE: Moved UI repaint after room repaint since that makes sense.
          // in-game window to show active item, health, and amount of collectibles
          //draw things
@@ -787,15 +792,21 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          //draws the player
          player.draw(g, this);
       }
-      if(Zelda.loadCredits){
-         Credits.loadCredits();
-      }
       } 
-      else
+      if(player.hp < 0)
          showDeathScreen(g);
+         
+      if(Zelda.loadCredits){
+         if(Credits.time == 0)  
+            Credits.loadCredits();
+         Credits.drawCredits(g,this);
+      }
    }
 
    private void showDeathScreen(Graphics g) {
+      if(!player.countedDeath)
+         Player.deaths++;
+      player.countedDeath = true;
       g.setColor(Color.BLACK);
       g.fillRect(0, 0, 790, 790);
       g.setColor(Color.RED);
@@ -816,6 +827,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       g.drawString("press enter to continue", 120, 520);
    }
    private void restart(){
+      player.countedDeath = false;
       System.out.println("game restarting....");
       if(menu.saveFileSelected == 0)
          f1.loadGame(player,room,activeMenu);

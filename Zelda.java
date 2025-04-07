@@ -8,25 +8,26 @@ public class Zelda extends Entity{
     private BufferedImage image;
     public static boolean gameIsOver = false;
     private int textTimer = 0;
-    private final int MTextTimer = 5;
+    private final int MTextTimer = 1;//5
     private String activeText = "";
     int stringIndex = 0;
     int activeIndex = 0;
     boolean forward = true;
     static boolean loadCredits = false;
-    int Mdelay = 10;//50
+    int Mdelay = 1;//50
     int delay = Mdelay;
     boolean textDelaying = false;
     private final String[] text = {
-        "You did it, " + Player.name + "!",
-        "You have great wisdom and power",
-        "THE END!!!!!!!"
+        "Thanks, " + Player.name + "!",
+        "You're the hero of Hyrule.",
+        "Finally, peace can return to Hyrule",
+        "This ends the story"
     };
     public Zelda(int cx, int cy){
         this.cx = cx;
         this.cy = cy;
         try {
-            image = ImageIO.read(new File(".\\Image files\\zelda.png"));
+            image = ImageIO.read(new File("./Image files/zelda.png"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -39,6 +40,7 @@ public class Zelda extends Entity{
         if(activeText.equals(text[text.length-1])){
             loadCredits = true;
             System.out.println("made it here?");
+            System.out.println(loadCredits);
         }
         //add the characters one by one
         if(gameIsOver && !loadCredits){

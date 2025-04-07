@@ -9,6 +9,7 @@ import util.Counter;
 
 //child class of Entity, has specific methods and attributes special for the main player
 public class Player extends Entity {
+   //why that number????????????????????????????????????
    private static final int DELTA_BETWEEN_BEEPS_MS = 666;
 
    // tracks the player location in both the overworld and a dungeon
@@ -69,6 +70,14 @@ public class Player extends Entity {
 
    private Counter beepCounter;
 
+   //STATS!!!!!!!!!!!!
+   //TODO: Test this!!!!!!!
+   public static long stepsWalked;
+   public static long damageTaken;
+   public static long rubpeesCollected;
+   //everything above this line works....
+   public static long deaths;
+   public boolean countedDeath = false;
    // only one player object will be created,therefore there is no need for a
    // parameter-based constructor
    public Player() {

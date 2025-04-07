@@ -152,6 +152,8 @@ public class Entity {
          // hurt entity based on damage calculations
          this.hp -= (int) (ent.damage / (1 - this.defense));
          this.inv = 60;
+         if(this instanceof Player)
+               Player.damageTaken+= ent.damage;
          entityHitCallback();
          return true;
       }
@@ -436,6 +438,22 @@ public class Entity {
                   
                   )
                   )
+               || (Player.level == 8
+                  && ((Player.location[0] == 2 && Player.location[1] == -2 && !LoadingZone.keyArray[7][0])
+                  ||  (Player.location[0] == 1 && Player.location[1] == -1 && !LoadingZone.keyArray[7][1])
+                  ||  (Player.location[0] == -1 && Player.location[1] == -1 && !LoadingZone.keyArray[7][2])
+                  ||  (Player.location[0] == -1 && Player.location[1] == -3 && !LoadingZone.keyArray[7][3])
+                  ||  (Player.location[0] == 0 && Player.location[1] == -1 && !LoadingZone.keyArray[7][4])
+                  ||  (Player.location[0] == 0 && Player.location[1] == -4 && !LoadingZone.keyArray[7][5])
+                  ||  (Player.location[0] == -1 && Player.location[1] == -4 && !LoadingZone.keyArray[7][6])
+                  ||  (Player.location[0] == -2 && Player.location[1] == -4 && !LoadingZone.keyArray[7][7])
+                  ||  (Player.location[0] == -2 && Player.location[1] == -5 && !LoadingZone.keyArray[7][8])
+                  ||  (Player.location[0] == -1 && Player.location[1] == -5 && !LoadingZone.keyArray[7][9])
+                  ||  (Player.location[0] == 3 && Player.location[1] == 1 && !LoadingZone.keyArray[7][10])
+                  ||  (Player.location[0] == 3 && Player.location[1] == 0 && !LoadingZone.keyArray[7][11])
+                  ||  (Player.location[0] == 4 && Player.location[1] == 1 && !LoadingZone.keyArray[7][12])
+                  )
+               )
                      && item.type.equals("key")) {
             if (numKeyEnemiesAlive == 0) {
                item.cx = 400;
@@ -447,6 +465,19 @@ public class Entity {
                   item.cx = 80;
                   item.cy = 400;
                }
+               else if (Player.level == 8 && (Player.location[0] == 4 && Player.location[1] == 1)){
+                  item.cx = 650;
+                  item.cy = 400;
+               }
+               else if (Player.level == 8 && (Player.location[0] == 3 && Player.location[1] == 1)){
+                  item.cx = 750;
+                  item.cy = 200;
+               }
+               else if (Player.level == 8 && (Player.location[0] == 3 && Player.location[1] == 0)){
+                  item.cx = 750;
+                  item.cy = 660;
+               }
+
             }
          }
       } else

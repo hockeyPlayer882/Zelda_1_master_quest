@@ -42,12 +42,12 @@ public class Ganon extends Entity {
         phaseTimer = MphaseTimer;
         projDelay = MprojDelay;
         try {
-            waiting = ImageIO.read(new File(".\\Image files\\ganon waiting.png"));
-            healing = ImageIO.read(new File(".\\Image files\\ganon healing.png"));
-            hurt = ImageIO.read(new File(".\\Image files\\ganon hurt.png"));
-            charging = ImageIO.read(new File(".\\Image files\\ganon charging.png"));
-            attacking = ImageIO.read(new File(".\\Image files\\ganon attacking.png"));
-            OP = ImageIO.read(new File(".\\Image files\\ganon OP.png"));
+            waiting = ImageIO.read(new File("./Image files/ganon waiting.png"));
+            healing = ImageIO.read(new File("./Image files/ganon healing.png"));
+            hurt = ImageIO.read(new File("./Image files/ganon hurt.png"));
+            charging = ImageIO.read(new File("./Image files/ganon charging.png"));
+            attacking = ImageIO.read(new File("./Image files/ganon attacking.png"));
+            OP = ImageIO.read(new File("./Image files/ganon OP.png"));
         } catch (IOException e) {
             System.out.println("You a failure with images....");
             e.printStackTrace();
@@ -135,6 +135,7 @@ public class Ganon extends Entity {
                 && p.inv <= 0) {
             p.hp -= damage;
             p.inv = 60;
+            Player.damageTaken+= damage;
             return true;
         }
         return false;

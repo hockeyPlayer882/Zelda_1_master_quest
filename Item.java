@@ -46,11 +46,11 @@ public class Item extends Entity {
       if ((this.cx - unitSize / 2 < player.cx + unitSize / 2 && this.cx + unitSize / 2 > player.cx - unitSize / 2
             && this.cy - unitSize / 2 < player.cy + unitSize / 2 && this.cy + unitSize / 2 > player.cy - unitSize / 2)
             || !type.equals("key") && Boomerang.cx < 800 && Boomerang.cy < 800
-               && (this.cx - unitSize / 2 < Boomerang.cx + unitSize / 2
-               && this.cx + unitSize / 2 > Boomerang.cx - unitSize / 2
-               && this.cy - unitSize / 2 < Boomerang.cy + unitSize / 2
-               && this.cy + unitSize / 2 > Boomerang.cy - unitSize / 2)) {
-         
+                  && (this.cx - unitSize / 2 < Boomerang.cx + unitSize / 2
+                        && this.cx + unitSize / 2 > Boomerang.cx - unitSize / 2
+                        && this.cy - unitSize / 2 < Boomerang.cy + unitSize / 2
+                        && this.cy + unitSize / 2 > Boomerang.cy - unitSize / 2)) {
+
          if (type.equals("heart")) {
             player.heal(this.value);
             AudioEngine.playClip("./sfx/LTTP_RefillHealth.wav");
@@ -58,6 +58,7 @@ public class Item extends Entity {
 
          if (type.equals("rubpee") || type.equals("rubpee5")) {
             player.rubpees += this.value;
+            Player.rubpeesCollected+= this.value;
             AudioEngine.playClip("./sfx/LOZ_Get_Rupee.wav");
          }
 
@@ -110,8 +111,7 @@ public class Item extends Entity {
             LoadingZone.keyArray[0][0] = true;
          if (Player.location[0] == -1 && Player.location[1] == 3)
             LoadingZone.keyArray[0][1] = true;
-      } 
-      else if (Player.level == 2) {
+      } else if (Player.level == 2) {
          if (Player.location[0] == -1 && Player.location[1] == 0)
             LoadingZone.keyArray[1][0] = true;
          else if (Player.location[0] == -1 && Player.location[1] == 1)
@@ -124,8 +124,7 @@ public class Item extends Entity {
             LoadingZone.keyArray[1][4] = true;
          else if (Player.location[0] == 3 && Player.location[1] == 2)
             LoadingZone.keyArray[1][5] = true;
-      } 
-      else if (Player.level == 3) {
+      } else if (Player.level == 3) {
          if (Player.location[0] == -1 && Player.location[1] == 0)
             LoadingZone.keyArray[2][0] = true;
          else if (Player.location[0] == 0 && Player.location[1] == 1)
@@ -138,8 +137,7 @@ public class Item extends Entity {
             LoadingZone.keyArray[2][4] = true;
          else if (Player.location[0] == -2 && Player.location[1] == 0)
             LoadingZone.keyArray[2][5] = true;
-      } 
-      else if (Player.level == 4) {
+      } else if (Player.level == 4) {
          if (Player.location[0] == 1 && Player.location[1] == 0)
             LoadingZone.keyArray[3][0] = true;
          else if (Player.location[0] == 0 && Player.location[1] == 1)
@@ -158,8 +156,7 @@ public class Item extends Entity {
             LoadingZone.keyArray[3][7] = true;
          else if (Player.location[0] == -2 && Player.location[1] == 2)
             LoadingZone.keyArray[3][8] = true;
-      } 
-      else if (Player.level == 5) {
+      } else if (Player.level == 5) {
          if (Player.location[0] == 1 && Player.location[1] == 0)
             LoadingZone.keyArray[4][0] = true;
          else if (Player.location[0] == -1 && Player.location[1] == 1)
@@ -176,8 +173,7 @@ public class Item extends Entity {
             LoadingZone.keyArray[4][6] = true;
          else if (Player.location[0] == 4 && Player.location[1] == -3)
             LoadingZone.keyArray[4][7] = true;
-      } 
-      else if (Player.level == 6) {
+      } else if (Player.level == 6) {
          if (Player.location[0] == 1 && Player.location[1] == 0)
             LoadingZone.keyArray[5][0] = true;
          else if (Player.location[0] == 0 && Player.location[1] == 1)
@@ -202,8 +198,7 @@ public class Item extends Entity {
             LoadingZone.keyArray[5][10] = true;
          else if (Player.location[0] == -2 && Player.location[1] == 2)
             LoadingZone.keyArray[5][11] = true;
-      } 
-      else if (Player.level == 7) {
+      } else if (Player.level == 7) {
          if (Player.location[0] == -1 && Player.location[1] == 1)
             LoadingZone.keyArray[6][0] = true;
          else if (Player.location[0] == -2 && Player.location[1] == 1)
@@ -228,8 +223,34 @@ public class Item extends Entity {
             LoadingZone.keyArray[6][10] = true;
          else if (Player.location[0] == -1 && Player.location[1] == 2)
             LoadingZone.keyArray[6][11] = true;
-      } 
-      else if (Player.location[0] == 3 && Player.location[1] == -2)
+      } else if (Player.level == 8) {
+         if (Player.location[0] == 2 && Player.location[1] == -2)
+            LoadingZone.keyArray[7][0] = true;
+         else if (Player.location[0] == 1 && Player.location[1] == -1)
+            LoadingZone.keyArray[7][1] = true;
+         else if (Player.location[0] == -1 && Player.location[1] == -1)
+            LoadingZone.keyArray[7][2] = true;
+         else if (Player.location[0] == -1 && Player.location[1] == -3)
+            LoadingZone.keyArray[7][3] = true;
+         else if (Player.location[0] == 0 && Player.location[1] == -1)
+            LoadingZone.keyArray[7][4] = true;
+         else if (Player.location[0] == 0 && Player.location[1] == -4)
+            LoadingZone.keyArray[7][5] = true;
+         else if (Player.location[0] == -1 && Player.location[1] == -4)
+            LoadingZone.keyArray[7][6] = true;
+         else if (Player.location[0] == -2 && Player.location[1] == -4)
+            LoadingZone.keyArray[7][7] = true;
+         else if (Player.location[0] == -2 && Player.location[1] == -5)
+            LoadingZone.keyArray[7][8] = true;
+         else if (Player.location[0] == -1 && Player.location[1] == -5)
+            LoadingZone.keyArray[7][9] = true;
+         else if (Player.location[0] == 3 && Player.location[1] == 1)
+            LoadingZone.keyArray[7][10] = true;
+         else if (Player.location[0] == 3 && Player.location[1] == 0)
+            LoadingZone.keyArray[7][11] = true;
+         else if (Player.location[0] == 4 && Player.location[1] == 1)
+            LoadingZone.keyArray[7][12] = true;
+      } else if (Player.location[0] == 3 && Player.location[1] == -2)
          LoadingZone.keyArray[4][6] = true;
    }
 

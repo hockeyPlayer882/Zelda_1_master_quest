@@ -144,7 +144,9 @@ public class Room {
                   newArea = 7;
                else if (Player.location[0] == 10 && Player.location[1] == 10 && ActiveMenu.numTriforcePieces == 7)
                   newArea = 8;
+               
                row.add(new LoadingZone(x * 41 + 23, y * 41 + 140, newArea));
+               System.out.println(newArea);
                continue;
             } else if (roomToBeGenerated[x][y] == 7) {
                row.add(new OctorokR(x * 41 + 23, y * 41 + 140));
@@ -1437,7 +1439,7 @@ public class Room {
                }
                // 2 rooms to the left of the previous room
                else if (Player.location[0] == 7 && Player.location[1] == 6) {
-                  if (y == 10 && x == 10 && LoadingZone.numDefeatedBosses == 5)
+                  if (y == 10 && x == 10 && LoadingZone.numDefeatedBosses >= 5 && !Player.hasSuperBomb)
                      roomToBeGenerated[x][y] = 15;
                   else if (y == 0 || y >= 14 || x == 0)
                      roomToBeGenerated[x][y] = 1;
@@ -1452,7 +1454,7 @@ public class Room {
                      roomToBeGenerated[x][y] = 1;
                   else if (y == 0)
                      roomToBeGenerated[x][y] = makeRow("openingMiddle", "", "", x);
-                  else if (x == 10 && y == 10 && LoadingZone.numDefeatedBosses == 6)
+                  else if (x == 10 && y == 10 && !Player.hasSuperBomb)
                      roomToBeGenerated[x][y] = 6;
                   else
                      roomToBeGenerated[x][y] = 0;
@@ -4141,10 +4143,11 @@ public class Room {
                   LoadingZone.currentRoomBlock[0] = 1;
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
-                  LoadingZone.currentRoomBlock[3] = player.keys == 1 ? 1:LoadingZone.keyDoor[7][11] ? 0:2;
+                  //to prevent a softlock, make sure the player can't go further if they haven't opened a specific door yet 
+                  LoadingZone.currentRoomBlock[3] = player.keys == 1 && !LoadingZone.keyArray[7][1] ? 1:LoadingZone.keyDoor[7][11] ? 0:2;
                   roomToBeGenerated[x][y] = 0;
                   
-                  if(player.keys == 1 && x == 0 && y == 0)
+                  if(player.keys == 1 && x == 0 && y == 0 && !LoadingZone.keyArray[7][1])
                      setText("wait...","you don't have enough keys?","welp. no fight for you...");
                   else if(x == 0 && y == 0){
                      setText("Prepare yourself","our battle shall go down in history","as the last futile attempt to stop...");

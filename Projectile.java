@@ -1,6 +1,5 @@
 import java.awt.Graphics;
 import java.awt.Color;
-
 public class Projectile {
    // base damage for projectiles are 1
    public int projectileStrength = 1;
