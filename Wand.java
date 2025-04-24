@@ -22,12 +22,14 @@ public abstract class Wand {
    private static BufferedImage projectileD;
 
    private static void move() {
-      cx += dir == 'a' ? -speed : dir == 'd' ? speed : 0;
-      cy += dir == 'w' ? -speed : dir == 's' ? speed : 0;
-      if (cx >= 840 || cx <= -Entity.unitSize || cy >= 840 || cy <= Entity.unitSize * 2) {
-         cx = 999;
-         dir = ' ';
-         cy = 999;
+      if (!Player.isPaused) {
+         cx += dir == 'a' ? -speed : dir == 'd' ? speed : 0;
+         cy += dir == 'w' ? -speed : dir == 's' ? speed : 0;
+         if (cx >= 840 || cx <= -Entity.unitSize || cy >= 840 || cy <= Entity.unitSize * 2) {
+            cx = 999;
+            dir = ' ';
+            cy = 999;
+         }
       }
    }
 
@@ -44,7 +46,7 @@ public abstract class Wand {
             // and resets their movement timer)
             other.dir = dir;
             other.movementTimer = other.MmovementTimer;
-            
+
             AudioEngine.playClip("./sfx/LOZ_Enemy_Hit.wav");
          }
          cx = 999;

@@ -104,6 +104,7 @@ public class saveFile {
             saveWriter.write("deaths:" + Player.deaths + n);
             saveWriter.write("rubpeesCollected:" + Player.rubpeesCollected + n);
             saveWriter.write("steps:" + Player.stepsWalked + n);
+            saveWriter.write("time:" + SpeedTimer.ToString() + n);
             saveWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -223,10 +224,11 @@ public class saveFile {
         ActiveMenu.itemExists = parse2DArray(searchFile("exists"), 4);
 
         Player.level = Integer.parseInt(searchFile("level"));
-        Player.deaths = Integer.parseInt(searchFile("deaths"));
-        Player.rubpeesCollected = Integer.parseInt(searchFile("rubpeesCollected"));
-        Player.stepsWalked = Integer.parseInt(searchFile("steps"));
-        Player.damageTaken = Integer.parseInt(searchFile("damageTaken"));
+        Player.deaths = Long.parseLong(searchFile("deaths"));
+        Player.rubpeesCollected = Long.parseLong(searchFile("rubpeesCollected"));
+        Player.stepsWalked = Long.parseLong(searchFile("steps"));
+        Player.damageTaken = Long.parseLong(searchFile("damageTaken"));
+        SpeedTimer.setTime(searchFile("time"));
         // Keep the legacy cheat code system!
         processCheatCodes(p);
     }

@@ -1439,7 +1439,7 @@ public class Room {
                }
                // 2 rooms to the left of the previous room
                else if (Player.location[0] == 7 && Player.location[1] == 6) {
-                  if (y == 10 && x == 10 && LoadingZone.numDefeatedBosses >= 5 && !Player.hasSuperBomb)
+                  if (y == 10 && x == 10 && (LoadingZone.numDefeatedBosses <= 5 || !Player.hasSuperBomb))
                      roomToBeGenerated[x][y] = 15;
                   else if (y == 0 || y >= 14 || x == 0)
                      roomToBeGenerated[x][y] = 1;
@@ -1454,7 +1454,7 @@ public class Room {
                      roomToBeGenerated[x][y] = 1;
                   else if (y == 0)
                      roomToBeGenerated[x][y] = makeRow("openingMiddle", "", "", x);
-                  else if (x == 10 && y == 10 && !Player.hasSuperBomb)
+                  else if (x == 10 && y == 10)
                      roomToBeGenerated[x][y] = 6;
                   else
                      roomToBeGenerated[x][y] = 0;
@@ -3254,7 +3254,7 @@ public class Room {
                   LoadingZone.currentRoomBlock[1] = 0;
                   LoadingZone.currentRoomBlock[2] = 1;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if (y < 16)
+                  if (y < 12 && y > 1)
                      roomToBeGenerated[x][y] = x < 4 ? 9 : x < 6 ? 21 : x < 8 ? 23 : x < 10 ? 13 : 0;
                   else
                      roomToBeGenerated[x][y] = 0;
@@ -3348,7 +3348,7 @@ public class Room {
                   LoadingZone.currentRoomBlock[1] = 1;
                   LoadingZone.currentRoomBlock[2] = 0;
                   LoadingZone.currentRoomBlock[3] = 0;
-                  if (x == 10 && (y == 9 || y >= 12) && y < 14)
+                  if (x == 10 && y < 14 && y > 2)
                      roomToBeGenerated[x][y] = 23;
                   else
                      roomToBeGenerated[x][y] = 0;

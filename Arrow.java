@@ -20,19 +20,22 @@ public abstract class Arrow {
    public static BufferedImage arrowD;
 
    public static void move() {
-      switch (dir) {
-         case 'w':
-            cy -= speed;
-            break;
-         case 's':
-            cy += speed;
-            break;
-         case 'a':
-            cx -= speed;
-            break;
-         case 'd':
-            cx += speed;
-            break;
+      //prevents wrapping
+      if ((cx < 1000 && cy < 100000) && !Player.isPaused) {
+         switch (dir) {
+            case 'w':
+               cy -= speed;
+               break;
+            case 's':
+               cy += speed;
+               break;
+            case 'a':
+               cx -= speed;
+               break;
+            case 'd':
+               cx += speed;
+               break;
+         }
       }
    }
 
@@ -48,7 +51,7 @@ public abstract class Arrow {
             // hurt entity based on damage calculations
             ent.hp -= (int) (damage / (ent.defense + 1));
             ent.inv = 60;
-            
+
             AudioEngine.playClip("./sfx/LOZ_Enemy_Hit.wav");
          }
       }

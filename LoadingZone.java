@@ -478,6 +478,15 @@ public class LoadingZone extends Entity {
                room.spawnRoom(player);
                room.clearImages();
                room.fillRoomArray(player);
+            }else if (Player.level == 8) {
+               Player.location[0] = 10;
+               Player.location[1] = 10;
+               Player.level = 0;
+               player.cx = 400;
+               player.cy = 400;
+               room.spawnRoom(player);
+               room.clearImages();
+               room.fillRoomArray(player);
             }
          } else if (player.cy + (unitSize + unitSize / 2) + 50 >= unitSize * 20 && player.dir == 's') {
             if (player.cx >= 350 && player.cx <= 450 && currentRoomBlock[1] == 0) {

@@ -8,13 +8,13 @@ public class Zelda extends Entity{
     private BufferedImage image;
     public static boolean gameIsOver = false;
     private int textTimer = 0;
-    private final int MTextTimer = 1;//5
+    private final int MTextTimer = 5;
     private String activeText = "";
     int stringIndex = 0;
     int activeIndex = 0;
     boolean forward = true;
     static boolean loadCredits = false;
-    int Mdelay = 1;//50
+    int Mdelay = 50;
     int delay = Mdelay;
     boolean textDelaying = false;
     private final String[] text = {

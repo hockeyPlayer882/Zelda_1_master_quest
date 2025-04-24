@@ -61,6 +61,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    private boolean fullscreen = false;
    public static Dimension currentResolution = new Dimension(790, 770);
    public static Point transformPoint = new Point(0, 0);
+   //in-game timer
+   static SpeedTimer speedTimer;
 
    public static void main(String[] args) throws Exception {
       System.out.println("Zelda 1 master quest " + version);
@@ -73,7 +75,9 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
 
       // instantiates frame
       frame = new JFrame();
-
+      //starts the in game timer
+      speedTimer = new SpeedTimer();
+      speedTimer.start();
       // RSC Games: refactored the name prompt. Original code will be kept for
       // historical
       // reasons.
@@ -172,7 +176,6 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       addKeyListener(this);
       Timer timer = new Timer(16, this);
       timer.start();
-
       // creates the room(should be world, but im dumb) that the player is in
       this.room = new Room("starting area");
       room.spawnRoom(player);
@@ -212,10 +215,16 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                      || Player.level == 2 && Player.location[0] == -3 && Player.location[1] == 0
                      || Player.location[0] == -3 && Player.location[1] == -1 && Player.level == 3
                      || Player.level == 4 && Player.location[0] == -3 && Player.location[1] == 0
-                     || Player.level == 5 && Player.location[0] == -3 && Player.location[1] == -1)) {
+                     || Player.level == 5 && Player.location[0] == -3 && Player.location[1] == -1)
+                     || Player.level == 6 && Player.location[0] == -3 && Player.location[1] == 0
+                     || Player.level == 7 && Player.location[0] == 1 && Player.location[1] == -2
+                     || Player.level == 8 && Player.location[0] == 5 && Player.location[1] == -7) {
 
                   if (!currentTrack.equals("boss-theme")) {
-                     AudioEngine.playBGM("./new_ost/Anger of the Guardians.wav");
+                     if(Player.level == 8)
+                        AudioEngine.playBGM("./new_ost/The Prince of Darkness.wav");
+                     else
+                        AudioEngine.playBGM("./new_ost/Anger of the Guardians.wav");
                      currentTrack = "boss-theme";
                   }
                }
@@ -354,11 +363,12 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                   if (!menu.registrating){
                      menu.selectArrow(activeMenu, player, room);
                      //TESTING, teleports the player
+                     //TODO: remove this
+                     
                      
                      Player.location[0] = 5;
                      Player.location[1] = -6;
                      Player.level = 8;
-                     //(TESING!)
                   }
                   else
                      menu.addKey(player);
@@ -793,7 +803,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          player.draw(g, this);
       }
       } 
-      if(player.hp < 0)
+      if(player.hp <= 0)
          showDeathScreen(g);
          
       if(Zelda.loadCredits){
@@ -813,14 +823,13 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
       Font font = new Font("Verdana", Font.PLAIN, 80);
       g.setFont(font);
       g.drawString("YOU DIED!", 120, 400);
-
+      SpeedTimer.ticking = false;
       if (menu.saveFileSelected == 0)
          f1.saveGame(player);
       if (menu.saveFileSelected == 1)
          f2.saveGame(player);
       if (menu.saveFileSelected == 2)
          f3.saveGame(player);
-      
       Font f = new Font("Verdana", Font.PLAIN, 40);
       g.setFont(f);
       g.drawString("Your game has been saved" , 120, 480);
@@ -835,5 +844,6 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
          f2.loadGame(player,room,activeMenu);
       else if(menu.saveFileSelected == 2)
          f3.loadGame(player,room,activeMenu);
+      SpeedTimer.ticking = true;
    }
 }

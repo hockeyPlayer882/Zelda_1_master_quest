@@ -9,7 +9,7 @@ public class Credits{
     static int time = 0;
     static int speed = 3;
     static Color activeColor = Color.BLUE;
-    static final int MTime = 650;
+    static final int MTime = 700;
     static String[] creditsTitles = {
         "Core developer...",
         "Spell checker...",
@@ -22,7 +22,8 @@ public class Credits{
         "Steps walked...",
         "Damage Taken...",
         "Deaths taken...",
-        "Rubpees collected..."
+        "Rubpees collected...",
+        "Final time..."
     };
     //Empty strings used for formatting
     static String[] creditsNames = {
@@ -37,7 +38,8 @@ public class Credits{
         "" +Player.stepsWalked,
         "" +Player.damageTaken,
         "" +Player.deaths,
-        "" + Player.rubpeesCollected
+        "" + Player.rubpeesCollected,
+        "" + SpeedTimer.ToStringWCorrectFormat()
 
     };
     public static void loadCredits(){
@@ -58,7 +60,7 @@ public class Credits{
             if( i < 7 || i >= 13)
                 g.drawImage(creditsBlock,i*Entity.unitSize,50-time,Entity.unitSize,Entity.unitSize,d);
         }
-        int numBlocks = 35;
+        int numBlocks = 40;
         for(int i = 0; i < numBlocks;i++){
             for(int y = 0; y < 2;y++){
                 g.drawImage(creditsBlock, y == 0 ? 0:(760-Entity.unitSize/2), 50+i*Entity.unitSize-time,Entity.unitSize,Entity.unitSize, d);

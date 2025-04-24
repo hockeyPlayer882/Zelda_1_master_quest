@@ -45,7 +45,7 @@ g.drawImage(drawImg,cx-unitSize/2,cy-unitSize/2,unitSize,unitSize,driver);
 public void shootProjectile(){
 this.projectileTimer -= 1;
 if(projectileTimer <= 0){
-if(this.dir != 'n') Driver.projs.add(new Projectile(this.cx,this.cy,1,1,this.dir,1,0));
+if(this.dir != 'n') Driver.projs.add(new Projectile(this.cx,this.cy,1,5,this.dir,1,0));
 this.dir = 'n';
 this.resetProjectileTimer();
 this.movementTimer = 0;

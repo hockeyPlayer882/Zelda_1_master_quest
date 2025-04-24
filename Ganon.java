@@ -37,8 +37,7 @@ public class Ganon extends Entity {
     int MphaseTimer = 80;
 
     public Ganon() {
-        //TODO::: rebuff hp to normal level
-        super(0, 'n', 400, 400, 2, 20, 1, 12, 10, 10, 1);
+        super(0, 'n', 400, 400, Player.name.equals("peaceful mode!") ? 0:20, 20, 1, 12, 10, 10, 1);
         phaseTimer = MphaseTimer;
         projDelay = MprojDelay;
         try {

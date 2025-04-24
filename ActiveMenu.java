@@ -312,12 +312,12 @@ public class ActiveMenu{
             for (int x = 0; x < Room.currentRoom.size(); x++) {
                for (int y= 0; y < Room.currentRoom.get(x).size(); y++) {
                   Entity ent = (Entity) Room.currentRoom.get(x).get(y);
-                  ent.cy += 5;
+                  ent.cy += 10;
                }
             }
 
-            player.cy += 5;
-            iterationNum += 5;
+            player.cy += 10;
+            iterationNum += 10;
          }
       }
    }
@@ -332,12 +332,12 @@ public class ActiveMenu{
          for (int x = 0; x < Room.currentRoom.size(); x++) {
             for (int y= 0; y < Room.currentRoom.get(x).size(); y++) {
                Entity ent = (Entity) Room.currentRoom.get(x).get(y);
-               ent.cy -= 5;
+               ent.cy -= 10;
             }
          }
 
-         player.cy -= 5;
-         iterationNum -= 5;
+         player.cy -= 10;
+         iterationNum -= 10;
       }
       else {
          isResuming = false;
