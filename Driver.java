@@ -362,13 +362,6 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                case KeyEvent.VK_ENTER:
                   if (!menu.registrating){
                      menu.selectArrow(activeMenu, player, room);
-                     //TESTING, teleports the player
-                     //TODO: remove this
-                     
-                     
-                     Player.location[0] = 5;
-                     Player.location[1] = -6;
-                     Player.level = 8;
                   }
                   else
                      menu.addKey(player);
