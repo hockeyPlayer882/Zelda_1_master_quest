@@ -187,6 +187,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
    public void actionPerformed(ActionEvent e) {
       // repaints the canvas
       //repaint(0,0,fullscreen ? 1600:800,fullscreen ? 1600:800);
+
       repaint();
       // debugger
       DebugInterface.debugMain();
@@ -370,7 +371,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
                   System.out.println("Changed to backspace!");
                   break;
 
-               // TODO: Michael you need to add a prompt.
+               // TODO: M^2 you need to add a prompt.
                case KeyEvent.VK_BACK_SPACE:
                   if (!menu.registrating) {
                      if (menu.saveFileSelected == 0)
@@ -754,6 +755,7 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             Cane.drawCoolDownBox(g, this);
          if (Player.name.equals("SUPERSTAR!") || Player.name.equals("SUPER OVERPOWERED!"))
             player.heal(1);
+
          /*
           * //Random Stuff not important to the legend of Zelda, just fun coding thingies
           * int R = (int)(254*Math.random()+1);
@@ -804,6 +806,8 @@ public class Driver extends JPanel implements KeyListener, ActionListener {
             Credits.loadCredits();
          Credits.drawCredits(g,this);
       }
+
+      Toolkit.getDefaultToolkit().sync();
    }
 
    private void showDeathScreen(Graphics g) {
